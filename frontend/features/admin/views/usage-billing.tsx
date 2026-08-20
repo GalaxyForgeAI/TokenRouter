@@ -203,6 +203,7 @@ export function ExecutiveKPI({ label, value, detail }: { label: string; value: s
 }
 
 export function ExecutiveDepartmentChart({ rows }: { rows: ExecutiveDepartmentRow[] }) {
+  const [hover, setHover] = useState<number | null>(null);
   if (rows.length === 0) return <div className="empty">{tx("暂无部门 Token 数据")}</div>;
   const width = 960;
   const height = 320;
@@ -216,6 +217,8 @@ export function ExecutiveDepartmentChart({ rows }: { rows: ExecutiveDepartmentRo
   const gap = 18;
   const barWidth = Math.max(28, (width - left - right - gap * (rows.length - 1)) / rows.length);
   const ticks = [0.25, 0.5, 0.75, 1];
+  const hovered = hover !== null ? rows[hover] : null;
+  const hoverX = hover !== null ? left + hover * (barWidth + gap) + barWidth / 2 : 0;
 
   return (
     <div className="executive-chart-wrap">
@@ -236,8 +239,15 @@ export function ExecutiveDepartmentChart({ rows }: { rows: ExecutiveDepartmentRo
           const totalHeight = inputHeight + outputHeight || Math.max(4, (row.total_tokens / max) * chartHeight);
           const inputY = baseline - inputHeight;
           const outputY = inputY - outputHeight;
+          const dimmed = hover !== null && hover !== index;
           return (
-            <g key={row.id}>
+            <g
+              key={row.id}
+              className="executive-bar-group"
+              onMouseEnter={() => setHover(index)}
+              onMouseLeave={() => setHover(null)}
+              style={{ opacity: dimmed ? 0.4 : 1, transition: "opacity 0.15s ease", cursor: "pointer" }}
+            >
               <rect className="executive-bar-bg" x={x} y={top} width={barWidth} height={chartHeight} rx="8" />
               {row.output_tokens > 0 ? <rect className="executive-bar-output" x={x} y={outputY} width={barWidth} height={outputHeight} rx="8" /> : null}
               <rect className="executive-bar-input" x={x} y={row.input_tokens > 0 ? inputY : baseline - totalHeight} width={barWidth} height={row.input_tokens > 0 ? inputHeight : totalHeight} rx="8" />
@@ -246,6 +256,14 @@ export function ExecutiveDepartmentChart({ rows }: { rows: ExecutiveDepartmentRo
             </g>
           );
         })}
+        {hovered ? (
+          <g className="executive-tip" transform={`translate(${Math.min(Math.max(hoverX, 96), width - 96)} 10)`}>
+            <rect x={-92} y={-4} width={184} height={58} rx={9} />
+            <text className="executive-tip-title" x={0} y={13} textAnchor="middle">{hovered.name}</text>
+            <text className="executive-tip-total" x={0} y={29} textAnchor="middle">{tx("总 Token")} {compactNumber(hovered.total_tokens)}</text>
+            <text className="executive-tip-detail" x={0} y={45} textAnchor="middle">{tx("输入")} {compactNumber(hovered.input_tokens)} · {tx("输出")} {compactNumber(hovered.output_tokens)}</text>
+          </g>
+        ) : null}
       </svg>
     </div>
   );

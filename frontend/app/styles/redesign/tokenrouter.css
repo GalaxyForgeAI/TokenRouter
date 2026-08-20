@@ -470,3 +470,50 @@
     transition: none !important;
   }
 }
+
+/* ===== 部门 Token 消耗对比图：hover 明细 ===== */
+.executive-bar-group {
+  transition: opacity 0.15s ease;
+}
+
+.executive-tip rect {
+  fill: #0f172a;
+  opacity: 0.94;
+}
+
+.executive-tip-title {
+  fill: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+}
+
+.executive-tip-total {
+  fill: #fbbf24;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.executive-tip-detail {
+  fill: #cbd5e1;
+  font-size: 10px;
+  font-family: var(--font-mono);
+}
+
+/* ===== 请求日志详情：视口内独立滚动，不再撑长整页 ===== */
+.request-detail-panel {
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  border-radius: 12px;
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.request-detail-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface);
+  padding-bottom: 8px;
+}
