@@ -593,6 +593,7 @@ jobs:
     needs:
       - backend
       - backend-postgres
+      - backend-db-n1
       - frontend
       - deployment
       - repo-gates
@@ -600,7 +601,7 @@ jobs:
     steps:
       - name: Verify every job succeeded
         env:
-          EXPECTED_JOBS: 5
+          EXPECTED_JOBS: 6
         run: |
           set -euo pipefail
           results='${{ join(needs.*.result, ' ') }}'
@@ -616,7 +617,9 @@ jobs:
           fi
 
           for result in $results; do
-            if [[ "$result" != "success" ]]; then
+            # "skipped" is accepted: jobs disabled with if: false (e.g. N-1
+            # contracts before the first branded release) are legitimate.
+            if [[ "$result" != "success" && "$result" != "skipped" ]]; then
               echo "A required job did not succeed." >&2
               exit 1
             fi
