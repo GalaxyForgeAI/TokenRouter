@@ -1,6 +1,6 @@
 import { Activity, BarChart3, Boxes, Check, CircleDollarSign, Code2, Database, FileText, Gauge, KeyRound, LayoutDashboard, Server, ShieldCheck, X } from "lucide-react";
 import { motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import CountUp from "@/components/reactbits/CountUp/CountUp";
 import GradientText from "@/components/reactbits/GradientText/GradientText";
 import ShinyText from "@/components/reactbits/ShinyText/ShinyText";
@@ -936,10 +936,23 @@ export function OverviewMetricCard({
 }
 
 export function OverviewSparkline({ values }: { values: number[] }) {
-  const path = overviewLinePath(values, 160, 34, 3);
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const path = overviewSmoothPath(values, 160, 34, 3);
+  const area = path ? `${path} L 157 31 L 3 31 Z` : "";
   return (
     <svg className="overview-sparkline" viewBox="0 0 160 34" preserveAspectRatio="none" aria-hidden="true">
-      <path d={path} />
+      <defs>
+        <linearGradient id={`sparkArea-${uid}`} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id={`sparkLine-${uid}`} x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stopColor="var(--accent)" />
+          <stop offset="100%" stopColor="#38BDF8" />
+        </linearGradient>
+      </defs>
+      <path className="overview-sparkline-area" d={area} style={{ fill: `url(#sparkArea-${uid})` }} />
+      <path className="overview-sparkline-line" d={path} style={{ stroke: `url(#sparkLine-${uid})` }} />
     </svg>
   );
 }
@@ -953,11 +966,21 @@ export function OverviewTrendChart({ metric, points }: { metric: OverviewMetricK
   const top = 28;
   const bottom = 46;
   const baseline = height - bottom;
-  const line = overviewLinePath(values, width - left - right, baseline - top, 0, left, top);
+  const line = overviewSmoothPath(values, width - left - right, baseline - top, 0, left, top);
   const area = line ? `${line} L ${width - right} ${baseline} L ${left} ${baseline} Z` : "";
   const max = Math.max(...values, 1);
+  const min = Math.min(...values, 0);
+  const span = Math.max(max - min, 1);
   const ticks = [0.25, 0.5, 0.75];
   const labels = overviewAxisLabels(points);
+  const pts = values.map((value, index) => {
+    const w = width - left - right;
+    const h = baseline - top;
+    const x = left + (values.length === 1 ? 0 : (index / (values.length - 1)) * w);
+    const y = top + h - ((value - min) / span) * h;
+    return { x, y };
+  });
+  const last = pts.length ? pts[pts.length - 1] : null;
 
   return (
     <div className="overview-chart-wrap">
@@ -966,6 +989,10 @@ export function OverviewTrendChart({ metric, points }: { metric: OverviewMetricK
           <linearGradient id="overviewArea" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.22" />
             <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="overviewLine" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="var(--accent)" />
+            <stop offset="100%" stopColor="#38BDF8" />
           </linearGradient>
         </defs>
         {ticks.map((tick) => {
@@ -977,8 +1004,19 @@ export function OverviewTrendChart({ metric, points }: { metric: OverviewMetricK
             </g>
           );
         })}
+        <line className="overview-chart-baseline" x1={left} x2={width - right} y1={baseline} y2={baseline} />
         <path className="overview-chart-area" d={area} />
         <path className="overview-chart-line" d={line} />
+        {pts.map((point, index) => (
+          <circle
+            className={index === pts.length - 1 ? "overview-chart-dot last" : "overview-chart-dot"}
+            cx={point.x}
+            cy={point.y}
+            r={index === pts.length - 1 ? 4.6 : 3.2}
+            key={index}
+          />
+        ))}
+        {last ? <circle className="overview-chart-halo" cx={last.x} cy={last.y} r={9} /> : null}
         {labels.map((item) => (
           <text className="overview-axis-label" key={`${item.label}-${item.x}`} x={item.x} y={height - 10}>{item.label}</text>
         ))}
@@ -1122,6 +1160,35 @@ export function overviewLinePath(values: number[], width: number, height: number
       return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
     })
     .join(" ");
+}
+
+/** Catmull-Rom → 三次贝塞尔平滑曲线路径（高级图表质感） */
+export function overviewSmoothPath(values: number[], width: number, height: number, pad = 0, offsetX = 0, offsetY = 0) {
+  if (!values.length) return "";
+  const max = Math.max(...values, 1);
+  const min = Math.min(...values, 0);
+  const span = Math.max(max - min, 1);
+  const usableWidth = Math.max(1, width - pad * 2);
+  const usableHeight = Math.max(1, height - pad * 2);
+  const pts = values.map((value, index) => {
+    const x = offsetX + pad + (values.length === 1 ? usableWidth : (index / (values.length - 1)) * usableWidth);
+    const y = offsetY + pad + usableHeight - ((value - min) / span) * usableHeight;
+    return [x, y];
+  });
+  if (pts.length === 1) return `M ${pts[0][0].toFixed(2)} ${pts[0][1].toFixed(2)}`;
+  let d = `M ${pts[0][0].toFixed(2)} ${pts[0][1].toFixed(2)}`;
+  for (let i = 0; i < pts.length - 1; i += 1) {
+    const p0 = pts[Math.max(0, i - 1)];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`;
+  }
+  return d;
 }
 
 export function overviewAxisLabels(points: UsagePoint[]) {

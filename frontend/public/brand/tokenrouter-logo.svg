@@ -1,31 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="hexGrad" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#1E40AF"/>
+      <stop offset="0.5" stop-color="#2563EB"/>
       <stop offset="1" stop-color="#3B82F6"/>
     </linearGradient>
-    <linearGradient id="flameGrad" x1="0.5" y1="1" x2="0.5" y2="0">
-      <stop offset="0" stop-color="#7DD3FC"/>
-      <stop offset="0.55" stop-color="#BAE6FD"/>
-      <stop offset="1" stop-color="#E0F2FE"/>
+    <linearGradient id="beamGrad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#93C5FD" stop-opacity="0"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
     </linearGradient>
-    <radialGradient id="coreGrad" cx="0.5" cy="0.6" r="0.55">
-      <stop offset="0" stop-color="#FCD34D"/>
+    <radialGradient id="coreGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FEF3C7"/>
+      <stop offset="0.45" stop-color="#FBBF24"/>
       <stop offset="1" stop-color="#D97706"/>
+    </radialGradient>
+    <radialGradient id="coreHalo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FBBF24" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FBBF24" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
-  <!-- 外六边形：路由枢纽节点（full-bleed） -->
-  <path d="M128 12 L224 64 L224 192 L128 244 L32 192 L32 64 Z" fill="url(#hexGrad)"/>
+  <!-- 徽章：圆角六边形（渐变蓝） -->
+  <path d="M128 18 C 156 18, 172 30, 191 41 L 217 67 C 228 86, 238 102, 238 128 C 238 154, 228 170, 217 189 L 191 215 C 172 226, 156 238, 128 238 C 100 238, 84 226, 65 215 L 39 189 C 28 170, 18 154, 18 128 C 18 102, 28 86, 39 67 L 65 41 C 84 30, 100 18, 128 18 Z" fill="url(#bgGrad)"/>
 
-  <!-- 内六边形环：通道环 -->
-  <path d="M128 52 L194 89 L194 167 L128 204 L62 167 L62 89 Z" fill="#0F2557" opacity="0.35"/>
+  <!-- 顶部内侧高光（体积感） -->
+  <path d="M65 41 C 84 30, 100 18, 128 18 C 156 18, 172 30, 191 41 L 177 58 C 161 48, 147 41, 128 41 C 109 41, 95 48, 79 58 Z" fill="#FFFFFF" opacity="0.16"/>
 
-  <!-- 火炬火焰（炬）：路由核心 -->
-  <path d="M128 68 C 154 102, 163 123, 163 146 A 35 35 0 0 1 93 146 C 93 123, 102 102, 128 68 Z" fill="url(#flameGrad)"/>
-  <path d="M128 96 C 143 119, 148 131, 148 146 A 20 20 0 0 1 108 146 C 108 131, 113 119, 128 96 Z" fill="#FFFFFF" opacity="0.6"/>
+  <!-- 路由光束：三条轨迹汇聚到核心（炬：光路 + 枢纽） -->
+  <path d="M128 216 C 128 188, 128 170, 128 154" stroke="url(#beamGrad)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.92"/>
+  <path d="M84 182 C 99 167, 113 155, 125 145" stroke="url(#beamGrad)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.72"/>
+  <path d="M172 182 C 157 167, 143 155, 131 145" stroke="url(#beamGrad)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.72"/>
 
-  <!-- 核心：token 火花 -->
-  <circle cx="128" cy="146" r="15" fill="url(#coreGrad)"/>
-  <circle cx="122" cy="140" r="4.5" fill="#FFFFFF" opacity="0.9"/>
+  <!-- 核心：token 光点 + 光晕 -->
+  <circle cx="128" cy="148" r="27" fill="url(#coreHalo)"/>
+  <circle cx="128" cy="148" r="12.5" fill="url(#coreGrad)"/>
+  <circle cx="123.5" cy="143.5" r="3.6" fill="#FFFFFF" opacity="0.85"/>
 </svg>

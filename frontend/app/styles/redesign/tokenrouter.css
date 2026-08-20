@@ -206,3 +206,119 @@
 .overview-panel-motion {
   display: contents;
 }
+
+/* ===== 图表高级感 ===== */
+
+/* 趋势图网格：虚线淡化 */
+.overview-chart line {
+  stroke-dasharray: 3 7;
+  opacity: 0.55;
+}
+
+.overview-chart-baseline {
+  stroke: var(--border-2);
+  stroke-dasharray: none !important;
+  opacity: 0.9 !important;
+}
+
+/* 趋势线：渐变描边 + 柔光 */
+.overview-chart-line {
+  stroke: url(#overviewLine);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 8px rgba(30, 64, 175, 0.22));
+}
+
+.overview-chart-area {
+  fill: url(#overviewArea);
+}
+
+/* 数据点：白芯 + 描边；末点放大 + 光晕脉冲 */
+.overview-chart-dot {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 2.2;
+}
+
+.overview-chart-dot.last {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2.4;
+}
+
+.overview-chart-halo {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  opacity: 0.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: tr-halo-pulse 2.4s ease-out infinite;
+}
+
+@keyframes tr-halo-pulse {
+  0% { opacity: 0.55; transform: scale(0.8); }
+  70% { opacity: 0.12; transform: scale(1.35); }
+  100% { opacity: 0.55; transform: scale(0.8); }
+}
+
+.overview-axis-label {
+  fill: var(--ink-4);
+  font-size: 10.5px !important;
+  letter-spacing: 0.04em;
+}
+
+/* Sparkline：渐变线 + 面积 */
+.overview-sparkline-area {
+  fill: url(#sparkArea);
+}
+
+.overview-sparkline-line {
+  fill: none;
+  stroke: url(#sparkLine);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 环形图：体积感 + 数字等宽 */
+.overview-donut {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--border) 55%, transparent),
+    0 8px 20px rgba(15, 23, 42, 0.07);
+}
+
+.overview-donut::after {
+  background: radial-gradient(circle at 50% 30%, var(--surface-2), var(--surface) 72%);
+}
+
+.overview-donut strong {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+/* 成本占比图例：圆点 + 数值强调 */
+.overview-share-dot {
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18);
+}
+
+.overview-share-row strong {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Top 模型：渐变进度条 + 等宽计数 */
+.overview-progress span {
+  background: linear-gradient(90deg, var(--accent), #38bdf8);
+  transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.overview-top-row em {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  font-weight: 650;
+}
