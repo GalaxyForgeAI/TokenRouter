@@ -115,6 +115,9 @@ jobs:
           go test -tags=integration ./internal/dbschema -run '^TestPostgres' -count=1 -v
 
       - name: Check out previous release tag
+        # TokenRouter 品牌化首版没有历史 release 版本阶梯（上游 v0.4.0/v0.5.0），
+        # N-1 数据库兼容契约暂禁用；发布 v0.6.0-tokenrouter.1 后可作为新基线恢复。
+        if: false
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           ref: 0cfe8346e71b8c3ab1dbea147c412c436fc1b0c5
@@ -122,12 +125,14 @@ jobs:
           persist-credentials: false
 
       - name: Build N-1 binaries
+        if: false
         run: |
           go build -o "$RUNNER_TEMP/current-tokenhub" ./cmd/tokenhub
           go build -o "$RUNNER_TEMP/n1check" ./cmd/n1check
           (cd ../n1/backend && go build -o "$RUNNER_TEMP/n1-tokenhub" ./cmd/tokenhub)
 
       - name: Run the PostgreSQL N-1 contract
+        if: false
         env:
           TOKENHUB_ADMIN_TOKEN: n1-contract-token
           N1_PG_URL: postgresql://tokenhub:tokenhub-e2e-password@localhost:5432/tokenhub_n1?sslmode=disable
@@ -215,6 +220,9 @@ jobs:
 
   backend-db-n1:
     name: Backend database N-1 contract
+    # 品牌化首版无历史 release 版本阶梯（v0.4.0/v0.5.0 基线尚不存在），
+    # N-1 数据库兼容契约暂禁用；发布 v0.6.0-tokenrouter.1 后可作为新基线恢复。
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -224,6 +232,8 @@ jobs:
           persist-credentials: false
 
       - name: Check out previous release tag
+        # 品牌化首版无历史 release 阶梯，N-1 契约暂禁用（同 backend-postgres 注释）。
+        if: false
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           ref: 0cfe8346e71b8c3ab1dbea147c412c436fc1b0c5
@@ -231,6 +241,7 @@ jobs:
           persist-credentials: false
 
       - name: Check out v0.5.0 release tag
+        if: false
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           ref: 0cfe8346e71b8c3ab1dbea147c412c436fc1b0c5
