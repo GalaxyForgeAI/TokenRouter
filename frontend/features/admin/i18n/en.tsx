@@ -645,7 +645,7 @@ export const enTranslations: Record<string, string> = {
     "驳回": "Reject",
     "导出": "Export",
     "切换主题": "Toggle theme",
-    "炬枢 · 企业 AI 网关": "TokenRouter · Enterprise AI Gateway", "网关运行中": "Gateway Running",
+    "企业 AI 网关": "Enterprise AI Gateway", "炬枢 · 企业 AI 网关": "TokenRouter · Enterprise AI Gateway", "网关运行中": "Gateway Running",
     "统一接入与成本治理平台": "Unified access and cost governance platform",
     "显示密码": "Show password",
     "隐藏密码": "Hide password",

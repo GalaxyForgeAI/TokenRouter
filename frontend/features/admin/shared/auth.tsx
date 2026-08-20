@@ -599,8 +599,8 @@ export function LoginView({
               <img src="/brand/tokenrouter-logo.png" alt="" />
             </span>
             <span className="login-brand-copy">
-              <strong>Token<span>Router</span></strong>
-              <small>{tx("炬枢 · 企业 AI 网关")}</small>
+              <strong className="login-brand-zh">炬枢</strong>
+              <small className="login-brand-en">{tx("企业 AI 网关")}</small>
             </span>
           </div>
 

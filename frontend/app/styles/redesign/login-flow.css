@@ -62,6 +62,32 @@
   letter-spacing: 0;
 }
 
+.login-brand-copy strong.login-brand-zh {
+  color: #182033;
+  font-size: 36px;
+  font-weight: 820;
+  line-height: 1;
+  letter-spacing: 0.1em;
+}
+
+.login-brand-copy small.login-brand-en {
+  margin-top: 7px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 720;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .login-brand-copy strong.login-brand-zh {
+  color: #f3f6fb;
+}
+
+[data-theme="dark"] .login-brand-copy small.login-brand-en {
+  color: #93c5fd;
+}
+
 .login-brand-copy strong span {
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 60%, #38bdf8 100%);
   -webkit-background-clip: text;

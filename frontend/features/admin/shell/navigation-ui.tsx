@@ -35,8 +35,8 @@ export function Sidebar({
     <aside className={collapsed ? "sidebar collapsed" : "sidebar"}>
       <div className="brand">
         <img src="/brand/tokenrouter-logo.png" alt="TokenRouter" className="brand-logo" />
-        <span className="brand-name">TokenRouter</span>
-        <em className="brand-name-zh">炬枢</em>
+        <span className="brand-name">炬枢</span>
+        <span className="brand-name-en">TokenRouter</span>
         <div className="sidebar-version-status" id="sidebar-version-status" />
         <button
           className="sidebar-toggle"
