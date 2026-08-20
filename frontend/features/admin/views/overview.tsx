@@ -981,6 +981,9 @@ export function OverviewTrendChart({ metric, points }: { metric: OverviewMetricK
     return { x, y };
   });
   const last = pts.length ? pts[pts.length - 1] : null;
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const hovered = hoverIndex !== null && pts[hoverIndex] ? pts[hoverIndex] : null;
+  const tooltipX = hovered ? Math.min(Math.max(hovered.x, 86), width - 86) : 0;
 
   return (
     <div className="overview-chart-wrap">
@@ -1012,14 +1015,46 @@ export function OverviewTrendChart({ metric, points }: { metric: OverviewMetricK
             className={index === pts.length - 1 ? "overview-chart-dot last" : "overview-chart-dot"}
             cx={point.x}
             cy={point.y}
-            r={index === pts.length - 1 ? 4.6 : 3.2}
+            r={hoverIndex === index ? 6 : index === pts.length - 1 ? 4.6 : 3.2}
             key={index}
+            style={{ transition: "r 0.15s ease" }}
           />
         ))}
         {last ? <circle className="overview-chart-halo" cx={last.x} cy={last.y} r={9} /> : null}
+        {hovered ? (
+          <g className="overview-chart-cursor">
+            <line x1={hovered.x} x2={hovered.x} y1={top} y2={baseline} />
+            <circle className="overview-chart-dot hover" cx={hovered.x} cy={hovered.y} r={6} />
+            <g transform={`translate(${tooltipX} ${top})`}>
+              <rect className="overview-chart-tip-bg" x={-48} y={-6} width={96} height={28} rx={7} />
+              <text className="overview-chart-tip-label" x={0} y={7} textAnchor="middle">
+                {overviewDateLabel(points[hoverIndex as number].date)}
+              </text>
+              <text className="overview-chart-tip-value" x={0} y={19} textAnchor="middle">
+                {overviewMetricDisplay(values[hoverIndex as number], metric)}
+              </text>
+            </g>
+          </g>
+        ) : null}
         {labels.map((item) => (
           <text className="overview-axis-label" key={`${item.label}-${item.x}`} x={item.x} y={height - 10}>{item.label}</text>
         ))}
+        <rect
+          className="overview-chart-hit"
+          x={left}
+          y={top}
+          width={width - left - right}
+          height={baseline - top}
+          fill="transparent"
+          onMouseMove={(event) => {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const chartWidth = width - left - right;
+            const px = ((event.clientX - rect.left) / rect.width) * chartWidth;
+            const index = Math.round((px / chartWidth) * (values.length - 1));
+            setHoverIndex(Math.max(0, Math.min(values.length - 1, index)));
+          }}
+          onMouseLeave={() => setHoverIndex(null)}
+        />
       </svg>
     </div>
   );
@@ -1027,20 +1062,63 @@ export function OverviewTrendChart({ metric, points }: { metric: OverviewMetricK
 
 export function OverviewProviderShare({ rows }: { rows: Array<{ id: string; label: string; percent: number; value: number; cost: number }> }) {
   const totalCost = rows.reduce((sum, row) => sum + row.cost, 0);
+  const [hover, setHover] = useState<number | null>(null);
+  const COLORS = ["#1E40AF", "#38BDF8", "#8B5CF6", "#D97706", "#0FA478"];
+  const r = 42;
+  const C = 2 * Math.PI * r;
+  let acc = 0;
+  const slices = rows.map((row, index) => {
+    const frac = totalCost > 0 ? Math.max(0, row.cost / totalCost) : 0;
+    const slice = { ...row, frac, dash: Math.max(frac * C - 2, 0.75), offset: -acc * C, index };
+    acc += frac;
+    return slice;
+  });
+  const active =
+    hover !== null ? slices[hover] : slices.filter((s) => s.frac > 0).sort((a, b) => b.frac - a.frac)[0] ?? null;
   return (
     <article className="overview-panel overview-share-panel">
-      <h2>{tx("Provider 成本占比")}</h2>
+      <div className="overview-share-head">
+        <h2>{tx("Provider 成本占比")}</h2>
+        <span className="overview-share-total">{totalCost > 0 ? `$${compactNumber(totalCost)}` : "$0"}</span>
+      </div>
       <div className="overview-share-content">
-        <div className="overview-donut" style={{ background: overviewDonutGradient(rows) }}>
-          <div>
-            <strong>{totalCost > 0 ? `$${compactNumber(totalCost)}` : "$0"}</strong>
-            <span>{tx("总成本")}</span>
-          </div>
+        <div className="overview-donut-svg" onMouseLeave={() => setHover(null)}>
+          <svg viewBox="0 0 160 160" role="img" aria-label={tx("Provider 成本占比")}>
+            <g transform="rotate(-90 80 80)">
+              <circle className="overview-donut-track" cx="80" cy="80" r={r} />
+              {slices.map((slice) => (
+                <circle
+                  className="overview-donut-segment"
+                  cx="80"
+                  cy="80"
+                  r={r}
+                  stroke={COLORS[slice.index % COLORS.length]}
+                  strokeDasharray={`${slice.dash} ${C}`}
+                  strokeDashoffset={slice.offset}
+                  opacity={hover === null || hover === slice.index ? 1 : 0.35}
+                  onMouseEnter={() => setHover(slice.index)}
+                  key={slice.id}
+                />
+              ))}
+            </g>
+            <text className="overview-donut-center-value" x="80" y="76" textAnchor="middle">
+              {active ? `${active.percent}%` : "0%"}
+            </text>
+            <text className="overview-donut-center-label" x="80" y="94" textAnchor="middle">
+              {hover !== null && active ? active.label : tx("总成本")}
+            </text>
+          </svg>
         </div>
         <div className="overview-share-list">
           {rows.length ? rows.map((row, index) => (
-            <div className="overview-share-row" key={row.id}>
-              <span className={`overview-share-dot color-${index}`} />
+            <div
+              className="overview-share-row"
+              key={row.id}
+              onMouseEnter={() => setHover(index)}
+              onMouseLeave={() => setHover(null)}
+              style={{ opacity: hover === null || hover === index ? 1 : 0.45, transition: "opacity 0.18s" }}
+            >
+              <span className="overview-share-dot" style={{ background: COLORS[index % COLORS.length] }} />
               <span>{row.label}</span>
               <strong>{row.percent}%</strong>
             </div>
