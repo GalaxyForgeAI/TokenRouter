@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frontend/public/brand/tokenhub-logo.png" alt="TokenRouter" width="96" />
+  <img src="frontend/public/brand/tokenrouter-logo.png" alt="TokenRouter" width="96" />
 </p>
 
 <h1 align="center">TokenRouter</h1>

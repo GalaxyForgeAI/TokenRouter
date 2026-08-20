@@ -2,6 +2,13 @@
 
 Language: [English](../README.md) | 简体中文 | [日本語](../ja/README.md)
 
+## 炬枢项目文档（中文）
+
+- [产品概述](product-overview.md)：定位、核心能力、三种角色、技术架构
+- [快速开始](quickstart.md)：Docker Compose / 本地开发 5 分钟上手
+- [品牌与许可](branding-and-license.md)：品牌规范、Apache-2.0、上游致谢与合规
+- [变更记录](changelog.md)：版本历史
+
 TokenRouter 文档现在按企业 AI 网关里的三种角色组织。默认文档语言是英文；中文和日文版本复用同一套英文截图和英文样例数据，避免多语言截图不一致。
 
 ## 架构与部署

@@ -2,6 +2,13 @@
 
 Language: English | [简体中文](zh-CN/README.md) | [日本語](ja/README.md)
 
+## TokenRouter 炬枢 · Project Docs（中文）
+
+- [产品概述](zh-CN/product-overview.md)：定位、核心能力、三种角色、技术架构
+- [快速开始](zh-CN/quickstart.md)：Docker Compose / 本地开发 5 分钟上手
+- [品牌与许可](zh-CN/branding-and-license.md)：品牌规范、Apache-2.0、上游致谢与合规
+- [变更记录](zh-CN/changelog.md)：版本历史
+
 TokenRouter documentation is now organized around the three roles used in an enterprise AI gateway. The default documentation language is English. Localized Chinese and Japanese versions use the same English screenshots and the same English sample data set.
 
 ## Architecture and Deployment
