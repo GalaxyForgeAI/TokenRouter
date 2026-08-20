@@ -1,38 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1E40AF"/>
-      <stop offset="0.5" stop-color="#2563EB"/>
-      <stop offset="1" stop-color="#3B82F6"/>
+      <stop offset="0" stop-color="#0E1B4C"/>
+      <stop offset="0.45" stop-color="#1E40AF"/>
+      <stop offset="1" stop-color="#2563EB"/>
     </linearGradient>
-    <linearGradient id="beamGrad" x1="0" y1="1" x2="0" y2="0">
+    <linearGradient id="lineGrad" x1="0" y1="1" x2="0" y2="0">
       <stop offset="0" stop-color="#93C5FD" stop-opacity="0"/>
+      <stop offset="0.55" stop-color="#BFDBFE" stop-opacity="0.65"/>
       <stop offset="1" stop-color="#FFFFFF"/>
     </linearGradient>
     <radialGradient id="coreGrad" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0" stop-color="#FEF3C7"/>
-      <stop offset="0.45" stop-color="#FBBF24"/>
+      <stop offset="0.5" stop-color="#FBBF24"/>
       <stop offset="1" stop-color="#D97706"/>
     </radialGradient>
     <radialGradient id="coreHalo" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#FBBF24" stop-opacity="0.35"/>
+      <stop offset="0" stop-color="#FBBF24" stop-opacity="0.28"/>
       <stop offset="1" stop-color="#FBBF24" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
-  <!-- 徽章：圆角六边形（渐变蓝） -->
-  <path d="M128 18 C 156 18, 172 30, 191 41 L 217 67 C 228 86, 238 102, 238 128 C 238 154, 228 170, 217 189 L 191 215 C 172 226, 156 238, 128 238 C 100 238, 84 226, 65 215 L 39 189 C 28 170, 18 154, 18 128 C 18 102, 28 86, 39 67 L 65 41 C 84 30, 100 18, 128 18 Z" fill="url(#bgGrad)"/>
+  <!-- 圆角六边形徽章（更深渐变） -->
+  <path d="M128 16 C 157 16, 173 28, 192 39 L 219 66 C 230 85, 240 102, 240 128 C 240 154, 230 171, 219 190 L 192 217 C 173 228, 157 240, 128 240 C 99 240, 83 228, 64 217 L 37 190 C 26 171, 16 154, 16 128 C 16 102, 26 85, 37 66 L 64 39 C 83 28, 99 16, 128 16 Z" fill="url(#bgGrad)"/>
 
-  <!-- 顶部内侧高光（体积感） -->
-  <path d="M65 41 C 84 30, 100 18, 128 18 C 156 18, 172 30, 191 41 L 177 58 C 161 48, 147 41, 128 41 C 109 41, 95 48, 79 58 Z" fill="#FFFFFF" opacity="0.16"/>
+  <!-- 内描边（细线徽章感） -->
+  <path d="M128 22 C 154 22, 169 33, 187 43 L 212 68 C 223 86, 232 102, 232 128 C 232 154, 223 170, 212 188 L 187 213 C 169 223, 154 234, 128 234 C 102 234, 87 223, 69 213 L 44 188 C 33 170, 24 154, 24 128 C 24 102, 33 86, 44 68 L 69 43 C 87 33, 102 22, 128 22 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="1.4"/>
 
-  <!-- 路由光束：三条轨迹汇聚到核心（炬：光路 + 枢纽） -->
-  <path d="M128 216 C 128 188, 128 170, 128 154" stroke="url(#beamGrad)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.92"/>
-  <path d="M84 182 C 99 167, 113 155, 125 145" stroke="url(#beamGrad)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.72"/>
-  <path d="M172 182 C 157 167, 143 155, 131 145" stroke="url(#beamGrad)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.72"/>
+  <!-- 顶部内侧高光 -->
+  <path d="M64 39 C 83 28, 99 16, 128 16 C 157 16, 173 28, 192 39 L 178 57 C 162 47, 148 39, 128 39 C 108 39, 94 47, 78 57 Z" fill="#FFFFFF" opacity="0.1"/>
 
-  <!-- 核心：token 光点 + 光晕 -->
-  <circle cx="128" cy="148" r="27" fill="url(#coreHalo)"/>
-  <circle cx="128" cy="148" r="12.5" fill="url(#coreGrad)"/>
-  <circle cx="123.5" cy="143.5" r="3.6" fill="#FFFFFF" opacity="0.85"/>
+  <!-- 路由细线：三条轨迹汇聚（炬：光路 + 枢纽） -->
+  <path d="M128 220 C 128 194, 128 176, 128 160" stroke="url(#lineGrad)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <path d="M84 188 C 99 172, 113 160, 126 149" stroke="url(#lineGrad)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.78"/>
+  <path d="M172 188 C 157 172, 143 160, 130 149" stroke="url(#lineGrad)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.78"/>
+
+  <!-- 核心：token 光点（克制） -->
+  <circle cx="128" cy="152" r="23" fill="url(#coreHalo)"/>
+  <circle cx="128" cy="152" r="10.5" fill="url(#coreGrad)"/>
+  <circle cx="124.5" cy="148.5" r="2.8" fill="#FFFFFF" opacity="0.9"/>
 </svg>

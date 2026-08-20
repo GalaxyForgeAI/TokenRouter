@@ -1,12 +1,11 @@
 /* ===== TokenRouter 炬枢 design-system additions ===== */
 
-/* 品牌区：三行网格（logo / 中文主名 / 英文副标 + 版本），中文突出 */
+/* 品牌区：两行网格（logo / 中文主名 / 英文副标），版本区已移出 */
 .brand {
   grid-template-areas:
     "logo name"
-    "logo en"
-    "logo version";
-  min-height: 88px;
+    "logo en";
+  min-height: 78px;
 }
 
 .brand-name {
@@ -35,7 +34,39 @@
   display: none;
 }
 
-.sidebar.collapsed .brand-name-zh {
+/* 侧边栏底部：版本区（仅管理员可见，远离品牌） */
+.sidebar-footer {
+  padding: 10px 14px 8px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-footer .sidebar-version-status {
+  min-width: 0;
+}
+
+.sidebar-footer .version {
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--ink-3);
+  font-size: 13px;
+  font-weight: 680;
+  letter-spacing: 0.02em;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.sidebar-footer .version:hover {
+  background: var(--accent-weak);
+  color: var(--accent);
+}
+
+.sidebar.collapsed .sidebar-footer {
   display: none;
 }
 

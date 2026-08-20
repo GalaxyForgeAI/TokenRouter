@@ -37,7 +37,6 @@ export function Sidebar({
         <img src="/brand/tokenrouter-logo.png" alt="TokenRouter" className="brand-logo" />
         <span className="brand-name">炬枢</span>
         <span className="brand-name-en">TokenRouter</span>
-        <div className="sidebar-version-status" id="sidebar-version-status" />
         <button
           className="sidebar-toggle"
           aria-label={collapsed ? tx("展开菜单") : tx("折叠菜单")}
@@ -150,6 +149,11 @@ export function Sidebar({
             </div>
           );
         })}
+      </div>
+      <div className="sidebar-footer">
+        {user.role === "admin" || user.role === "system_admin" ? (
+          <div className="sidebar-version-status" id="sidebar-version-status" />
+        ) : null}
       </div>
       <div className="sidebar-account">
         <div className="account-avatar">{userInitial(user)}</div>
