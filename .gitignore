@@ -60,3 +60,5 @@ yarn-error.log*
 CLAUDE.md
 backend/tokenhub-migrate
 sdk/migration-e2e/report.json
+docs-site/node_modules/
+dist/

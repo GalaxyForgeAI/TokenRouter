@@ -1,0 +1,14 @@
+{
+  "name": "tokenrouter-docs",
+  "version": "0.6.0",
+  "private": true,
+  "description": "TokenRouter 炬枢 documentation site",
+  "scripts": {
+    "dev": "vitepress dev src",
+    "build": "vitepress build src",
+    "preview": "vitepress preview src"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}
