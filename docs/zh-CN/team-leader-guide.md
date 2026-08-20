@@ -2,7 +2,7 @@
 
 Language: [English](../team-leader-guide.md) | 简体中文 | [日本語](../ja/team-leader-guide.md)
 
-本指南面向帮助业务应用通过项目级 TokenHub API Key 调用已批准大语言模型的团队负责人。
+本指南面向帮助业务应用通过项目级 TokenRouter API Key 调用已批准大语言模型的团队负责人。
 
 ## 团队负责人职责
 

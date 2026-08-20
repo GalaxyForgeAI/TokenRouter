@@ -48,7 +48,7 @@ export function gatewayChineseLLMUsageDocs(stats: GatewayDocStats, role: AppRole
             group: "快速开始",
             badge: "GUIDE",
             title: "快速接入",
-            description: "通过 TokenHub 发起第一笔 OpenAI 兼容的大模型请求。",
+            description: "通过 TokenRouter 发起第一笔 OpenAI 兼容的大模型请求。",
             details: [
               { label: "Base URL", value: stats.baseURL },
               { label: "鉴权 Header", value: "Authorization: Bearer <API Key>" },
@@ -229,7 +229,7 @@ export function gatewayChineseLLMUsageDocs(stats: GatewayDocStats, role: AppRole
               title: "请求体",
               columns: ["字段", "类型", "必填", "说明"],
               rows: [
-                ["model", "string", "是", "可调用的 TokenHub 模型 ID。"],
+                ["model", "string", "是", "可调用的 TokenRouter 模型 ID。"],
                 ["max_tokens", "integer", "是", "最大生成 Token 数。"],
                 ["messages", "array", "是", "由 user、assistant 和结构化内容块组成的 Anthropic 消息。"],
                 ["system", "string | array", "否", "顶层 Anthropic system prompt。"],
@@ -313,7 +313,7 @@ export function gatewayChineseLLMUsageDocs(stats: GatewayDocStats, role: AppRole
             group: teamLeader ? "团队接入" : "项目 Key",
             badge: "SDK",
             title: "SDK 与 Claude Code",
-            description: "OpenAI 兼容 SDK 使用 TokenHub Base URL；Claude Code 使用 TokenHub Host URL。",
+            description: "OpenAI 兼容 SDK 使用 TokenRouter Base URL；Claude Code 使用 TokenRouter Host URL。",
             examplesTitle: "客户端示例",
             examples: [
               { title: "Node.js", code: gatewayOpenAISDKExample(stats) },

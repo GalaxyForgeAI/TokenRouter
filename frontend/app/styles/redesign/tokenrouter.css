@@ -1,0 +1,74 @@
+/* ===== TokenRouter 炬枢 design-system additions ===== */
+
+/* 品牌名旁的「炬枢」徽标 */
+.brand-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-name-zh {
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  padding: 3px 7px 2px;
+  border-radius: 999px;
+  color: var(--accent);
+  background: var(--accent-weak);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  vertical-align: 2px;
+}
+
+/* 侧边栏导航激活指示条（motion layoutId 弹簧滑动） */
+.nav-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item.active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.nav-active-pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: var(--accent-weak);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.nav-item > :not(.nav-active-pill) {
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar.collapsed .brand-name-zh {
+  display: none;
+}
+
+/* 数字/代码使用 Fira Code：KPI 数值 */
+.usage-monitor-kpi-value,
+.usage-monitor-kpi strong,
+.metrics-value,
+.kpi-value,
+.metric-value,
+[class*="mono"] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* KPI 卡聚光：与既有卡片样式合并（SpotlightCard 外框收敛） */
+.usage-monitor-kpi.card-spotlight {
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.usage-monitor-kpi.card-spotlight::before {
+  border-radius: 16px;
+}

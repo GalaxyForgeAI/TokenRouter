@@ -988,7 +988,7 @@ export function PlaygroundAPIExamples({ baseURL, modelName, supportsImages = fal
   return (
     <section className="api-example-panel">
       <div className="api-example-header">
-        <div><strong>{tx("API 使用")}</strong><span>{tx("使用以下代码示例集成 TokenHub 模型接口")}</span></div>
+        <div><strong>{tx("API 使用")}</strong><span>{tx("使用以下代码示例集成 TokenRouter 模型接口")}</span></div>
         <button className="icon-button subtle" onClick={() => void copyCurrent()} type="button" title={tx("复制代码")}>{copied ? <Check size={15} /> : <Copy size={15} />}</button>
       </div>
       <div className="api-example-tabs" role="tablist" aria-label={tx("API 调用语言")}>

@@ -2,11 +2,11 @@
 
 Language: [English](../deployment.md) | [简体中文](../zh-CN/deployment.md) | 日本語
 
-TokenHub は、Go バックエンド、Next.js 管理コンソール、SQLite 永続化で構成されるプライベートデプロイ向けのサービスです。
+TokenRouter は、Go バックエンド、Next.js 管理コンソール、SQLite 永続化で構成されるプライベートデプロイ向けのサービスです。
 
 ## データベースの選択
 
-TokenHub は 2 種類のデータベースバックエンドをサポートしています。
+TokenRouter は 2 種類のデータベースバックエンドをサポートしています。
 
 以下のコマンドは Docker Compose を使用します。どちらのバックエンドも Docker なしで同様にサポートされます。[ネイティブ Release + systemd](#ネイティブ-release--systemd)を参照してください。
 
@@ -119,7 +119,7 @@ sudo env \
   bash /tmp/tokenhub-install.sh install
 ```
 
-インストーラーがこの値を `/etc/tokenhub/tokenhub.env` に書き込むのは、設定を初めて作成するときだけです。その後の install、upgrade、rollback では既存の設定を保持します。データベースを意図的に変更する場合は、このファイルを編集して TokenHub を再起動してください。
+インストーラーがこの値を `/etc/tokenhub/tokenhub.env` に書き込むのは、設定を初めて作成するときだけです。その後の install、upgrade、rollback では既存の設定を保持します。データベースを意図的に変更する場合は、このファイルを編集して TokenRouter を再起動してください。
 
 初回インストールでは、本番用シークレットと初期管理者パスワードが生成されます。パスワードは一度だけ表示されます。実行ファイルは次の場所に分けて保存されます。
 
@@ -174,7 +174,7 @@ cp deploy/.env.example deploy/.env
 - `TOKENHUB_ADMIN_TOKEN`: Admin API の初期 Token。32 バイト以上のランダム値を使用してください。
 - `TOKENHUB_BOOTSTRAP_ADMIN_PASSWORD`: 初期 `admin` ユーザーの作成時にのみ使用するパスワード。12 バイト以上にしてください。
 - `TOKENHUB_SECRET_KEY`: バックエンド秘密鍵。32 バイト以上のランダム値を使用し、安定して保持してください。
-- `TOKENHUB_IMAGE_TAG`: 管理対象 TokenHub イメージのタグ。デフォルトは `latest`。
+- `TOKENHUB_IMAGE_TAG`: 管理対象 TokenRouter イメージのタグ。デフォルトは `latest`。
 - `TOKENHUB_PUBLIC_BASE_URL`: ユーザーに表示するバックエンド URL。
 - `TOKENHUB_API_BASE_URL`: ブラウザの管理コンソールが使用するバックエンド URL。フロントエンドサーバーが実行時に読み取ります。非推奨の `NEXT_PUBLIC_API_BASE_URL` は、1 回の互換期間に限りフォールバックとして残します。
 - `TOKENHUB_BACKEND_PORT`: バックエンドのホスト側ポート。デフォルトは `8080`。
@@ -215,7 +215,7 @@ GHCR で初めて公開した Package はデフォルトで非公開です。匿
 
 ### Docker のバージョン状態とロールバック
 
-プラットフォーム管理者は TokenHub ロゴの下にあるバージョンバッジを選択すると、実行中のバージョン、最新の安定版 GitHub Release、最大 3 件の過去の安定版を確認できます。正式なイメージビルドには公開ワークフローから正確なバージョンが設定され、ローカルのソースビルドにはパッケージバージョンとソースビルドの表示が使用されます。管理対象の更新、ロールバック、再起動リクエストは管理者監査ログに記録されます。
+プラットフォーム管理者は TokenRouter ロゴの下にあるバージョンバッジを選択すると、実行中のバージョン、最新の安定版 GitHub Release、最大 3 件の過去の安定版を確認できます。正式なイメージビルドには公開ワークフローから正確なバージョンが設定され、ローカルのソースビルドにはパッケージバージョンとソースビルドの表示が使用されます。管理対象の更新、ロールバック、再起動リクエストは管理者監査ログに記録されます。
 
 バージョン確認は、タイムアウト付きの送信 HTTPS リクエストで公開 GitHub Releases API にアクセスし、成功結果を 20 分間キャッシュします。デフォルトでは `astaxie/TokenHub` を確認します。fork の Release を検証する場合、管理者は `TOKENHUB_RELEASE_REPOSITORY` に信頼できる公開 `owner/repository` を設定できます。GitHub の障害や Release がまだない状態でもゲートウェイトラフィックには影響せず、パネルは現在のバージョンを保ったまま利用不可の状態を表示します。
 
@@ -307,7 +307,7 @@ docker compose --env-file deploy/.env -f deploy/docker-compose.yml down -v
 
 ## ローカルで本番ビルドを実行する（Docker なし）
 
-`deploy/local/run-local.sh` は、Docker も root も systemd も使わずに、自分のマシンで本番ビルドからバックエンドとコンソールを実行します。これは開発用の補助手段であり、デプロイ手段ではありません。サーバーに TokenHub をインストールする場合は[ネイティブ Release + systemd](#ネイティブ-release--systemd) または [Docker Compose](#docker-compose) を使用してください。
+`deploy/local/run-local.sh` は、Docker も root も systemd も使わずに、自分のマシンで本番ビルドからバックエンドとコンソールを実行します。これは開発用の補助手段であり、デプロイ手段ではありません。サーバーに TokenRouter をインストールする場合は[ネイティブ Release + systemd](#ネイティブ-release--systemd) または [Docker Compose](#docker-compose) を使用してください。
 
 ```bash
 ./deploy/local/run-local.sh          # フォアグラウンド。Ctrl-C で両方停止
@@ -401,7 +401,7 @@ docker compose --env-file deploy/.env -f deploy/docker-compose.yml down -v
 | `TOKENHUB_RESPONSE_MAX_QUEUED_JOBS` | `1000` | 1 つのデプロイが受け付ける待機中および実行中のバックグラウンド Responses ジョブ上限 |
 | `TOKENHUB_API` | 空 | `tokenhub-migrate` CLI が対象とする Admin API の URL。この CLI のみが読み取り、バックエンドサーバーは読み取りません。`--to` で上書きされます |
 
-TokenHub ホストのプロキシが Fake-IP モードで動作する場合は、**システム設定 → 基本設定 → Synthetic DNS / Fake-IP 範囲** で設定します。この例外は既定で無効であり、ホスト名の DNS 解決結果にだけ適用され、リテラル IP の Provider URL には適用されません。すべての実装が `198.18.0.0/15` を使うと仮定せず、プロキシが実際に使用するプールを入力してください。この範囲はベンチマーク用に予約され、Fake-IP でよく使われますが、Fake-IP 専用ではありません。通常モードでは RFC1918 プライベートネットワークと IPv6 ULA は引き続きブロックされます。プロキシが実際にこれらの範囲を使用する場合（例：Xray の IPv6 Fake-IP プール）は、別の高リスクなプライベート範囲信頼を明示的に有効にする必要があります。有効にすると、Provider ホスト名が設定範囲内の実在する内部サービスへ到達できる可能性があります。loopback、link-local、metadata、multicast、NAT64 の各範囲はどのモードでもブロックされます。
+TokenRouter ホストのプロキシが Fake-IP モードで動作する場合は、**システム設定 → 基本設定 → Synthetic DNS / Fake-IP 範囲** で設定します。この例外は既定で無効であり、ホスト名の DNS 解決結果にだけ適用され、リテラル IP の Provider URL には適用されません。すべての実装が `198.18.0.0/15` を使うと仮定せず、プロキシが実際に使用するプールを入力してください。この範囲はベンチマーク用に予約され、Fake-IP でよく使われますが、Fake-IP 専用ではありません。通常モードでは RFC1918 プライベートネットワークと IPv6 ULA は引き続きブロックされます。プロキシが実際にこれらの範囲を使用する場合（例：Xray の IPv6 Fake-IP プール）は、別の高リスクなプライベート範囲信頼を明示的に有効にする必要があります。有効にすると、Provider ホスト名が設定範囲内の実在する内部サービスへ到達できる可能性があります。loopback、link-local、metadata、multicast、NAT64 の各範囲はどのモードでもブロックされます。
 
 ## フロントエンド環境変数
 
@@ -445,9 +445,9 @@ SQLite は、プロジェクト、Key、Provider、ルート、ユーザー、�
 
 ### Kronk への接続
 
-TokenHub は外部の Kronk Model Server に接続するだけで、Kronk のインストール、GGUF ファイルのダウンロード、llama.cpp の組み込みは行いません。TokenHub コンテナ内の `127.0.0.1` は Docker ホストではなく、そのコンテナ自身を指します。Kronk をホストで実行する場合は、環境で利用可能な `host.docker.internal` などのホスト到達可能なアドレスを使用してください。別コンテナで実行する場合は、共有 Docker ネットワークと Kronk のサービス名を使用します。信頼済みプライベートリテラル IP は `TOKENHUB_PROVIDER_UPSTREAM_ALLOWED_CIDRS` で許可します。TokenHub と Kronk が同じホストネットワーク名前空間を共有する場合に限り、既定の loopback アドレス用に `TOKENHUB_PROVIDER_UPSTREAM_ALLOW_LOOPBACK=true` を設定してください。
+TokenRouter は外部の Kronk Model Server に接続するだけで、Kronk のインストール、GGUF ファイルのダウンロード、llama.cpp の組み込みは行いません。TokenRouter コンテナ内の `127.0.0.1` は Docker ホストではなく、そのコンテナ自身を指します。Kronk をホストで実行する場合は、環境で利用可能な `host.docker.internal` などのホスト到達可能なアドレスを使用してください。別コンテナで実行する場合は、共有 Docker ネットワークと Kronk のサービス名を使用します。信頼済みプライベートリテラル IP は `TOKENHUB_PROVIDER_UPSTREAM_ALLOWED_CIDRS` で許可します。TokenRouter と Kronk が同じホストネットワーク名前空間を共有する場合に限り、既定の loopback アドレス用に `TOKENHUB_PROVIDER_UPSTREAM_ALLOW_LOOPBACK=true` を設定してください。
 
-Kronk は既定で平文 HTTP を待ち受けます。リモート配置では、信頼済みプライベートネットワークまたは TLS リバースプロキシを使用し、適切な Kronk authorization mode を有効にしてください。TokenHub は推論、モデル検出、liveness、readiness エンドポイントだけを使用し、モデルダウンロード、ディレクトリ、セキュリティ管理、debug、pprof、管理 UI の各エンドポイントはプロキシしません。
+Kronk は既定で平文 HTTP を待ち受けます。リモート配置では、信頼済みプライベートネットワークまたは TLS リバースプロキシを使用し、適切な Kronk authorization mode を有効にしてください。TokenRouter は推論、モデル検出、liveness、readiness エンドポイントだけを使用し、モデルダウンロード、ディレクトリ、セキュリティ管理、debug、pprof、管理 UI の各エンドポイントはプロキシしません。
 
 ## リバースプロキシ
 

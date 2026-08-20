@@ -1,12 +1,12 @@
-# Codex を TokenHub に接続する：Profile クイック設定
+# Codex を TokenRouter に接続する：Profile クイック設定
 
 Language: [English](../codex-tokenhub-profile-quick-start.md) | [简体中文](../zh-CN/codex-tokenhub-profile-quick-start.md) | 日本語
 
-> 独立した `tokenhub` Profile だけを使って Codex を TokenHub に接続するための簡易ガイドです。Profile の作成、API Key の設定、検証、既定環境への復旧を説明します。
+> 独立した `tokenhub` Profile だけを使って Codex を TokenRouter に接続するための簡易ガイドです。Profile の作成、API Key の設定、検証、既定環境への復旧を説明します。
 >
 > Profile、プロセス限定設定、CLI グローバル設定、デスクトップ設定を比較する場合は、[4 つの設定方法と復旧ガイド](codex-tokenhub-configuration.md)を参照してください。
 
-ユーザーが設定を始める前に、管理者は TokenHub で OpenAI Codex Provider、サブスクリプションアカウントリソース、モデルルートを設定し、対象プロジェクトの API Key を作成する必要があります。
+ユーザーが設定を始める前に、管理者は TokenRouter で OpenAI Codex Provider、サブスクリプションアカウントリソース、モデルルートを設定し、対象プロジェクトの API Key を作成する必要があります。
 
 ## 1. Profile の動作
 
@@ -15,7 +15,7 @@ Language: [English](../codex-tokenhub-profile-quick-start.md) | [简体中文](.
 | コマンド | 主な設定 | リクエスト経路 |
 | --- | --- | --- |
 | `codex` | `~/.codex/config.toml` | 既定の Codex Provider |
-| `codex --profile tokenhub` | `~/.codex/tokenhub.config.toml` | TokenHub |
+| `codex --profile tokenhub` | `~/.codex/tokenhub.config.toml` | TokenRouter |
 
 既定の `config.toml` は上書きされません。スクリーンショットには実際の設定・結果だけを使用し、API Key、Token、アカウント、Session ID、非公開アドレス、ユーザー名、パス、Project ID、Request ID を完全にマスクしてください。
 
@@ -23,12 +23,12 @@ Language: [English](../codex-tokenhub-profile-quick-start.md) | [简体中文](.
 
 ## 2. 設定済み Profile を使用する
 
-TokenHub、Project API Key、モデルルートが有効であることを確認します。
+TokenRouter、Project API Key、モデルルートが有効であることを確認します。
 
 `env_key` を使用する場合：
 
 ```bash
-read -r -s "TOKENHUB_API_KEY?TokenHub Project API Key: "
+read -r -s "TOKENHUB_API_KEY?TokenRouter Project API Key: "
 export TOKENHUB_API_KEY
 echo
 
@@ -49,7 +49,7 @@ codex --version
 
 コマンドがない場合は Codex CLI のインストールとサインインを先に完了します。
 
-### 3.2 TokenHub を確認する
+### 3.2 TokenRouter を確認する
 
 ```bash
 curl --fail-with-body http://127.0.0.1:8080/healthz
@@ -92,7 +92,7 @@ model_provider = "tokenhub"
 model = "gpt-5.6-luna"
 
 [model_providers.tokenhub]
-name = "TokenHub Local"
+name = "TokenRouter Local"
 base_url = "http://127.0.0.1:8080/v1"
 env_key = "TOKENHUB_API_KEY"
 env_key_instructions = "Codexを起動する前にTOKENHUB_API_KEYを設定してください"
@@ -105,9 +105,9 @@ wire_api = "responses"
 
 ```toml
 [model_providers.tokenhub]
-name = "TokenHub Local"
+name = "TokenRouter Local"
 base_url = "http://127.0.0.1:8080/v1"
-experimental_bearer_token = "自分のTokenHub Project API Keyをここに貼り付ける"
+experimental_bearer_token = "自分のTokenRouter Project API Keyをここに貼り付ける"
 wire_api = "responses"
 ```
 
@@ -119,7 +119,7 @@ chmod 600 "$HOME/.codex/tokenhub.config.toml"
 
 Key を含む Profile は Git に追加、アップロード、共有、スクリーンショット掲載してはいけません。
 
-![Base URL をマスクした実際の TokenHub Profile 設定](../assets/codex-profile/tokenhub-profile-config-redacted.png)
+![Base URL をマスクした実際の TokenRouter Profile 設定](../assets/codex-profile/tokenhub-profile-config-redacted.png)
 
 *図 1：環境変数方式の実際の設定。Base URL はマスク済みで、API Key は保存されていません。*
 
@@ -157,7 +157,7 @@ PY
 4. `export TOKENHUB_API_KEY` と `echo` を実行します。
 
 ```bash
-read -r -s "TOKENHUB_API_KEY?TokenHub Project API Key: "
+read -r -s "TOKENHUB_API_KEY?TokenRouter Project API Key: "
 export TOKENHUB_API_KEY
 echo
 ```
@@ -194,13 +194,13 @@ provider: tokenhub
 接続成功
 ```
 
-モデル、`provider: tokenhub`、最終応答、TokenHub の HTTP 200 ログを確認します。
+モデル、`provider: tokenhub`、最終応答、TokenRouter の HTTP 200 ログを確認します。
 
 ### 4.4 状態を確認する
 
 Codex で `/status` を実行します。
 
-![TokenHub Profile 経由の実際の Codex 状態](../assets/codex-profile/codex-status-redacted.png)
+![TokenRouter Profile 経由の実際の Codex 状態](../assets/codex-profile/codex-status-redacted.png)
 
 *図 2：実際の `/status`。Provider 詳細、ウィンドウタイトル、Session ID はマスク済みです。*
 
@@ -212,7 +212,7 @@ Codex で `/status` を実行します。
 現在のターミナル
   → tokenhub Profile
   → http://127.0.0.1:8080/v1
-  → TokenHub Project 認証とモデルルーティング
+  → TokenRouter Project 認証とモデルルーティング
   → 接続済み OpenAI Codex アカウントリソース
   → モデル応答
 ```
@@ -273,5 +273,5 @@ mv "$HOME/.codex/tokenhub.config.toml.disabled" \
 
 ## 9. 関連ドキュメント
 
-- [Codex を TokenHub に接続する：4 つの設定方法と復旧](codex-tokenhub-configuration.md)
+- [Codex を TokenRouter に接続する：4 つの設定方法と復旧](codex-tokenhub-configuration.md)
 - [モデル API 利用者ガイド](user-guide.md)

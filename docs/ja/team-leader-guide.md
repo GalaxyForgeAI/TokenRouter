@@ -2,7 +2,7 @@
 
 Language: [English](../team-leader-guide.md) | [简体中文](../zh-CN/team-leader-guide.md) | 日本語
 
-このガイドは、業務アプリケーションが Project 単位の TokenHub API Key で承認済み大規模言語モデルを呼び出せるようにするチームリーダー向けです。
+このガイドは、業務アプリケーションが Project 単位の TokenRouter API Key で承認済み大規模言語モデルを呼び出せるようにするチームリーダー向けです。
 
 ## チームリーダーの責任
 

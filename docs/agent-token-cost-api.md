@@ -2,7 +2,7 @@
 
 Language: English | [简体中文](zh-CN/agent-token-cost-api.md) | [日本語](ja/agent-token-cost-api.md)
 
-The versioned Agent Token Cost API lets a local reporting or monitoring agent read TokenHub usage without an administrator session, model-invocation API key, Provider credential, or manual export. The API is read-only and uses the same request, token, error, and estimated customer-cost records as the administrator usage view.
+The versioned Agent Token Cost API lets a local reporting or monitoring agent read TokenRouter usage without an administrator session, model-invocation API key, Provider credential, or manual export. The API is read-only and uses the same request, token, error, and estimated customer-cost records as the administrator usage view.
 
 ## Endpoints
 
@@ -31,7 +31,7 @@ curl -sS https://tokenhub.example.com/api/admin/analytics/credentials \
   }'
 ```
 
-The response includes `credential` metadata and a `token`. Copy the token immediately; later list responses expose only its prefix and suffix. Set `scope_type` to `organization` and omit `project_id` only when the agent must read the entire TokenHub instance. An expiry is optional but recommended.
+The response includes `credential` metadata and a `token`. Copy the token immediately; later list responses expose only its prefix and suffix. Set `scope_type` to `organization` and omit `project_id` only when the agent must read the entire TokenRouter instance. An expiry is optional but recommended.
 
 Store the token in the local agent's secret store:
 
@@ -142,7 +142,7 @@ Every JSON response declares `schema_version: "1.0"` and has this shape:
 }
 ```
 
-`request_count` and `error_count` come from gateway request logs, including failed requests that have no usage row. Token and cost metrics come from usage records. Cached and reasoning counts are details already represented in the input/output totals; do not add every detail field to `total_tokens`. `estimated_cost_usd` is the configured external customer charge used by the administrator usage view, not TokenHub's confidential Provider cost.
+`request_count` and `error_count` come from gateway request logs, including failed requests that have no usage row. Token and cost metrics come from usage records. Cached and reasoning counts are details already represented in the input/output totals; do not add every detail field to `total_tokens`. `estimated_cost_usd` is the configured external customer charge used by the administrator usage view, not TokenRouter's confidential Provider cost.
 
 ## Pagination and incremental pulls
 
@@ -173,7 +173,7 @@ curl -sS -G https://tokenhub.example.com/api/v1/analytics/token-costs \
   -o token-costs.csv
 ```
 
-CSV uses the same filters, limits, metrics, pagination, and `dedupe_key` as JSON. Metadata is returned in `X-TokenHub-Schema-Version`, `X-TokenHub-Has-More`, `X-TokenHub-Next-Cursor`, `X-TokenHub-Watermark`, `X-TokenHub-Dedupe-By`, `X-TokenHub-Checkpoint-By`, and `X-TokenHub-Incremental-Mode` headers. Text cells that could be interpreted as spreadsheet formulas are prefixed with an apostrophe.
+CSV uses the same filters, limits, metrics, pagination, and `dedupe_key` as JSON. Metadata is returned in `X-TokenRouter-Schema-Version`, `X-TokenRouter-Has-More`, `X-TokenRouter-Next-Cursor`, `X-TokenRouter-Watermark`, `X-TokenRouter-Dedupe-By`, `X-TokenRouter-Checkpoint-By`, and `X-TokenRouter-Incremental-Mode` headers. Text cells that could be interpreted as spreadsheet formulas are prefixed with an apostrophe.
 
 ## CLI and MCP assessment
 

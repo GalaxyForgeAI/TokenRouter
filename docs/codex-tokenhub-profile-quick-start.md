@@ -1,12 +1,12 @@
-# Connect Codex to TokenHub: Profile Quick Setup
+# Connect Codex to TokenRouter: Profile Quick Setup
 
 Language: English | [简体中文](zh-CN/codex-tokenhub-profile-quick-start.md) | [日本語](ja/codex-tokenhub-profile-quick-start.md)
 
-> This guide is for users who only need to connect Codex to TokenHub through an isolated `tokenhub` profile. It covers profile creation, API key setup, validation, and recovery.
+> This guide is for users who only need to connect Codex to TokenRouter through an isolated `tokenhub` profile. It covers profile creation, API key setup, validation, and recovery.
 >
-> To compare profile, process-local, global CLI, and desktop configuration, see [Connect Codex to TokenHub: Four Configuration Methods and Recovery](codex-tokenhub-configuration.md).
+> To compare profile, process-local, global CLI, and desktop configuration, see [Connect Codex to TokenRouter: Four Configuration Methods and Recovery](codex-tokenhub-configuration.md).
 
-Before users follow this guide, an administrator must configure an OpenAI Codex provider, subscription account resources, and model routes in TokenHub, and then create an API key for the project.
+Before users follow this guide, an administrator must configure an OpenAI Codex provider, subscription account resources, and model routes in TokenRouter, and then create an API key for the project.
 
 ## 1. How the profile works
 
@@ -15,7 +15,7 @@ The `tokenhub` profile is loaded only when Codex starts with `--profile tokenhub
 | Command | Primary configuration | Request path |
 | --- | --- | --- |
 | `codex` | `~/.codex/config.toml` | Default Codex provider |
-| `codex --profile tokenhub` | `~/.codex/tokenhub.config.toml` | TokenHub |
+| `codex --profile tokenhub` | `~/.codex/tokenhub.config.toml` | TokenRouter |
 
 The profile does not overwrite the default `config.toml`, affects only explicitly selected sessions, and can be bypassed by omitting the profile argument.
 
@@ -25,12 +25,12 @@ Screenshots must come from real configuration or real requests. Fully redact API
 
 ## 2. Use an existing profile
 
-Before starting, confirm that TokenHub is available, the project API key is valid, and the configured model has a healthy route.
+Before starting, confirm that TokenRouter is available, the project API key is valid, and the configured model has a healthy route.
 
 For a profile that uses `env_key`, enter the key without terminal echo and start Codex:
 
 ```bash
-read -r -s "TOKENHUB_API_KEY?TokenHub project API key: "
+read -r -s "TOKENHUB_API_KEY?TokenRouter project API key: "
 export TOKENHUB_API_KEY
 echo
 
@@ -39,7 +39,7 @@ codex --profile tokenhub
 
 If the profile uses `experimental_bearer_token`, skip `read` and `export` and run `codex --profile tokenhub` directly.
 
-After startup, run `/status`. `Model provider` must show TokenHub and `Model` must match the profile.
+After startup, run `/status`. `Model provider` must show TokenRouter and `Model` must match the profile.
 
 ---
 
@@ -53,7 +53,7 @@ codex --version
 
 Install and sign in to Codex CLI first if the command is unavailable.
 
-### 3.2 Check TokenHub
+### 3.2 Check TokenRouter
 
 This guide uses the local endpoint:
 
@@ -73,7 +73,7 @@ Expected response:
 {"service":"tokenhub-backend","status":"ok"}
 ```
 
-If the service is unavailable, start TokenHub from the repository:
+If the service is unavailable, start TokenRouter from the repository:
 
 ```bash
 cd "/enter/the/absolute/path/to/TokenHub"
@@ -108,7 +108,7 @@ model_provider = "tokenhub"
 model = "gpt-5.6-luna"
 
 [model_providers.tokenhub]
-name = "TokenHub Local"
+name = "TokenRouter Local"
 base_url = "http://127.0.0.1:8080/v1"
 env_key = "TOKENHUB_API_KEY"
 env_key_instructions = "Set TOKENHUB_API_KEY before starting Codex"
@@ -127,9 +127,9 @@ For a controlled personal development machine, you may store the project API key
 
 ```toml
 [model_providers.tokenhub]
-name = "TokenHub Local"
+name = "TokenRouter Local"
 base_url = "http://127.0.0.1:8080/v1"
-experimental_bearer_token = "paste your TokenHub project API key here"
+experimental_bearer_token = "paste your TokenRouter project API key here"
 wire_api = "responses"
 ```
 
@@ -141,7 +141,7 @@ chmod 600 "$HOME/.codex/tokenhub.config.toml"
 
 Never commit, upload, share, or screenshot a profile containing a key.
 
-![Real TokenHub profile configuration with the Base URL redacted](assets/codex-profile/tokenhub-profile-config-redacted.png)
+![Real TokenRouter profile configuration with the Base URL redacted](assets/codex-profile/tokenhub-profile-config-redacted.png)
 
 *Figure 1: Real environment-variable profile configuration. The Base URL is redacted and no API key is stored in the file.*
 
@@ -188,7 +188,7 @@ This section applies only when the profile uses `env_key = "TOKENHUB_API_KEY"`.
 4. Run `export TOKENHUB_API_KEY`, then run `echo`.
 
 ```bash
-read -r -s "TOKENHUB_API_KEY?TokenHub project API key: "
+read -r -s "TOKENHUB_API_KEY?TokenRouter project API key: "
 export TOKENHUB_API_KEY
 echo
 ```
@@ -243,13 +243,13 @@ provider: tokenhub
 Connection successful
 ```
 
-Success requires the expected model, `provider: tokenhub`, the final response, and a corresponding HTTP 200 entry in TokenHub request logs.
+Success requires the expected model, `provider: tokenhub`, the final response, and a corresponding HTTP 200 entry in TokenRouter request logs.
 
 ### 4.4 Check runtime status
 
 Run `/status` in Codex.
 
-![Real Codex status through the TokenHub profile with sensitive information redacted](assets/codex-profile/codex-status-redacted.png)
+![Real Codex status through the TokenRouter profile with sensitive information redacted](assets/codex-profile/codex-status-redacted.png)
 
 *Figure 2: Real `/status` output. Provider details, window title, and session ID are redacted.*
 
@@ -261,14 +261,14 @@ Run `/status` in Codex.
 Current terminal
   → tokenhub profile
   → http://127.0.0.1:8080/v1
-  → TokenHub project authentication and model routing
+  → TokenRouter project authentication and model routing
   → Connected OpenAI Codex account resource
   → Model response
 ```
 
 `GET /v1/models` proves only that the model is visible to the key. A successful request also requires a healthy provider, a healthy account resource, an enabled model route, a valid project API key, and streaming Responses API support.
 
-This environment completed a real streaming Responses request for `gpt-5.6-luna`; TokenHub recorded HTTP 200.
+This environment completed a real streaming Responses request for `gpt-5.6-luna`; TokenRouter recorded HTTP 200.
 
 ---
 
@@ -329,5 +329,5 @@ The filename must be `tokenhub.config.toml`, not `tokenhub.toml` or `tokenhub.co
 
 ## 9. Related documentation
 
-- [Connect Codex to TokenHub: Four Configuration Methods and Recovery](codex-tokenhub-configuration.md)
+- [Connect Codex to TokenRouter: Four Configuration Methods and Recovery](codex-tokenhub-configuration.md)
 - [Model API User Guide](user-guide.md)

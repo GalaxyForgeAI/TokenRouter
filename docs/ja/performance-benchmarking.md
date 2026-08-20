@@ -1,6 +1,6 @@
 # パフォーマンスベンチマーク
 
-TokenHub には 2 つの補完的なベンチマーク層があります。ブラックボックスベンチマークは OpenAI 互換 HTTP エンドポイントを介して TokenHub と他のゲートウェイを比較できます。プロセス内 Go ベンチマークは、TokenHub のルーティングとガバナンスのコストを分離し、メモリ割り当てを報告します。どちらも実際のモデル Provider には接続しません。
+TokenRouter には 2 つの補完的なベンチマーク層があります。ブラックボックスベンチマークは OpenAI 互換 HTTP エンドポイントを介して TokenRouter と他のゲートウェイを比較できます。プロセス内 Go ベンチマークは、TokenRouter のルーティングとガバナンスのコストを分離し、メモリ割り当てを報告します。どちらも実際のモデル Provider には接続しません。
 
 ## 数値の意味
 
@@ -23,9 +23,9 @@ mkdir -p .tmp
 (cd backend && go build -o ../.tmp/tokenhub-benchmark ./cmd/tokenhub-benchmark)
 ```
 
-CLI の `mocker`、`gateway`、`run`、`check`、`summarize-go`、`check-go` は、それぞれ決定的 upstream、ゼロ設定のインメモリ TokenHub ゲートウェイ、ウォームアップ付き固定並列数/固定 RPS 負荷、ブラックボックスのベースライン検査、Go ベンチマーク中央値の集計、プロセス内 `ns/op`・`B/op`・`allocs/op` の検査を提供します。Runner はレスポンスキャッシュを回避するため、プロンプトを一意にします。
+CLI の `mocker`、`gateway`、`run`、`check`、`summarize-go`、`check-go` は、それぞれ決定的 upstream、ゼロ設定のインメモリ TokenRouter ゲートウェイ、ウォームアップ付き固定並列数/固定 RPS 負荷、ブラックボックスのベースライン検査、Go ベンチマーク中央値の集計、プロセス内 `ns/op`・`B/op`・`allocs/op` の検査を提供します。Runner はレスポンスキャッシュを回避するため、プロンプトを一意にします。
 
-TokenHub 単体のスモークベンチマークでは、別のターミナルで自己完結型ゲートウェイを起動します。Key はインメモリテスト DB にのみ存在しますが、引数ではなく環境変数で渡します。
+TokenRouter 単体のスモークベンチマークでは、別のターミナルで自己完結型ゲートウェイを起動します。Key はインメモリテスト DB にのみ存在しますが、引数ではなく環境変数で渡します。
 
 ```bash
 TOKENHUB_BENCHMARK_API_KEY=thk_benchmark_local \
@@ -48,7 +48,7 @@ TOKENHUB_BENCHMARK_API_KEY=thk_benchmark_local \
 
 両方のゲートウェイに `benchmark-model` ルートを作成し、`http://127.0.0.1:18081/v1` に転送します。それぞれにローカルベンチマーク API Key を作成します。`--failure-every` はフェイルオーバー用の決定的障害を注入します。
 
-## TokenHub と Bifrost の比較
+## TokenRouter と Bifrost の比較
 
 同じアイドル状態のマシン上で、同じデータベースクラスとテレメトリ設定を使用します。CPU を競合する場合は両方を同時に測定せず、実行順序を入れ替えて複数回実行します。
 
@@ -110,4 +110,4 @@ schema、プロトコル、ストリームモード、負荷モード/レベル�
 
 シナリオフィンガープリントには、期間、ウォームアップ、タイムアウト、最大実行中数、レスポンスサイズ、ストリーム形状、DB/テレメトリ profile も含まれます。いずれかが異なるか、ロードジェネレータがリクエストをドロップすると失敗します。
 
-成功率、ロードジェネレータの飽和、リトライ回数、CPU/メモリ圧力が異なる実行は無効です。固定並列数のスループット、固定 RPS の遅延、TTFT、割り当てを別々に比較します。最大 RPS だけでは、TokenHub の永続化、監査、ルーティング、metrics、tracing のコストを説明できません。
+成功率、ロードジェネレータの飽和、リトライ回数、CPU/メモリ圧力が異なる実行は無効です。固定並列数のスループット、固定 RPS の遅延、TTFT、割り当てを別々に比較します。最大 RPS だけでは、TokenRouter の永続化、監査、ルーティング、metrics、tracing のコストを説明できません。

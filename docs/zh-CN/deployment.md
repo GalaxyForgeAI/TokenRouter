@@ -2,11 +2,11 @@
 
 Language: [English](../deployment.md) | 简体中文 | [日本語](../ja/deployment.md)
 
-TokenHub 面向私有化部署，由 Go 后端、Next.js 管理后台和 SQLite 持久化组成。
+TokenRouter 面向私有化部署，由 Go 后端、Next.js 管理后台和 SQLite 持久化组成。
 
 ## 数据库选择
 
-TokenHub 支持两种数据库后端：
+TokenRouter 支持两种数据库后端：
 
 下面的命令使用 Docker Compose。两种后端同样支持不使用 Docker 的方式，参见[原生 Release + systemd](#原生-release--systemd)。
 
@@ -119,7 +119,7 @@ sudo env \
   bash /tmp/tokenhub-install.sh install
 ```
 
-安装器只会在首次创建配置时将该值写入 `/etc/tokenhub/tokenhub.env`。后续执行 install、upgrade 或 rollback 会保留已有配置；确需切换数据库时，请编辑该文件并重启 TokenHub。
+安装器只会在首次创建配置时将该值写入 `/etc/tokenhub/tokenhub.env`。后续执行 install、upgrade 或 rollback 会保留已有配置；确需切换数据库时，请编辑该文件并重启 TokenRouter。
 
 首次安装会生成生产密钥和初始管理员密码，密码只会输出一次。运行文件分别保存在：
 
@@ -174,7 +174,7 @@ cp deploy/.env.example deploy/.env
 - `TOKENHUB_ADMIN_TOKEN`：Admin API 启动 Token，请使用至少 32 字节的随机值。
 - `TOKENHUB_BOOTSTRAP_ADMIN_PASSWORD`：仅用于创建初始 `admin` 用户，请设置至少 12 字节的密码。
 - `TOKENHUB_SECRET_KEY`：后端密钥，请使用至少 32 字节的随机值并保持稳定。
-- `TOKENHUB_IMAGE_TAG`：托管 TokenHub 镜像标签，默认 `latest`。
+- `TOKENHUB_IMAGE_TAG`：托管 TokenRouter 镜像标签，默认 `latest`。
 - `TOKENHUB_PUBLIC_BASE_URL`：展示给用户的后端访问地址。
 - `TOKENHUB_API_BASE_URL`：浏览器管理后台访问后端的地址，由前端服务在运行时读取。旧变量 `NEXT_PUBLIC_API_BASE_URL` 保留一个兼容周期，作为回退配置。
 - `TOKENHUB_BACKEND_PORT`：后端宿主机端口，默认 `8080`。
@@ -215,7 +215,7 @@ GHCR 首次发布产生的 Package 默认为私有。开放匿名部署前，仓
 
 ### Docker 版本状态与回退
 
-平台管理员可以点击 TokenHub 标志下方的版本胶囊，查看当前运行版本、检查最新的 GitHub 正式 Release，并列出最多 3 个更早的稳定版本。正式镜像构建会从发布工作流获得精确版本号；本地源码构建使用项目包版本，并明确标记为源码构建。托管更新、回退和重启请求都会写入管理员审计日志。
+平台管理员可以点击 TokenRouter 标志下方的版本胶囊，查看当前运行版本、检查最新的 GitHub 正式 Release，并列出最多 3 个更早的稳定版本。正式镜像构建会从发布工作流获得精确版本号；本地源码构建使用项目包版本，并明确标记为源码构建。托管更新、回退和重启请求都会写入管理员审计日志。
 
 版本检查会通过限时的出站 HTTPS 请求访问公开的 GitHub Releases API，并将成功结果缓存 20 分钟。默认检查 `astaxie/TokenHub`；维护者可以将 `TOKENHUB_RELEASE_REPOSITORY` 设置为其他可信的公开 `owner/repository`，用于 fork 发布验证。GitHub 故障或仓库尚无 Release 不会影响网关流量；面板会展示不可用状态，同时保留当前版本信息。
 
@@ -307,7 +307,7 @@ docker compose --env-file deploy/.env -f deploy/docker-compose.yml down -v
 
 ## 本地运行生产构建（不使用 Docker）
 
-`deploy/local/run-local.sh` 以完全不依赖 Docker、不需要 root、不需要 systemd 的方式，在自己的机器上用生产构建运行后端和控制台。它是开发辅助手段，不是部署方式：要把 TokenHub 装到服务器上，请使用[原生 Release + systemd](#原生-release--systemd) 或 [Docker Compose](#docker-compose)。
+`deploy/local/run-local.sh` 以完全不依赖 Docker、不需要 root、不需要 systemd 的方式，在自己的机器上用生产构建运行后端和控制台。它是开发辅助手段，不是部署方式：要把 TokenRouter 装到服务器上，请使用[原生 Release + systemd](#原生-release--systemd) 或 [Docker Compose](#docker-compose)。
 
 ```bash
 ./deploy/local/run-local.sh          # 前台运行，Ctrl-C 同时停止两者
@@ -401,7 +401,7 @@ docker compose --env-file deploy/.env -f deploy/docker-compose.yml down -v
 | `TOKENHUB_RESPONSE_MAX_QUEUED_JOBS` | `1000` | 单个部署接受的排队中与运行中后台 Responses 任务总上限 |
 | `TOKENHUB_API` | 空 | `tokenhub-migrate` CLI 的目标 Admin API 地址。仅由该 CLI 读取，后端服务不会读取；可被 `--to` 覆盖 |
 
-当 TokenHub 所在主机的代理工作在 Fake-IP 模式时，在「系统设置 → 基础设置 → Synthetic DNS / Fake-IP 网段」中配置。该例外默认关闭，只作用于域名解析结果，不允许字面量 IP Provider URL。应填写代理实际使用的地址池，不要假设所有实现都使用 `198.18.0.0/15`：这个网段为基准测试保留，虽常被 Fake-IP 使用，但并非 Fake-IP 专属。普通模式仍禁止 RFC1918 私网和 IPv6 ULA；如果代理确实使用这些范围（例如 Xray 的 IPv6 Fake-IP 池），必须另行开启高风险私网信任。开启后，Provider 域名可能访问配置范围内的真实内网服务。loopback、link-local、metadata、multicast、NAT64 等范围在任何模式下仍会被拒绝。
+当 TokenRouter 所在主机的代理工作在 Fake-IP 模式时，在「系统设置 → 基础设置 → Synthetic DNS / Fake-IP 网段」中配置。该例外默认关闭，只作用于域名解析结果，不允许字面量 IP Provider URL。应填写代理实际使用的地址池，不要假设所有实现都使用 `198.18.0.0/15`：这个网段为基准测试保留，虽常被 Fake-IP 使用，但并非 Fake-IP 专属。普通模式仍禁止 RFC1918 私网和 IPv6 ULA；如果代理确实使用这些范围（例如 Xray 的 IPv6 Fake-IP 池），必须另行开启高风险私网信任。开启后，Provider 域名可能访问配置范围内的真实内网服务。loopback、link-local、metadata、multicast、NAT64 等范围在任何模式下仍会被拒绝。
 
 ## 前端环境变量
 
@@ -445,9 +445,9 @@ SQLite 是项目、Key、Provider、路由、用户、请求日志、用量、�
 
 ### 连接 Kronk
 
-TokenHub 只连接外部 Kronk Model Server，不安装 Kronk、不下载 GGUF 文件，也不在进程内嵌 llama.cpp。TokenHub 容器内的 `127.0.0.1` 指向容器自身，而不是 Docker 宿主机。Kronk 运行在宿主机时，应使用环境支持的宿主机可达地址（例如 `host.docker.internal`）；运行在其他容器时，应加入共享 Docker 网络并使用 Kronk 服务名。可信私网字面 IP 通过 `TOKENHUB_PROVIDER_UPSTREAM_ALLOWED_CIDRS` 放行。只有 TokenHub 与 Kronk 确实共享同一宿主网络命名空间时，才为默认 loopback 地址设置 `TOKENHUB_PROVIDER_UPSTREAM_ALLOW_LOOPBACK=true`。
+TokenRouter 只连接外部 Kronk Model Server，不安装 Kronk、不下载 GGUF 文件，也不在进程内嵌 llama.cpp。TokenRouter 容器内的 `127.0.0.1` 指向容器自身，而不是 Docker 宿主机。Kronk 运行在宿主机时，应使用环境支持的宿主机可达地址（例如 `host.docker.internal`）；运行在其他容器时，应加入共享 Docker 网络并使用 Kronk 服务名。可信私网字面 IP 通过 `TOKENHUB_PROVIDER_UPSTREAM_ALLOWED_CIDRS` 放行。只有 TokenRouter 与 Kronk 确实共享同一宿主网络命名空间时，才为默认 loopback 地址设置 `TOKENHUB_PROVIDER_UPSTREAM_ALLOW_LOOPBACK=true`。
 
-Kronk 默认监听明文 HTTP。远程部署时应使用可信私网或 TLS 反向代理，并启用合适的 Kronk authorization mode。TokenHub 只访问推理、模型发现、存活和就绪端点，不代理模型下载、目录、安全管理、调试、pprof 或管理 UI 端点。
+Kronk 默认监听明文 HTTP。远程部署时应使用可信私网或 TLS 反向代理，并启用合适的 Kronk authorization mode。TokenRouter 只访问推理、模型发现、存活和就绪端点，不代理模型下载、目录、安全管理、调试、pprof 或管理 UI 端点。
 
 ## 反向代理
 

@@ -2,11 +2,11 @@
 
 返回：[文档首页](README.md) | [普通用户指南](user-guide.md)
 
-本文说明如何通过 TokenHub 的 OpenAI 兼容 Image API 调用 `codex-gpt-image-2` 和 `gpt-image-2`。
+本文说明如何通过 TokenRouter 的 OpenAI 兼容 Image API 调用 `codex-gpt-image-2` 和 `gpt-image-2`。
 
-`codex-gpt-image-2` 是 TokenHub 对外暴露的 Codex 订阅虚拟模型。管理员可在 OpenAI Codex Provider 的“模型”页签勾选“Codex 订阅生图”，选择真实账号完成一次低质量生图测试；测试通过后，TokenHub 会自动创建或启用上游模型为 `gpt-image-2` 的线路。服务器随后从该线路覆盖的账号资源中选择已确认支持生图的 Codex 订阅账号，直接调用 Codex 订阅 Images 接口。服务器不需要安装或启动 Codex CLI。
+`codex-gpt-image-2` 是 TokenRouter 对外暴露的 Codex 订阅虚拟模型。管理员可在 OpenAI Codex Provider 的“模型”页签勾选“Codex 订阅生图”，选择真实账号完成一次低质量生图测试；测试通过后，TokenRouter 会自动创建或启用上游模型为 `gpt-image-2` 的线路。服务器随后从该线路覆盖的账号资源中选择已确认支持生图的 Codex 订阅账号，直接调用 Codex 订阅 Images 接口。服务器不需要安装或启动 Codex CLI。
 
-`gpt-image-2` 通常是独立的 OpenAI API 模型，必须配置 `openai` 类型 Provider、API Key 和模型路由。它调用 Provider 的标准 `/v1/images/generations` 与 `/v1/images/edits`，不会选择 Codex 订阅账号或消耗 Codex 额度。唯一例外是带 Codex `originator` 或 `x-codex-image-turn-id` 请求头的 `/v1/images/generations` 请求：TokenHub 会将其映射为 `codex-gpt-image-2` 并返回 `b64_json`，API Key 必须允许 `codex-gpt-image-2`。
+`gpt-image-2` 通常是独立的 OpenAI API 模型，必须配置 `openai` 类型 Provider、API Key 和模型路由。它调用 Provider 的标准 `/v1/images/generations` 与 `/v1/images/edits`，不会选择 Codex 订阅账号或消耗 Codex 额度。唯一例外是带 Codex `originator` 或 `x-codex-image-turn-id` 请求头的 `/v1/images/generations` 请求：TokenRouter 会将其映射为 `codex-gpt-image-2` 并返回 `b64_json`，API Key 必须允许 `codex-gpt-image-2`。
 
 ## 1. 协议概览
 
@@ -19,7 +19,7 @@
 | 查询可用模型 | `GET` | `/v1/models` | 无请求体 |
 | 管理员查询完整生图日志 | `GET` | `/api/admin/audit/image-jobs?limit=200` | Admin 鉴权 |
 
-所有业务 Endpoint 使用 TokenHub API Key：
+所有业务 Endpoint 使用 TokenRouter API Key：
 
 ```http
 Authorization: Bearer <TOKENHUB_API_KEY>
@@ -29,9 +29,9 @@ Authorization: Bearer <TOKENHUB_API_KEY>
 
 管理员审计接口会返回数据库中解密后的完整提示词，以及输入图、输出图的新签名 URL；提示词在数据库中仍以密文保存。
 
-## 2. TokenHub 与标准 Image API 的关系
+## 2. TokenRouter 与标准 Image API 的关系
 
-TokenHub 保留了 OpenAI Image API 的主要调用形态：
+TokenRouter 保留了 OpenAI Image API 的主要调用形态：
 
 - 文生图使用 `/v1/images/generations`
 - 图片编辑使用 `/v1/images/edits`
@@ -39,23 +39,23 @@ TokenHub 保留了 OpenAI Image API 的主要调用形态：
 - 编辑请求使用 multipart 上传一个或多个 `image` / `image[]`
 - 同步响应使用 `data[].url` 或 `data[].b64_json`
 
-TokenHub 当前扩展和限制如下：
+TokenRouter 当前扩展和限制如下：
 
-| 能力 | TokenHub 当前行为 |
+| 能力 | TokenRouter 当前行为 |
 | --- | --- |
 | 对外模型 | `codex-gpt-image-2`、`gpt-image-2` |
 | 模型隔离 | 前者只使用 Codex 订阅账号；后者只使用 OpenAI API Provider |
 | 单次图片数 | 仅支持 `n=1` |
-| 异步调用 | 支持 `Prefer: respond-async` 或 `X-TokenHub-Async: true` |
+| 异步调用 | 支持 `Prefer: respond-async` 或 `X-TokenRouter-Async: true` |
 | 异步任务查询 | 使用 `/v1/image-jobs/{job_id}` |
-| 图片 URL | TokenHub 服务器签名 URL，有效期 24 小时 |
-| 文件保存 | 输入图、输出图默认保留在 TokenHub 服务器 |
+| 图片 URL | TokenRouter 服务器签名 URL，有效期 24 小时 |
+| 文件保存 | 输入图、输出图默认保留在 TokenRouter 服务器 |
 | 遮罩编辑 | `gpt-image-2` 支持；`codex-gpt-image-2` 上传 `mask` 返回 `501 image_mask_not_supported` |
 | 流式局部图片 | 暂不支持 |
 | 输出格式参数 | 对外暂不支持 `output_format`；OpenAI API 路由请求 PNG，Codex 路由保留上游返回的 PNG、JPEG 或 WebP |
 | 幂等键 | 暂不支持；每次 `POST` 都会创建新任务 |
 
-OpenAI 官方 Image API 还支持更多参数和模式。本文只描述 TokenHub 已实现并经过测试的协议。
+OpenAI 官方 Image API 还支持更多参数和模式。本文只描述 TokenRouter 已实现并经过测试的协议。
 
 ## 3. 测试前准备
 
@@ -64,16 +64,16 @@ OpenAI 官方 Image API 还支持更多参数和模式。本文只描述 TokenHu
 1. 打开控制台的“Provider 渠道”，编辑目标 OpenAI Codex Provider。
 2. 进入“模型”页签，勾选“Codex 订阅生图”。
 3. 选择一个健康、已启用的真实 Codex 订阅账号，并确认额度提示。
-4. 等待“正在测试生图能力”完成。TokenHub 会发送一次 `quality: "low"`、`size: "1024x1024"` 的真实请求，这会消耗少量订阅额度。
+4. 等待“正在测试生图能力”完成。TokenRouter 会发送一次 `quality: "low"`、`size: "1024x1024"` 的真实请求，这会消耗少量订阅额度。
 5. 只有收到非空且可解析的图片后，系统才会记录“支持生图”并创建或启用线路。`403` 表示账号不支持生图；认证失效需要重新授权；限流、超时或上游临时故障可在弹窗中重试。
 
-不需要先手工创建默认线路。自动创建的线路仍可在路由策略中调整优先级、权重、项目范围、指定资源和资源分组。取消勾选会停用匹配线路，但保留能力测试结果。升级已有环境时，TokenHub 只会为之前已经确认支持生图的启用账号补齐一次缺失线路，不会重新启用明确停用的线路，也不会反复创建管理员已经删除的线路。
+不需要先手工创建默认线路。自动创建的线路仍可在路由策略中调整优先级、权重、项目范围、指定资源和资源分组。取消勾选会停用匹配线路，但保留能力测试结果。升级已有环境时，TokenRouter 只会为之前已经确认支持生图的启用账号补齐一次缺失线路，不会重新启用明确停用的线路，也不会反复创建管理员已经删除的线路。
 
 ### 3.2 设置环境变量
 
 ```bash
 export TOKENHUB_BASE_URL="http://localhost:8080"
-export TOKENHUB_API_KEY="你的 TokenHub API Key"
+export TOKENHUB_API_KEY="你的 TokenRouter API Key"
 ```
 
 不要把真实 API Key 写入脚本、Git 或日志。
@@ -118,9 +118,9 @@ curl -sS \
 
 同时确保：
 
-1. TokenHub 已配置健康启用的 `openai` 类型 Provider 和有效 API Key。
+1. TokenRouter 已配置健康启用的 `openai` 类型 Provider 和有效 API Key。
 2. `gpt-image-2` 存在指向该 Provider 的启用模型路由。
-3. TokenHub API Key 的模型白名单包含 `gpt-image-2`。
+3. TokenRouter API Key 的模型白名单包含 `gpt-image-2`。
 
 两种模型的异步任务、服务端文件保存、24 小时签名 URL、提示词日志和响应格式相同。
 
@@ -439,7 +439,7 @@ Codex 订阅 Images 接口做整图和参考图编辑时，mask 请求会返回�
 
 ## 9. 错误处理
 
-TokenHub 使用统一错误结构：
+TokenRouter 使用统一错误结构：
 
 ```json
 {
@@ -499,7 +499,7 @@ running
 
 任务只能由同一项目下的 API Key 查询。其他项目查询相同任务 ID 会得到 `404 image_job_not_found`。
 
-异步 Worker 运行在 TokenHub 后端服务内并受并发数与队列容量限制。服务重启时不会恢复此前的 `queued` 或 `running` 任务；这些任务会被标记为 `failed`，错误码为 `image_worker_restarted`，调用方应创建新任务。图片文件保存在 `TOKENHUB_IMAGE_STORAGE_DIR`；服务器部署时必须自行创建该目录、授予后端进程写权限，并将其放在需要的持久化磁盘上。
+异步 Worker 运行在 TokenRouter 后端服务内并受并发数与队列容量限制。服务重启时不会恢复此前的 `queued` 或 `running` 任务；这些任务会被标记为 `failed`，错误码为 `image_worker_restarted`，调用方应创建新任务。图片文件保存在 `TOKENHUB_IMAGE_STORAGE_DIR`；服务器部署时必须自行创建该目录、授予后端进程写权限，并将其放在需要的持久化磁盘上。
 
 每个任务从 Worker 开始执行起最多运行 5 分钟，可通过 `TOKENHUB_IMAGE_JOB_TIMEOUT_SECONDS` 调整。超时任务会被标记为 `failed`，错误码为 `image_generation_timeout`。
 
@@ -535,7 +535,7 @@ const result = await client.images.generate({
 console.log(result.data[0].url);
 ```
 
-异步任务使用了 TokenHub 扩展协议，建议直接使用 `fetch`：
+异步任务使用了 TokenRouter 扩展协议，建议直接使用 `fetch`：
 
 ```javascript
 const baseURL = process.env.TOKENHUB_BASE_URL;
@@ -629,7 +629,7 @@ print(result.data[0].url)
 
 ## 14. 官方协议参考
 
-TokenHub 的 Endpoint 形态参考 OpenAI Image API，但模型名、账号能力路由、异步任务和存储行为属于 TokenHub 扩展：
+TokenRouter 的 Endpoint 形态参考 OpenAI Image API，但模型名、账号能力路由、异步任务和存储行为属于 TokenRouter 扩展：
 
 - [OpenAI Image generation guide](https://developers.openai.com/api/docs/guides/image-generation)
 - [OpenAI Images API reference](https://developers.openai.com/api/docs/api-reference/images)

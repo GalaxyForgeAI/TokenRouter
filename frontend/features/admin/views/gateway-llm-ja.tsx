@@ -48,7 +48,7 @@ export function gatewayJapaneseLLMUsageDocs(stats: GatewayDocStats, role: AppRol
             group: "クイックスタート",
             badge: "GUIDE",
             title: "はじめての接続",
-            description: "TokenHub 経由で最初の OpenAI 互換 LLM リクエストを送信します。",
+            description: "TokenRouter 経由で最初の OpenAI 互換 LLM リクエストを送信します。",
             details: [
               { label: "Base URL", value: stats.baseURL },
               { label: "認証 Header", value: "Authorization: Bearer <API Key>" },
@@ -229,7 +229,7 @@ export function gatewayJapaneseLLMUsageDocs(stats: GatewayDocStats, role: AppRol
               title: "リクエスト Body",
               columns: ["フィールド", "型", "必須", "説明"],
               rows: [
-                ["model", "string", "はい", "呼び出し可能な TokenHub モデル ID。"],
+                ["model", "string", "はい", "呼び出し可能な TokenRouter モデル ID。"],
                 ["max_tokens", "integer", "はい", "最大生成 tokens。"],
                 ["messages", "array", "はい", "user、assistant、構造化 content block からなる Anthropic メッセージ。"],
                 ["system", "string | array", "いいえ", "トップレベルの Anthropic system prompt。"],
@@ -313,7 +313,7 @@ export function gatewayJapaneseLLMUsageDocs(stats: GatewayDocStats, role: AppRol
             group: teamLeader ? "チーム導入" : "Project Key",
             badge: "SDK",
             title: "SDK と Claude Code",
-            description: "OpenAI 互換 SDK は TokenHub Base URL を使い、Claude Code は TokenHub Host URL を使います。",
+            description: "OpenAI 互換 SDK は TokenRouter Base URL を使い、Claude Code は TokenRouter Host URL を使います。",
             examplesTitle: "クライアント例",
             examples: [
               { title: "Node.js", code: gatewayOpenAISDKExample(stats) },

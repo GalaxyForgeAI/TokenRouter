@@ -1,6 +1,6 @@
 # Database Evolution
 
-TokenHub evolves its database with explicit, forward-only migrations. This page explains the model, the maintenance commands, and how upgrades and rollbacks interact with the database.
+TokenRouter evolves its database with explicit, forward-only migrations. This page explains the model, the maintenance commands, and how upgrades and rollbacks interact with the database.
 
 This page is the repository's normative source for the database evolution lifecycle and safety contract implemented by `backend/internal/dbschema`, the maintenance CLI, managed upgrades, and CI.
 

@@ -1,6 +1,6 @@
 # E2E 测试
 
-迁移框架提供基于 Docker Compose 的端到端测试。测试会启动真实 LiteLLM 和 TokenHub 服务，并通过 TokenHub Admin API 验证完整的 extract → plan → apply → verify → re-apply → rollback 流程。上游 OpenAI 兼容接口由 Nginx 模拟，用户导入所需的 SMTP 服务由 Mailpit 提供。
+迁移框架提供基于 Docker Compose 的端到端测试。测试会启动真实 LiteLLM 和 TokenRouter 服务，并通过 TokenRouter Admin API 验证完整的 extract → plan → apply → verify → re-apply → rollback 流程。上游 OpenAI 兼容接口由 Nginx 模拟，用户导入所需的 SMTP 服务由 Mailpit 提供。
 
 ## 运行方式
 

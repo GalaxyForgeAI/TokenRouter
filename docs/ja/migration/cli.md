@@ -16,7 +16,7 @@ cd backend && go build -o tokenhub-migrate ./cmd/tokenhub-migrate/
 | `verify --bundle <json>` | 移行後の整合性を検証 |
 | `rollback --checkpoint <json>` | 作成されたリソースをロールバック |
 
-`plan` / `apply` / `verify` / `rollback` はリモート TokenHub ターゲット（`--to` または `TOKENHUB_API`）が必須です。未指定の場合は終了コード 5 で拒否されます。
+`plan` / `apply` / `verify` / `rollback` はリモート TokenRouter ターゲット（`--to` または `TOKENHUB_API`）が必須です。未指定の場合は終了コード 5 で拒否されます。
 
 > 注意：`apply` は Admin CSV インポートエンドポイント経由でユーザーを作成します。このエンドポイントはターゲットインスタンスにアクティブなメール通知チャネルが設定されていることを要求します。未設定の場合、新規ユーザーを含む bundle の apply は失敗します。また、新規インポートされた各ユーザーには apply 中にパスワードリセットメールが送信されます。
 >
@@ -34,7 +34,7 @@ cd backend && go build -o tokenhub-migrate ./cmd/tokenhub-migrate/
 
 | 変数 | 説明 |
 |------|------|
-| `TOKENHUB_API` | TokenHub Admin API URL（必須、`--to` でも指定可） |
+| `TOKENHUB_API` | TokenRouter Admin API URL（必須、`--to` でも指定可） |
 | `TOKENHUB_ADMIN_TOKEN` | Admin API 認証トークン |
 
 完全なコマンド仕様は `docs/migration/cli.md` を参照してください。

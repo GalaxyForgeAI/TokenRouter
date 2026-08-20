@@ -6,7 +6,7 @@ The migration framework uses a three-phase architecture:
 
 1. **Source Adapter** — reads competitor gateway configuration and emits a `CanonicalMigrationBundle`
 2. **Canonical Bundle** — a versioned, secret-free JSON intermediate representation
-3. **TokenHub Sink** — idempotently applies the bundle to TokenHub via the Admin API
+3. **TokenRouter Sink** — idempotently applies the bundle to TokenRouter via the Admin API
 
 ## Adding a New Source Adapter
 
@@ -29,6 +29,6 @@ type Extractor interface {
 ## Sink Operations
 
 - **Plan** — dry-run, reports what would change
-- **Apply** — idempotent upsert into TokenHub
+- **Apply** — idempotent upsert into TokenRouter
 - **Verify** — confirms applied state matches bundle
 - **Rollback** — reverts to pre-apply state using checkpoint

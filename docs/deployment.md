@@ -2,11 +2,11 @@
 
 Language: English | [简体中文](zh-CN/deployment.md) | [日本語](ja/deployment.md)
 
-TokenHub is designed for private deployment with a Go backend, a Next.js admin console, and support for SQLite or PostgreSQL persistence.
+TokenRouter is designed for private deployment with a Go backend, a Next.js admin console, and support for SQLite or PostgreSQL persistence.
 
 ## Database Selection
 
-TokenHub supports two database backends:
+TokenRouter supports two database backends:
 
 The commands below use Docker Compose. Both backends are equally supported without Docker; see [Native Release with systemd](#native-release-with-systemd).
 
@@ -119,7 +119,7 @@ sudo env \
   bash /tmp/tokenhub-install.sh install
 ```
 
-The installer writes this value to `/etc/tokenhub/tokenhub.env` only when creating the configuration. Later install, upgrade, and rollback runs preserve the existing file; edit it and restart TokenHub when intentionally changing databases.
+The installer writes this value to `/etc/tokenhub/tokenhub.env` only when creating the configuration. Later install, upgrade, and rollback runs preserve the existing file; edit it and restart TokenRouter when intentionally changing databases.
 
 The first installation generates production secrets and an initial admin password. The password is printed once. Runtime files are kept in separate locations:
 
@@ -151,7 +151,7 @@ sudo bash /tmp/tokenhub-install.sh uninstall
 `uninstall` preserves `/etc/tokenhub` and `/var/lib/tokenhub`. Use `uninstall --purge` only when configuration and application data should also be deleted.
 The installer records ownership markers in the application, configuration, and state directories. Uninstall refuses to recursively remove an unmarked or mismatched directory, and system-level paths such as `/opt`, `/etc`, and `/var/lib` are never accepted as managed directory targets. A fresh installation rejects equal backend and frontend ports. When `ss` or `lsof` is available, it also rejects occupied ports before downloading a Release. Install and upgrade report success only after the systemd unit is active and both the backend health endpoint and admin console respond; readiness failures include recent service logs.
 
-For a fork, use its installer URL and tell TokenHub which public Release repository to query:
+For a fork, use its installer URL and tell TokenRouter which public Release repository to query:
 
 ```bash
 sudo env TOKENHUB_RELEASE_REPOSITORY=your-account/TokenHub \
@@ -174,7 +174,7 @@ Edit `deploy/.env` before starting:
 - `TOKENHUB_ADMIN_TOKEN`: Admin API bootstrap token. Use a random value of at least 32 bytes.
 - `TOKENHUB_BOOTSTRAP_ADMIN_PASSWORD`: Password used only when creating the initial `admin` user. Use at least 12 bytes.
 - `TOKENHUB_SECRET_KEY`: Backend secret key. Use a random value of at least 32 bytes and keep it stable.
-- `TOKENHUB_IMAGE_TAG`: Managed TokenHub image tag. Default: `latest`.
+- `TOKENHUB_IMAGE_TAG`: Managed TokenRouter image tag. Default: `latest`.
 - `TOKENHUB_PUBLIC_BASE_URL`: Public backend URL shown to users.
 - `TOKENHUB_API_BASE_URL`: Backend URL used by the browser admin console. The frontend server reads it at runtime. The deprecated `NEXT_PUBLIC_API_BASE_URL` remains a fallback for one compatibility cycle.
 - `TOKENHUB_BACKEND_PORT`: Host port for the backend. Default: `8080`.
@@ -215,7 +215,7 @@ The first GHCR publication creates a private package. The repository owner must 
 
 ### Docker version status and rollback
 
-Platform administrators can select the version badge below the TokenHub logo to inspect the running version, check the latest stable GitHub Release, and list up to three older stable releases. Release builds receive their exact version from the publication workflow; local source builds use the package version and are labeled as source builds. Managed update, rollback, and restart requests are recorded in the administrator audit log.
+Platform administrators can select the version badge below the TokenRouter logo to inspect the running version, check the latest stable GitHub Release, and list up to three older stable releases. Release builds receive their exact version from the publication workflow; local source builds use the package version and are labeled as source builds. Managed update, rollback, and restart requests are recorded in the administrator audit log.
 
 The check makes a time-limited outbound HTTPS request to the public GitHub Releases API and caches successful results for 20 minutes. It checks `astaxie/TokenHub` by default. Maintainers can set `TOKENHUB_RELEASE_REPOSITORY` to another trusted public `owner/repository` when validating releases from a fork. A GitHub outage or a repository without releases does not affect gateway traffic. The panel reports the unavailable state and keeps the current version visible.
 
@@ -307,7 +307,7 @@ Only use `down -v` when you intentionally want to delete local data.
 
 ## Running the Production Build Locally (without Docker)
 
-`deploy/local/run-local.sh` runs the backend and the console on your own machine from a production build, with no Docker, no root and no systemd. This is a development aid, not a deployment method: to install TokenHub on a server, use [Native Release with systemd](#native-release-with-systemd) or [Docker Compose](#docker-compose).
+`deploy/local/run-local.sh` runs the backend and the console on your own machine from a production build, with no Docker, no root and no systemd. This is a development aid, not a deployment method: to install TokenRouter on a server, use [Native Release with systemd](#native-release-with-systemd) or [Docker Compose](#docker-compose).
 
 ```bash
 ./deploy/local/run-local.sh          # foreground, Ctrl-C stops both
@@ -404,7 +404,7 @@ Options: `--rebuild`, `--reset` to drop the local database, `--backend-port N`, 
 | `TOKENHUB_DB_CONN_MAX_LIFETIME_MINUTES` | `30` | Maximum connection lifetime in minutes (PostgreSQL only) |
 | `TOKENHUB_API` | empty | Target Admin API for the `tokenhub-migrate` CLI. Read only by that CLI, never by the running server; overridden by `--to` |
 
-When the TokenHub host runs a proxy in Fake-IP mode, configure **System Settings → Base Settings → Synthetic DNS / Fake-IP ranges**. The exception is disabled by default and applies only to hostname resolution results, never to literal-IP Provider URLs. Enter the proxy's actual pool rather than assuming every implementation uses `198.18.0.0/15`: that range is reserved for benchmarking and is common, but not exclusive, for Fake-IP. RFC1918 private networks and IPv6 ULA remain blocked in ordinary mode. If a proxy genuinely uses one of those ranges (for example, an Xray IPv6 Fake-IP pool), the separate high-risk private-range trust switch is required; enabling it allows provider hostnames to reach real internal services in the configured range. Loopback, link-local, metadata, multicast, and NAT64 ranges remain blocked in every mode.
+When the TokenRouter host runs a proxy in Fake-IP mode, configure **System Settings → Base Settings → Synthetic DNS / Fake-IP ranges**. The exception is disabled by default and applies only to hostname resolution results, never to literal-IP Provider URLs. Enter the proxy's actual pool rather than assuming every implementation uses `198.18.0.0/15`: that range is reserved for benchmarking and is common, but not exclusive, for Fake-IP. RFC1918 private networks and IPv6 ULA remain blocked in ordinary mode. If a proxy genuinely uses one of those ranges (for example, an Xray IPv6 Fake-IP pool), the separate high-risk private-range trust switch is required; enabling it allows provider hostnames to reach real internal services in the configured range. Loopback, link-local, metadata, multicast, and NAT64 ranges remain blocked in every mode.
 
 ## Frontend Environment Variables
 
@@ -448,13 +448,13 @@ The custom mount intentionally overrides the image catalog and is therefore mana
 
 ### Connecting to Kronk
 
-TokenHub connects to an external Kronk Model Server; it does not install Kronk, download GGUF files, or embed llama.cpp. `127.0.0.1` inside the TokenHub container points to that container, not the Docker host. When Kronk runs on the host, use a host-reachable address such as `host.docker.internal` where supported; when it runs in another container, use a shared Docker network and the Kronk service name. Allow trusted private literal ranges with `TOKENHUB_PROVIDER_UPSTREAM_ALLOWED_CIDRS`. The loopback default requires `TOKENHUB_PROVIDER_UPSTREAM_ALLOW_LOOPBACK=true` only when TokenHub and Kronk actually share the same host network namespace.
+TokenRouter connects to an external Kronk Model Server; it does not install Kronk, download GGUF files, or embed llama.cpp. `127.0.0.1` inside the TokenRouter container points to that container, not the Docker host. When Kronk runs on the host, use a host-reachable address such as `host.docker.internal` where supported; when it runs in another container, use a shared Docker network and the Kronk service name. Allow trusted private literal ranges with `TOKENHUB_PROVIDER_UPSTREAM_ALLOWED_CIDRS`. The loopback default requires `TOKENHUB_PROVIDER_UPSTREAM_ALLOW_LOOPBACK=true` only when TokenRouter and Kronk actually share the same host network namespace.
 
-Kronk listens on plaintext HTTP by default. For remote deployment, use a trusted private network or a TLS reverse proxy and enable an appropriate Kronk authorization mode. TokenHub accesses only inference, model discovery, liveness, and readiness endpoints; it does not proxy model download, directory, security administration, debug, pprof, or management UI endpoints.
+Kronk listens on plaintext HTTP by default. For remote deployment, use a trusted private network or a TLS reverse proxy and enable an appropriate Kronk authorization mode. TokenRouter accesses only inference, model discovery, liveness, and readiness endpoints; it does not proxy model download, directory, security administration, debug, pprof, or management UI endpoints.
 
 ## Reverse Proxy
 
-For production, place TokenHub behind HTTPS and forward:
+For production, place TokenRouter behind HTTPS and forward:
 
 - Admin console traffic to the frontend service.
 - `/v1/*` and `/api/admin/*` traffic to the backend service.

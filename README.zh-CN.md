@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="frontend/public/brand/tokenhub-logo.png" alt="TokenHub" width="96" />
+  <img src="frontend/public/brand/tokenhub-logo.png" alt="TokenRouter" width="96" />
 </p>
 
-<h1 align="center">TokenHub</h1>
+<h1 align="center">TokenRouter</h1>
 
 <p align="center">
-  TokenHub 让企业通过一个私有化网关统一接入和治理 AI 模型，让每一次调用都可控、可追踪、可归因。
+  TokenRouter 让企业通过一个私有化网关统一接入和治理 AI 模型，让每一次调用都可控、可追踪、可归因。
 </p>
 
 <p align="center">
@@ -22,12 +22,12 @@
 ## 支持的 Provider
 
 > [!TIP]
-> **支持接入 Codex 订阅：**可将 OpenAI Codex 订阅账号接入 TokenHub，与 API Provider 一样通过统一网关进行模型服务与治理。[查看 Codex 接入指南 →](docs/zh-CN/codex-tokenhub-profile-quick-start.md)
+> **支持接入 Codex 订阅：**可将 OpenAI Codex 订阅账号接入 TokenRouter，与 API Provider 一样通过统一网关进行模型服务与治理。[查看 Codex 接入指南 →](docs/zh-CN/codex-tokenhub-profile-quick-start.md)
 
-TokenHub 原生适配 Codex 订阅、OpenAI、Azure OpenAI、Anthropic、Gemini、DeepSeek、Qwen 和本地模型，并内置 150+ Provider 模板，也支持自定义 OpenAI-Compatible 上游。常用接入包括：
+TokenRouter 原生适配 Codex 订阅、OpenAI、Azure OpenAI、Anthropic、Gemini、DeepSeek、Qwen 和本地模型，并内置 150+ Provider 模板，也支持自定义 OpenAI-Compatible 上游。常用接入包括：
 
 <p align="center">
-  <img src="docs/assets/provider-showcase.svg" alt="TokenHub 常用 Provider 接入，包括 Codex 订阅、OpenAI、Anthropic、Google Gemini、DeepSeek、Qwen、Llama 和自定义上游。" width="100%">
+  <img src="docs/assets/provider-showcase.svg" alt="TokenRouter 常用 Provider 接入，包括 Codex 订阅、OpenAI、Anthropic、Google Gemini、DeepSeek、Qwen、Llama 和自定义上游。" width="100%">
 </p>
 
 Provider 模板会优先使用对应的原生适配器，其余模板通过 OpenAI-Compatible 接口接入；实际可用模型和能力以对应上游服务及账号权限为准。
@@ -35,12 +35,12 @@ Provider 模板会优先使用对应的原生适配器，其余模板通过 Open
 ## 产品截图
 
 <p align="center">
-  <img src="docs/assets/screenshots/tokenhub-tour.webp" alt="TokenHub 产品导览：登录、概览、接口文档、Provider 渠道、模型目录、路由策略、用量统计和系统设置" width="100%">
+  <img src="docs/assets/screenshots/tokenhub-tour.webp" alt="TokenRouter 产品导览：登录、概览、接口文档、Provider 渠道、模型目录、路由策略、用量统计和系统设置" width="100%">
 </p>
 
 ## 围绕三大角色设计
 
-TokenHub 将日常模型使用、团队治理和平台运维拆成清晰的角色入口，让企业用户只看到和自己职责相关的工作流。
+TokenRouter 将日常模型使用、团队治理和平台运维拆成清晰的角色入口，让企业用户只看到和自己职责相关的工作流。
 
 | 角色 | 工作台重点 | 指南 |
 | --- | --- | --- |
@@ -61,8 +61,8 @@ TokenHub 将日常模型使用、团队治理和平台运维拆成清晰的角�
 - SQLite-first 私有化部署，提供原生 systemd 和 Docker Compose 两种方式。
 - PostgreSQL 支持多实例部署：通过远端 PostgreSQL 共享状态，实现前后端实例横向扩展，并提供连接池配置。参见[部署指南](docs/zh-CN/deployment.md)。
 - 管理后台支持英文、中文、日文切换。
-- TokenHub 还支持接入 OpenAI Codex 订阅账号资源，并通过可隔离、可恢复的 Codex Profile，让指定的本地 Codex CLI 或桌面端会话经过 TokenHub。参见 [Codex 接入指南](docs/zh-CN/codex-tokenhub-profile-quick-start.md)。
-- Gemini CLI 可以直接连接 TokenHub 的 Gemini 原生接口，并使用 Codex 订阅账号提供的 GPT 模型，不需要 CCswitch。参见 [Gemini CLI 接入指南](docs/zh-CN/gemini-cli-codex-subscription.md)。
+- TokenRouter 还支持接入 OpenAI Codex 订阅账号资源，并通过可隔离、可恢复的 Codex Profile，让指定的本地 Codex CLI 或桌面端会话经过 TokenRouter。参见 [Codex 接入指南](docs/zh-CN/codex-tokenhub-profile-quick-start.md)。
+- Gemini CLI 可以直接连接 TokenRouter 的 Gemini 原生接口，并使用 Codex 订阅账号提供的 GPT 模型，不需要 CCswitch。参见 [Gemini CLI 接入指南](docs/zh-CN/gemini-cli-codex-subscription.md)。
 
 ## 快速开始
 
@@ -107,7 +107,7 @@ cp deploy/.env.example deploy/.env
 
 ## Contributors
 
-TokenHub 的演进离不开真实企业场景里的使用反馈、网关集成、文档完善、测试补充和持续维护。感谢每一位让项目变得更可靠的人。
+TokenRouter 的演进离不开真实企业场景里的使用反馈、网关集成、文档完善、测试补充和持续维护。感谢每一位让项目变得更可靠的人。
 
 <!-- readme: contributors -start -->
 
@@ -260,4 +260,4 @@ TokenHub 的演进离不开真实企业场景里的使用反馈、网关集成�
 
 ## License
 
-TokenHub 采用 [Apache License 2.0](LICENSE) 协议。
+TokenRouter 采用 [Apache License 2.0](LICENSE) 协议。

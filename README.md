@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="frontend/public/brand/tokenhub-logo.png" alt="TokenHub" width="96" />
+  <img src="frontend/public/brand/tokenrouter-logo.png" alt="TokenRouter" width="96" />
 </p>
 
-<h1 align="center">TokenHub</h1>
+<h1 align="center">TokenRouter</h1>
 
 <p align="center">
-  TokenHub gives enterprises a private gateway to unify AI model access and governance, making every request controllable, traceable, and attributable.
+  TokenRouter gives enterprises a private gateway to unify AI model access and governance, making every request controllable, traceable, and attributable.
 </p>
 
 <p align="center">
@@ -22,12 +22,12 @@
 ## Supported Providers
 
 > [!TIP]
-> **Codex subscription ready:** connect OpenAI Codex subscription accounts to TokenHub and serve their models through the same governed gateway as API-based providers. [Set up Codex access →](docs/codex-tokenhub-profile-quick-start.md)
+> **Codex subscription ready:** connect OpenAI Codex subscription accounts to TokenRouter and serve their models through the same governed gateway as API-based providers. [Set up Codex access →](docs/codex-tokenhub-profile-quick-start.md)
 
-TokenHub includes native adapters for Codex subscriptions, OpenAI, Azure OpenAI, Anthropic, Gemini, DeepSeek, Qwen, and local models, plus a catalog of 150+ provider templates and custom OpenAI-compatible upstreams. Popular integrations include:
+TokenRouter includes native adapters for Codex subscriptions, OpenAI, Azure OpenAI, Anthropic, Gemini, DeepSeek, Qwen, and local models, plus a catalog of 150+ provider templates and custom OpenAI-compatible upstreams. Popular integrations include:
 
 <p align="center">
-  <img src="docs/assets/provider-showcase.svg" alt="Popular TokenHub provider integrations, including Codex Subscription, OpenAI, Anthropic, Google Gemini, DeepSeek, Qwen, Llama, and custom upstreams." width="100%">
+  <img src="docs/assets/provider-showcase.svg" alt="Popular TokenRouter provider integrations, including Codex Subscription, OpenAI, Anthropic, Google Gemini, DeepSeek, Qwen, Llama, and custom upstreams." width="100%">
 </p>
 
 Provider templates use the matching native adapter when available; otherwise they connect through an OpenAI-compatible endpoint. Models and capabilities vary by upstream service and account.
@@ -35,12 +35,12 @@ Provider templates use the matching native adapter when available; otherwise the
 ## Screenshots
 
 <p align="center">
-  <img src="docs/assets/screenshots/tokenhub-tour.webp" alt="TokenHub product tour: login, overview, API documentation, provider channels, model catalog, routing policies, usage analytics, and system settings" width="100%">
+  <img src="docs/assets/screenshots/tokenhub-tour.webp" alt="TokenRouter product tour: login, overview, API documentation, provider channels, model catalog, routing policies, usage analytics, and system settings" width="100%">
 </p>
 
 ## Designed Around Three Roles
 
-TokenHub separates everyday model usage, team governance, and platform administration so enterprise users see the workflows that match their responsibility.
+TokenRouter separates everyday model usage, team governance, and platform administration so enterprise users see the workflows that match their responsibility.
 
 | Role | Workspace Focus | Guide |
 | --- | --- | --- |
@@ -61,8 +61,8 @@ TokenHub separates everyday model usage, team governance, and platform administr
 - SQLite-first private deployment with native systemd and Docker Compose options.
 - PostgreSQL supports multi-instance deployments: share state through remote PostgreSQL, scale frontend and backend replicas horizontally, and configure connection pools. See the [deployment guide](docs/deployment.md) and [PostgreSQL setup guide](docs/postgresql-setup.md).
 - Console language switching for English, Chinese, and Japanese.
-- TokenHub can also connect OpenAI Codex subscription resources and route selected local Codex CLI or desktop sessions through an isolated, recoverable Codex profile. See the [Codex integration guides](docs/codex-tokenhub-profile-quick-start.md).
-- Gemini CLI can connect directly to TokenHub's native Gemini API and use GPT models backed by Codex subscription accounts, without CCswitch. See the [Gemini CLI guide](docs/gemini-cli-codex-subscription.md).
+- TokenRouter can also connect OpenAI Codex subscription resources and route selected local Codex CLI or desktop sessions through an isolated, recoverable Codex profile. See the [Codex integration guides](docs/codex-tokenhub-profile-quick-start.md).
+- Gemini CLI can connect directly to TokenRouter's native Gemini API and use GPT models backed by Codex subscription accounts, without CCswitch. See the [Gemini CLI guide](docs/gemini-cli-codex-subscription.md).
 
 ## Quick Start
 
@@ -107,7 +107,7 @@ The native installer verifies Release checksums, installs a systemd service, and
 
 ## Contributors
 
-TokenHub grows through product feedback, gateway integrations, documentation, tests, and the steady care of people who run it in real enterprise environments.
+TokenRouter grows through product feedback, gateway integrations, documentation, tests, and the steady care of people who run it in real enterprise environments.
 
 <!-- readme: contributors -start -->
 
@@ -260,4 +260,4 @@ TokenHub grows through product feedback, gateway integrations, documentation, te
 
 ## License
 
-TokenHub is licensed under the [Apache License 2.0](LICENSE).
+TokenRouter is licensed under the [Apache License 2.0](LICENSE).

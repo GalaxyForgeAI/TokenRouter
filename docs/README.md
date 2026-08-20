@@ -1,8 +1,8 @@
-# TokenHub Documentation
+# TokenRouter Documentation
 
 Language: English | [简体中文](zh-CN/README.md) | [日本語](ja/README.md)
 
-TokenHub documentation is now organized around the three roles used in an enterprise AI gateway. The default documentation language is English. Localized Chinese and Japanese versions use the same English screenshots and the same English sample data set.
+TokenRouter documentation is now organized around the three roles used in an enterprise AI gateway. The default documentation language is English. Localized Chinese and Japanese versions use the same English screenshots and the same English sample data set.
 
 ## Architecture and Deployment
 
@@ -21,8 +21,8 @@ TokenHub documentation is now organized around the three roles used in an enterp
 | [Administrator Guide](administrator-guide.md) | Platform administrators and security operators | Configure providers, model catalog, routing, identity sources, RBAC, audit, and cost controls |
 | [Agent Token Cost API](agent-token-cost-api.md) | Local reporting agents and platform administrators | Create least-privilege analytics credentials and pull filtered, aggregated, incremental token costs as JSON or CSV |
 | [Image Generation Guide](user-guide.md#codex-subscription-image-generation) | Application developers using image models | Generate and edit images, run asynchronous jobs, and distinguish Codex subscription capacity from OpenAI API usage |
-| [Connect Codex to TokenHub: Profile Quick Setup](codex-tokenhub-profile-quick-start.md) | Codex users who only need an isolated profile | Create the profile, set the key, validate the connection, and recover |
-| [Connect Codex to TokenHub: Four Configuration Methods and Recovery](codex-tokenhub-configuration.md) | Codex users and developers comparing integration methods | Configure TokenHub through a profile, process-local override, global CLI settings, or the desktop app |
+| [Connect Codex to TokenRouter: Profile Quick Setup](codex-tokenhub-profile-quick-start.md) | Codex users who only need an isolated profile | Create the profile, set the key, validate the connection, and recover |
+| [Connect Codex to TokenRouter: Four Configuration Methods and Recovery](codex-tokenhub-configuration.md) | Codex users and developers comparing integration methods | Configure TokenRouter through a profile, process-local override, global CLI settings, or the desktop app |
 
 ## Shared English Sample Data
 

@@ -1,12 +1,12 @@
-# Codex 接入 TokenHub：Profile 快速配置指南
+# Codex 接入 TokenRouter：Profile 快速配置指南
 
 Language: [English](../codex-tokenhub-profile-quick-start.md) | 简体中文 | [日本語](../ja/codex-tokenhub-profile-quick-start.md)
 
-> 本文面向仅需通过独立 `tokenhub` Profile 接入 TokenHub 的用户，提供配置文件创建、Key 设置、启动验证和恢复默认环境的简化流程。
+> 本文面向仅需通过独立 `tokenhub` Profile 接入 TokenRouter 的用户，提供配置文件创建、Key 设置、启动验证和恢复默认环境的简化流程。
 >
-> 本文不比较其他接入方式。如需了解 Profile、进程级临时配置、CLI 全局配置和桌面端配置，请参阅 [Codex 接入 TokenHub：四种配置方式与恢复指南](codex-tokenhub-configuration.md)。
+> 本文不比较其他接入方式。如需了解 Profile、进程级临时配置、CLI 全局配置和桌面端配置，请参阅 [Codex 接入 TokenRouter：四种配置方式与恢复指南](codex-tokenhub-configuration.md)。
 
-用户开始配置前，管理员需要先在 TokenHub 中接入 OpenAI Codex Provider、订阅账号资源和模型路由，再为实际项目创建 API Key。
+用户开始配置前，管理员需要先在 TokenRouter 中接入 OpenAI Codex Provider、订阅账号资源和模型路由，再为实际项目创建 API Key。
 
 ## 1. Profile 方案说明
 
@@ -17,7 +17,7 @@ Language: [English](../codex-tokenhub-profile-quick-start.md) | 简体中文 | [
 | 启动方式 | 使用的主要配置 | 请求路径 |
 | --- | --- | --- |
 | `codex` | `~/.codex/config.toml` | 默认 Codex Provider |
-| `codex --profile tokenhub` | `~/.codex/tokenhub.config.toml` | TokenHub |
+| `codex --profile tokenhub` | `~/.codex/tokenhub.config.toml` | TokenRouter |
 
 该方案具备以下特征：
 
@@ -30,9 +30,9 @@ Language: [English](../codex-tokenhub-profile-quick-start.md) | 简体中文 | [
 
 Profile 负责定义：
 
-1. TokenHub Provider；
-2. TokenHub 当前实际可用的模型；
-3. TokenHub Responses API 地址；
+1. TokenRouter Provider；
+2. TokenRouter 当前实际可用的模型；
+3. TokenRouter Responses API 地址；
 4. API Key 对应的环境变量名称 `TOKENHUB_API_KEY`。
 
 ### 1.3 截图与脱敏规范
@@ -51,14 +51,14 @@ Profile 负责定义：
 
 本文对应的 macOS 环境已经创建 `tokenhub` Profile。使用前应确认：
 
-- TokenHub 后端处于可用状态；
-- 已获取有效的 TokenHub 项目 API Key；
+- TokenRouter 后端处于可用状态；
+- 已获取有效的 TokenRouter 项目 API Key；
 - Profile 中配置的模型仍存在健康路由。
 
 在终端中安全注入 Key，并启动 Codex：
 
 ```bash
-read -r -s "TOKENHUB_API_KEY?请输入 TokenHub 项目 API Key: "
+read -r -s "TOKENHUB_API_KEY?请输入 TokenRouter 项目 API Key: "
 export TOKENHUB_API_KEY
 echo
 
@@ -69,7 +69,7 @@ codex --profile tokenhub
 
 > **验收要求**
 >
-> 启动后执行 `/status`，确认 `Model provider` 为 TokenHub，且 `Model` 与 Profile 中配置的实际模型一致。
+> 启动后执行 `/status`，确认 `Model provider` 为 TokenRouter，且 `Model` 与 Profile 中配置的实际模型一致。
 
 ---
 
@@ -85,7 +85,7 @@ codex --version
 
 命令应返回实际版本号。如果终端提示 `command not found: codex`，应先完成 Codex CLI 安装和登录。
 
-### 3.2 检查 TokenHub 服务
+### 3.2 检查 TokenRouter 服务
 
 本文对应环境的本机服务地址为：
 
@@ -105,10 +105,10 @@ curl --fail-with-body http://127.0.0.1:8080/healthz
 {"service":"tokenhub-backend","status":"ok"}
 ```
 
-如果服务不可用，在 TokenHub 仓库目录启动本地环境：
+如果服务不可用，在 TokenRouter 仓库目录启动本地环境：
 
 ```bash
-cd "/填写 TokenHub 仓库的实际绝对路径"
+cd "/填写 TokenRouter 仓库的实际绝对路径"
 ./start.sh
 ```
 
@@ -149,7 +149,7 @@ model_provider = "tokenhub"
 model = "gpt-5.6-luna"
 
 [model_providers.tokenhub]
-name = "TokenHub Local"
+name = "TokenRouter Local"
 base_url = "http://127.0.0.1:8080/v1"
 env_key = "TOKENHUB_API_KEY"
 env_key_instructions = "启动 Codex 前请设置 TOKENHUB_API_KEY"
@@ -172,9 +172,9 @@ wire_api = "responses"
 
 ```toml
 [model_providers.tokenhub]
-name = "TokenHub Local"
+name = "TokenRouter Local"
 base_url = "http://127.0.0.1:8080/v1"
-experimental_bearer_token = "在此粘贴自己的 TokenHub 项目 API Key"
+experimental_bearer_token = "在此粘贴自己的 TokenRouter 项目 API Key"
 wire_api = "responses"
 ```
 
@@ -188,7 +188,7 @@ chmod 600 "$HOME/.codex/tokenhub.config.toml"
 
 该方式会以明文保存 Key，仅适合受控的个人开发环境。Profile 文件不得提交到 Git、上传、分享或包含在截图中。多人共用设备或企业环境应使用环境变量或组织批准的凭证管理工具。
 
-![TokenHub Profile 实际配置，Base URL 已打码](../assets/codex-profile/tokenhub-profile-config-redacted.png)
+![TokenRouter Profile 实际配置，Base URL 已打码](../assets/codex-profile/tokenhub-profile-config-redacted.png)
 
 *图 1：使用环境变量方式的 `tokenhub.config.toml` 实际配置。Base URL 已打码，配置文件中不包含 API Key。*
 
@@ -238,13 +238,13 @@ Provider： tokenhub
 每次打开新的终端后，按以下顺序操作：
 
 1. 复制下面的 `read` 命令并按回车；
-2. 终端显示“请输入 TokenHub 项目 API Key:”后，粘贴实际 Key；
+2. 终端显示“请输入 TokenRouter 项目 API Key:”后，粘贴实际 Key；
 3. 按回车确认。输入过程中屏幕不会显示字符或星号；
 4. 执行 `export TOKENHUB_API_KEY`；
 5. 执行 `echo`，然后启动 Codex。
 
 ```bash
-read -r -s "TOKENHUB_API_KEY?请输入 TokenHub 项目 API Key: "
+read -r -s "TOKENHUB_API_KEY?请输入 TokenRouter 项目 API Key: "
 export TOKENHUB_API_KEY
 echo
 ```
@@ -311,16 +311,16 @@ provider: tokenhub
 
 验收标准：
 
-- `model` 为 TokenHub 中已启用的实际模型；
+- `model` 为 TokenRouter 中已启用的实际模型；
 - `provider` 为 `tokenhub`；
 - 最终响应为“连接成功”；
-- TokenHub 请求日志存在对应 HTTP 200 记录。
+- TokenRouter 请求日志存在对应 HTTP 200 记录。
 
 ### 4.4 检查运行状态
 
 进入 Codex 后执行 `/status`，确认模型和 Provider。
 
-![Codex 通过 TokenHub Profile 运行的真实状态，敏感信息已打码](../assets/codex-profile/codex-status-redacted.png)
+![Codex 通过 TokenRouter Profile 运行的真实状态，敏感信息已打码](../assets/codex-profile/codex-status-redacted.png)
 
 *图 2：本机真实 `/status`。窗口标题、Provider 详情和 Session ID 已打码。*
 
@@ -334,7 +334,7 @@ provider: tokenhub
 当前终端
   → tokenhub Profile
   → http://127.0.0.1:8080/v1
-  → TokenHub 项目鉴权与模型路由
+  → TokenRouter 项目鉴权与模型路由
   → 已接入的 OpenAI Codex 账号资源
   → 模型响应
 ```
@@ -347,7 +347,7 @@ provider: tokenhub
 - 项目 API Key 有效；
 - 路由支持流式 Responses API。
 
-本文对应环境已经完成 `gpt-5.6-luna` 的真实流式 Responses 请求验证，TokenHub 请求日志返回 HTTP 200。
+本文对应环境已经完成 `gpt-5.6-luna` 的真实流式 Responses 请求验证，TokenRouter 请求日志返回 HTTP 200。
 
 ---
 
@@ -407,7 +407,7 @@ mv "$HOME/.codex/tokenhub.config.toml.disabled" \
 | 现象 | 原因判断 | 处理方式 |
 | --- | --- | --- |
 | 提示缺少 `TOKENHUB_API_KEY` | 当前终端尚未注入 Key | 重新执行第 4.1 节的隐藏输入命令 |
-| HTTP 401 | Key 不存在、已失效，或不是当前项目的 API Key | 在 TokenHub 项目空间复制或轮换项目 API Key，并重新注入 |
+| HTTP 401 | Key 不存在、已失效，或不是当前项目的 API Key | 在 TokenRouter 项目空间复制或轮换项目 API Key，并重新注入 |
 | HTTP 503 / `provider_unavailable` | 当前模型没有可用路由 | 检查 Provider、账号资源、模型路由和 Provider 启用状态 |
 | 找不到 Profile | 文件不存在或文件名错误 | 检查 `~/.codex/tokenhub.config.toml` |
 | 修改后仍使用旧 Provider | 当前进程未重新加载配置 | 完全退出 Codex 后重新执行 `codex --profile tokenhub` |
@@ -457,7 +457,7 @@ codex exec \
 
 | 操作 | 命令 |
 | --- | --- |
-| 使用 TokenHub Profile | `codex --profile tokenhub` |
+| 使用 TokenRouter Profile | `codex --profile tokenhub` |
 | 使用默认 Codex 配置 | `codex` |
 | 直接在 Profile 中保存 Key | 使用 `experimental_bearer_token`，并删除 `env_key` 和 `env_key_instructions` |
 | 检查 Key 是否已注入 | `test -n "${TOKENHUB_API_KEY:-}" && echo "TOKENHUB_API_KEY 已注入"` |
@@ -466,5 +466,5 @@ codex exec \
 
 ## 10. 相关文档
 
-- [Codex 接入 TokenHub：四种配置方式与恢复指南](codex-tokenhub-configuration.md)
+- [Codex 接入 TokenRouter：四种配置方式与恢复指南](codex-tokenhub-configuration.md)
 - [普通用户大模型 API 指南](user-guide.md)

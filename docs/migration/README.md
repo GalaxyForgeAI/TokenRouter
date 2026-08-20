@@ -1,10 +1,10 @@
-# TokenHub Migration Framework
+# TokenRouter Migration Framework
 
-The TokenHub migration framework provides a repeatable, idempotent workflow for moving competing AI gateways into TokenHub.
+The TokenRouter migration framework provides a repeatable, idempotent workflow for moving competing AI gateways into TokenRouter.
 
 ## Current Status
 
-The current branch ships a working canonical bundle, a TokenHub sink with both store-backed and remote Admin API-backed execution, a LiteLLM file-based adapter, and a working CLI flow for `extract`, `plan`, `apply`, `verify`, and `rollback`.
+The current branch ships a working canonical bundle, a TokenRouter sink with both store-backed and remote Admin API-backed execution, a LiteLLM file-based adapter, and a working CLI flow for `extract`, `plan`, `apply`, `verify`, and `rollback`.
 
 ## Architecture
 
@@ -20,7 +20,7 @@ See [litellm.md](./litellm.md) for LiteLLM specifics.
 
 ## Canonical Bundle
 
-The intermediate representation used between source adapters and the TokenHub sink. See [bundle-schema.md](./bundle-schema.md) for the schema and compatibility policy.
+The intermediate representation used between source adapters and the TokenRouter sink. See [bundle-schema.md](./bundle-schema.md) for the schema and compatibility policy.
 
 ## CLI
 

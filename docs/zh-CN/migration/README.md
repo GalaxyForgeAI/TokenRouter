@@ -1,10 +1,10 @@
-# TokenHub 迁移框架
+# TokenRouter 迁移框架
 
-TokenHub 迁移框架提供可重复、幂等的工作流，将竞争 AI 网关迁入 TokenHub。
+TokenRouter 迁移框架提供可重复、幂等的工作流，将竞争 AI 网关迁入 TokenRouter。
 
 ## 当前状态
 
-当前分支已经提供可工作的 canonical bundle、同时支持基于 store 与远端 Admin API 的 TokenHub sink、LiteLLM 文件型适配器，以及可执行 `extract`、`plan`、`apply`、`verify`、`rollback` 的 CLI 流程。
+当前分支已经提供可工作的 canonical bundle、同时支持基于 store 与远端 Admin API 的 TokenRouter sink、LiteLLM 文件型适配器，以及可执行 `extract`、`plan`、`apply`、`verify`、`rollback` 的 CLI 流程。
 
 ## 文档
 

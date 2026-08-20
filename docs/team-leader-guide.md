@@ -2,7 +2,7 @@
 
 Language: English | [简体中文](zh-CN/team-leader-guide.md) | [日本語](ja/team-leader-guide.md)
 
-This guide is for team leaders who help applications call approved large language models through project-scoped TokenHub API keys.
+This guide is for team leaders who help applications call approved large language models through project-scoped TokenRouter API keys.
 
 ## Team Leader Responsibility
 

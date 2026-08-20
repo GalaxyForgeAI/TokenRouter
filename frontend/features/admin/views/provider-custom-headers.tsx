@@ -64,7 +64,7 @@ export function ProviderCustomHeaders({
                 <input
                   autoComplete="new-password"
                   disabled={locked}
-                  placeholder={entry.sensitive ? providerHeaderMask : "TokenHub-Custom-Client/1.0"}
+                  placeholder={entry.sensitive ? providerHeaderMask : "TokenRouter-Custom-Client/1.0"}
                   type={entry.sensitive ? "password" : "text"}
                   value={entry.value}
                   onChange={(event) => changeEntry(index, { value: event.target.value })}
@@ -90,7 +90,7 @@ export function ProviderCustomHeaders({
           </div>
         </details>
       ) : null}
-      <small>{tx("Authorization、API Key、Content-Type、Host 和逐跳传输头由 TokenHub 管理，不能覆盖。敏感值保存后仅显示遮盖；留空保留，删除整行才会清除。")}</small>
+      <small>{tx("Authorization、API Key、Content-Type、Host 和逐跳传输头由 TokenRouter 管理，不能覆盖。敏感值保存后仅显示遮盖；留空保留，删除整行才会清除。")}</small>
     </div>
   );
 }

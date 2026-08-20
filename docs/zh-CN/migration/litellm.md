@@ -10,7 +10,7 @@ LiteLLM `proxy_config.yaml` 文件，包含 `model_list`、`key_management_setti
 
 ## 映射规则
 
-| LiteLLM 概念 | TokenHub 资源 |
+| LiteLLM 概念 | TokenRouter 资源 |
 |-------------|----------------|
 | `model_list[].litellm_params.model` 前缀 | Provider |
 | `model_list[].model_name` | Model + Route |

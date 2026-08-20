@@ -1,12 +1,12 @@
-# Codex 接入 TokenHub：四种配置方式与恢复指南
+# Codex 接入 TokenRouter：四种配置方式与恢复指南
 
 Language: [English](../codex-tokenhub-configuration.md) | 简体中文 | [日本語](../ja/codex-tokenhub-configuration.md)
 
-> 本文说明如何将本地 Codex CLI、Codex 桌面端及 IDE 扩展接入 TokenHub，并提供 Profile、进程级临时配置、CLI 全局配置和桌面端配置四种实施方案。
+> 本文说明如何将本地 Codex CLI、Codex 桌面端及 IDE 扩展接入 TokenRouter，并提供 Profile、进程级临时配置、CLI 全局配置和桌面端配置四种实施方案。
 >
 > 每种方案均包含适用范围、配置步骤、验证标准和恢复方法。
 >
-> 如果仅需通过独立 Profile 快速完成接入，请参阅 [Codex 接入 TokenHub：Profile 快速配置](codex-tokenhub-profile-quick-start.md)。
+> 如果仅需通过独立 Profile 快速完成接入，请参阅 [Codex 接入 TokenRouter：Profile 快速配置](codex-tokenhub-profile-quick-start.md)。
 
 ## 1. 配置方案总览
 
@@ -14,9 +14,9 @@ Language: [English](../codex-tokenhub-configuration.md) | 简体中文 | [日本
 
 | 配置方式 | 影响范围 | 持久化 | 适用场景 | 恢复方式 |
 | --- | --- | --- | --- | --- |
-| Profile 局部配置 | 仅显式选择该 Profile 的会话 | 是 | 指定项目或任务需要通过 TokenHub | 启动时不传入 `--profile tokenhub` |
+| Profile 局部配置 | 仅显式选择该 Profile 的会话 | 是 | 指定项目或任务需要通过 TokenRouter | 启动时不传入 `--profile tokenhub` |
 | 进程级临时配置 | 当前 Codex 进程或终端会话 | 否 | 首次验证、临时测试或低频使用 | 退出进程并清除临时环境变量 |
-| CLI 全局配置 | 当前用户的本地 Codex 会话 | 是 | 本地 CLI 默认通过 TokenHub | 恢复用户级 `config.toml` |
+| CLI 全局配置 | 当前用户的本地 Codex 会话 | 是 | 本地 CLI 默认通过 TokenRouter | 恢复用户级 `config.toml` |
 | Codex 桌面端配置 | 桌面端、CLI 和 IDE 扩展 | 是 | 通过桌面端完成长期配置 | 恢复同一份 `config.toml` 并重启 |
 
 首次接入建议先采用**进程级临时配置**完成连通性验证，确认模型、路由和鉴权均正常后，再选择持久化方案。
@@ -25,8 +25,8 @@ Language: [English](../codex-tokenhub-configuration.md) | 简体中文 | [日本
 
 - Codex CLI、Codex 桌面端和 IDE 扩展共用用户级 `~/.codex/config.toml`。CLI 全局配置与桌面端配置仅入口不同，不属于相互隔离的配置。
 - 受信任项目中的 `.codex/config.toml` 可以配置模型、沙箱和 MCP 等项目设置，但不能覆盖 `model_provider`、`model_providers` 和 `openai_base_url`。需要局部切换 Provider 时，应使用 Profile。
-- TokenHub 控制台登录令牌不能替代项目 API Key。
-- TokenHub 项目 API Key 属于敏感凭证，不得写入代码仓库、提交到 Git 或保存在 Shell 历史中。
+- TokenRouter 控制台登录令牌不能替代项目 API Key。
+- TokenRouter 项目 API Key 属于敏感凭证，不得写入代码仓库、提交到 Git 或保存在 Shell 历史中。
 - 推荐通过 `env_key` 从环境变量读取 Key。个人本地开发环境也可以使用 `experimental_bearer_token` 将 Key 直接写入用户级配置文件，但该方式仅适合开发用途，必须限制文件权限。
 
 ### 1.3 截图与脱敏规范
@@ -48,8 +48,8 @@ Language: [English](../codex-tokenhub-configuration.md) | 简体中文 | [日本
 
 | 配置项 | 获取方式 | 要求 |
 | --- | --- | --- |
-| TokenHub Base URL | TokenHub 部署信息 | 必须以 `/v1` 结尾 |
-| TokenHub 项目 API Key | TokenHub 控制台的 **Key 管理** | 必须为项目 API Key |
+| TokenRouter Base URL | TokenRouter 部署信息 | 必须以 `/v1` 结尾 |
+| TokenRouter 项目 API Key | TokenRouter 控制台的 **Key 管理** | 必须为项目 API Key |
 | 模型 ID | 使用项目 API Key 调用 `GET /v1/models` | 必须采用响应中的实际 `data[].id` |
 
 ### 2.2 在当前终端注入配置（推荐）
@@ -57,8 +57,8 @@ Language: [English](../codex-tokenhub-configuration.md) | 简体中文 | [日本
 #### macOS zsh
 
 ```bash
-export TOKENHUB_BASE_URL="填写实际的 TokenHub Base URL"
-read -r -s "TOKENHUB_API_KEY?TokenHub 项目 API Key: "
+export TOKENHUB_BASE_URL="填写实际的 TokenRouter Base URL"
+read -r -s "TOKENHUB_API_KEY?TokenRouter 项目 API Key: "
 export TOKENHUB_API_KEY
 echo
 ```
@@ -66,7 +66,7 @@ echo
 macOS zsh 的实际操作顺序如下：
 
 1. 复制第一行命令，将引号中的内容替换为实际 Base URL，然后按回车执行。
-2. 复制第二行 `read` 命令并按回车。终端将显示 `TokenHub 项目 API Key:`。
+2. 复制第二行 `read` 命令并按回车。终端将显示 `TokenRouter 项目 API Key:`。
 3. 粘贴实际项目 API Key 并按回车。由于启用了隐藏输入，终端不会显示字符或星号，这是正常现象。
 4. 执行 `export TOKENHUB_API_KEY`，将刚才输入的值传递给后续启动的 Codex 进程。
 5. 执行 `echo`，恢复正常的命令行换行显示。
@@ -82,8 +82,8 @@ macOS zsh 的实际操作顺序如下：
 #### Bash
 
 ```bash
-export TOKENHUB_BASE_URL="填写实际的 TokenHub Base URL"
-read -r -s -p "TokenHub 项目 API Key: " TOKENHUB_API_KEY
+export TOKENHUB_BASE_URL="填写实际的 TokenRouter Base URL"
+read -r -s -p "TokenRouter 项目 API Key: " TOKENHUB_API_KEY
 export TOKENHUB_API_KEY
 echo
 ```
@@ -91,8 +91,8 @@ echo
 #### Windows PowerShell
 
 ```powershell
-$env:TOKENHUB_BASE_URL = Read-Host "TokenHub Base URL（需要以 /v1 结尾）"
-$tokenHubSecureKey = Read-Host "TokenHub 项目 API Key" -AsSecureString
+$env:TOKENHUB_BASE_URL = Read-Host "TokenRouter Base URL（需要以 /v1 结尾）"
+$tokenHubSecureKey = Read-Host "TokenRouter 项目 API Key" -AsSecureString
 $env:TOKENHUB_API_KEY = [System.Net.NetworkCredential]::new("", $tokenHubSecureKey).Password
 Remove-Variable tokenHubSecureKey
 ```
@@ -177,7 +177,7 @@ Invoke-WebRequest `
 
 如果返回 `provider_capability_not_supported`，应由管理员检查模型路由和 Provider 资源类型。修改本机 Codex 配置无法绕过该限制。
 
-对于 DeepSeek 官方 Provider，Responses 与 Codex 能力按模型开放，`deepseek-v4-flash` 和 `deepseek-v4-pro` 均可使用。两个模型都支持服务端 `web_search`、Codex 的 `apply_patch` 自定义工具，以及范围为 0–20 的 `top_logprobs`，但不支持图片或文件输入。DeepSeek 的 Responses API 是无状态的，因此客户端每轮都必须在 `input` 中传入完整对话历史，不能依赖 `previous_response_id` 或 `conversation`。DeepSeek 会自动管理上下文缓存。启用 `TOKENHUB_CACHE_AFFINITY_ENABLED=true` 后，TokenHub 会使用 `session-id`、`client_metadata.session_id` 或 `prompt_cache_key` 等稳定的 Codex 会话提示，将连续 Responses 请求固定到同一个上游账号；该标识仅控制网关路由，不会在 TokenHub 内创建另一份响应缓存。
+对于 DeepSeek 官方 Provider，Responses 与 Codex 能力按模型开放，`deepseek-v4-flash` 和 `deepseek-v4-pro` 均可使用。两个模型都支持服务端 `web_search`、Codex 的 `apply_patch` 自定义工具，以及范围为 0–20 的 `top_logprobs`，但不支持图片或文件输入。DeepSeek 的 Responses API 是无状态的，因此客户端每轮都必须在 `input` 中传入完整对话历史，不能依赖 `previous_response_id` 或 `conversation`。DeepSeek 会自动管理上下文缓存。启用 `TOKENHUB_CACHE_AFFINITY_ENABLED=true` 后，TokenRouter 会使用 `session-id`、`client_metadata.session_id` 或 `prompt_cache_key` 等稳定的 Codex 会话提示，将连续 Responses 请求固定到同一个上游账号；该标识仅控制网关路由，不会在 TokenRouter 内创建另一份响应缓存。
 
 ---
 
@@ -185,7 +185,7 @@ Invoke-WebRequest `
 
 ### 3.1 适用范围
 
-Profile 文件保存在用户目录中，仅在显式传入 `--profile tokenhub` 时生效。该方案适用于仅允许指定项目或任务通过 TokenHub 的场景。
+Profile 文件保存在用户目录中，仅在显式传入 `--profile tokenhub` 时生效。该方案适用于仅允许指定项目或任务通过 TokenRouter 的场景。
 
 ### 3.2 配置文件路径
 
@@ -223,8 +223,8 @@ model_provider = "tokenhub"
 model = "填写 GET /v1/models 返回的实际模型 ID"
 
 [model_providers.tokenhub]
-name = "TokenHub"
-base_url = "填写实际的 TokenHub Base URL"
+name = "TokenRouter"
+base_url = "填写实际的 TokenRouter Base URL"
 env_key = "TOKENHUB_API_KEY"
 env_key_instructions = "启动 Codex 前请设置 TOKENHUB_API_KEY"
 wire_api = "responses"
@@ -240,9 +240,9 @@ wire_api = "responses"
 
 ```toml
 [model_providers.tokenhub]
-name = "TokenHub"
-base_url = "填写实际的 TokenHub Base URL"
-experimental_bearer_token = "在此粘贴自己的 TokenHub 项目 API Key"
+name = "TokenRouter"
+base_url = "填写实际的 TokenRouter Base URL"
+experimental_bearer_token = "在此粘贴自己的 TokenRouter 项目 API Key"
 wire_api = "responses"
 ```
 
@@ -256,7 +256,7 @@ chmod 600 "$HOME/.codex/tokenhub.config.toml"
 
 该文件不得提交到 Git、上传、分享或包含在截图中。多人共用设备或企业环境应优先使用环境变量或组织批准的凭证管理工具。
 
-![TokenHub Profile 实际配置，Base URL 已打码](../assets/codex-profile/tokenhub-profile-config-redacted.png)
+![TokenRouter Profile 实际配置，Base URL 已打码](../assets/codex-profile/tokenhub-profile-config-redacted.png)
 
 *图 1：使用环境变量方式的 `tokenhub.config.toml` 实际配置。Base URL 已打码，配置文件中不包含 API Key。*
 
@@ -280,7 +280,7 @@ codex --profile tokenhub --cd "/填写实际项目绝对路径"
 codex exec --profile tokenhub --cd "/填写实际项目绝对路径" "填写本次真实任务"
 ```
 
-如果项目级 `.codex/config.toml` 设置了其他模型，可以在本次启动时显式指定 TokenHub 返回的模型 ID：
+如果项目级 `.codex/config.toml` 设置了其他模型，可以在本次启动时显式指定 TokenRouter 返回的模型 ID：
 
 ```bash
 codex --profile tokenhub --model "填写 GET /v1/models 返回的实际模型 ID"
@@ -290,11 +290,11 @@ codex --profile tokenhub --model "填写 GET /v1/models 返回的实际模型 ID
 
 进入 Codex 后执行 `/status`，确认：
 
-- `Model` 与 TokenHub 返回的实际模型 ID 一致；
-- `Model provider` 为 TokenHub；
-- TokenHub 请求日志存在对应成功请求。
+- `Model` 与 TokenRouter 返回的实际模型 ID 一致；
+- `Model provider` 为 TokenRouter；
+- TokenRouter 请求日志存在对应成功请求。
 
-![Codex 使用 TokenHub Profile 的真实状态，敏感信息已打码](../assets/codex-profile/codex-status-redacted.png)
+![Codex 使用 TokenRouter Profile 的真实状态，敏感信息已打码](../assets/codex-profile/codex-status-redacted.png)
 
 *图 2：Profile 生效后的 `/status`。Provider 详情、窗口标题和 Session ID 已打码。*
 
@@ -360,7 +360,7 @@ Copy-Item `
 codex \
   -c 'model_provider="tokenhub"' \
   -c "model=\"${TOKENHUB_MODEL_ID}\"" \
-  -c 'model_providers.tokenhub.name="TokenHub"' \
+  -c 'model_providers.tokenhub.name="TokenRouter"' \
   -c "model_providers.tokenhub.base_url=\"${TOKENHUB_BASE_URL}\"" \
   -c 'model_providers.tokenhub.env_key="TOKENHUB_API_KEY"' \
   -c 'model_providers.tokenhub.env_key_instructions="启动 Codex 前请设置 TOKENHUB_API_KEY"' \
@@ -377,7 +377,7 @@ codex \
 codex `
   -c 'model_provider="tokenhub"' `
   -c "model=`"$env:TOKENHUB_MODEL_ID`"" `
-  -c 'model_providers.tokenhub.name="TokenHub"' `
+  -c 'model_providers.tokenhub.name="TokenRouter"' `
   -c "model_providers.tokenhub.base_url=`"$env:TOKENHUB_BASE_URL`"" `
   -c 'model_providers.tokenhub.env_key="TOKENHUB_API_KEY"' `
   -c 'model_providers.tokenhub.env_key_instructions="启动 Codex 前请设置 TOKENHUB_API_KEY"' `
@@ -417,7 +417,7 @@ Remove-Item Env:TOKENHUB_MODEL_ID -ErrorAction SilentlyContinue
 
 ### 5.1 适用范围
 
-该方案适用于当前用户的大多数本地 Codex CLI 会话均需要通过 TokenHub 的场景。
+该方案适用于当前用户的大多数本地 Codex CLI 会话均需要通过 TokenRouter 的场景。
 
 ### 5.2 配置文件路径
 
@@ -457,8 +457,8 @@ model_provider = "tokenhub"
 model = "填写 GET /v1/models 返回的实际模型 ID"
 
 [model_providers.tokenhub]
-name = "TokenHub"
-base_url = "填写实际的 TokenHub Base URL"
+name = "TokenRouter"
+base_url = "填写实际的 TokenRouter Base URL"
 env_key = "TOKENHUB_API_KEY"
 env_key_instructions = "启动 Codex 前请设置 TOKENHUB_API_KEY"
 wire_api = "responses"
@@ -471,7 +471,7 @@ wire_api = "responses"
 个人本地开发环境也可以删除 `env_key` 和 `env_key_instructions`，并在 `[model_providers.tokenhub]` 中加入：
 
 ```toml
-experimental_bearer_token = "在此粘贴自己的 TokenHub 项目 API Key"
+experimental_bearer_token = "在此粘贴自己的 TokenRouter 项目 API Key"
 ```
 
 该字段会把 Key 以明文保存在 `config.toml` 中，仅适合受控的个人开发环境。应执行 `chmod 600 "$HOME/.codex/config.toml"`，并确保该文件不会被提交、上传、分享或纳入截图。
@@ -483,7 +483,7 @@ codex doctor --summary
 codex
 ```
 
-进入 Codex 后执行 `/status`，并在 TokenHub **请求日志**中按时间、项目和模型确认请求已进入网关。
+进入 Codex 后执行 `/status`，并在 TokenRouter **请求日志**中按时间、项目和模型确认请求已进入网关。
 
 ### 5.6 恢复方法
 
@@ -531,7 +531,7 @@ Codex 桌面端、CLI 和 IDE 扩展共用 `~/.codex/config.toml`。通过桌面
 
 **Settings → Configuration → Open config.toml**
 
-备份原文件后，将第 5.4 节的 TokenHub 配置块合并到 `config.toml`。不得重复声明同名 TOML 键或 `[model_providers.tokenhub]` 表。
+备份原文件后，将第 5.4 节的 TokenRouter 配置块合并到 `config.toml`。不得重复声明同名 TOML 键或 `[model_providers.tokenhub]` 表。
 
 
 
@@ -540,7 +540,7 @@ Codex 桌面端、CLI 和 IDE 扩展共用 `~/.codex/config.toml`。通过桌面
 从 Dock、启动台或开始菜单启动的桌面应用通常不会继承终端中的临时环境变量。可将以下配置合并到 `~/.codex/.env`：
 
 ```dotenv
-TOKENHUB_API_KEY=填写真实的 TokenHub 项目 API Key
+TOKENHUB_API_KEY=填写真实的 TokenRouter 项目 API Key
 ```
 
 不得覆盖 `.env` 中的其他变量。macOS / Linux 建议限制文件权限：
@@ -559,8 +559,8 @@ chmod 600 "$HOME/.codex/.env"
 
 完全退出 Codex 后重新启动，并新建一个本地任务。验证以下项目：
 
-- 当前任务使用的模型与 TokenHub 返回的实际模型 ID 一致；
-- TokenHub 请求日志存在对应请求；
+- 当前任务使用的模型与 TokenRouter 返回的实际模型 ID 一致；
+- TokenRouter 请求日志存在对应请求；
 - 请求所属项目、模型和状态符合预期。
 
 Codex 云端任务的默认模型不受本机 `config.toml` 控制。本文配置仅面向本地桌面端、CLI 和 IDE 扩展。
@@ -569,7 +569,7 @@ Codex 云端任务的默认模型不受本机 `config.toml` 控制。本文配�
 ### 6.5 恢复方法
 
 1. 完全退出 Codex。
-2. 恢复配置前备份的 `~/.codex/config.toml`，或按照第 5.6 节手动删除 TokenHub 配置。
+2. 恢复配置前备份的 `~/.codex/config.toml`，或按照第 5.6 节手动删除 TokenRouter 配置。
 3. 如果本次在 `~/.codex/.env` 中新增了 `TOKENHUB_API_KEY`，仅删除对应行，不得删除文件中的其他变量。
 4. 重新启动 Codex。
 
@@ -582,7 +582,7 @@ Codex 云端任务的默认模型不受本机 `config.toml` 控制。本文配�
 | 现象或状态码 | 常见原因 | 处理建议 |
 | --- | --- | --- |
 | 缺少 `TOKENHUB_API_KEY` | 当前 Codex 进程未读取环境变量 | 检查变量是否存在；桌面端需检查 `~/.codex/.env` 后完全重启 |
-| HTTP 401 / `invalid_api_key` | 未携带项目 API Key、认证格式错误或 Key 无法识别 | 确认使用 TokenHub 项目 API Key，而非控制台登录令牌 |
+| HTTP 401 / `invalid_api_key` | 未携带项目 API Key、认证格式错误或 Key 无法识别 | 确认使用 TokenRouter 项目 API Key，而非控制台登录令牌 |
 | HTTP 403 | `api_key_disabled`、`api_key_expired` 或 `model_not_allowed` | 检查项目状态、Key 状态、模型白名单和调用策略 |
 | HTTP 404 | Base URL 或模型 ID 不正确 | 确认 Base URL 以 `/v1` 结尾，并重新查询 `GET /v1/models` |
 | HTTP 429 / `quota_exceeded` | 请求、Token、成本、并发额度或 Provider 限制已触发 | 等待额度窗口恢复，或由管理员调整策略 |

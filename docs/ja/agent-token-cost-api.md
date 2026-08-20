@@ -2,7 +2,7 @@
 
 Language: [English](../agent-token-cost-api.md) | [简体中文](../zh-CN/agent-token-cost-api.md) | 日本語
 
-バージョン化された Agent Token コスト API を使うと、ローカルのレポート/監視 Agent は、管理者セッション、モデル呼び出し用 API Key、Provider 認証情報、手動エクスポートなしで TokenHub の利用量を読み取れます。この API は読み取り専用で、管理者の利用量画面と同じリクエスト数、Token 数、エラー数、推定顧客コストを使用します。
+バージョン化された Agent Token コスト API を使うと、ローカルのレポート/監視 Agent は、管理者セッション、モデル呼び出し用 API Key、Provider 認証情報、手動エクスポートなしで TokenRouter の利用量を読み取れます。この API は読み取り専用で、管理者の利用量画面と同じリクエスト数、Token 数、エラー数、推定顧客コストを使用します。
 
 ## エンドポイント
 
@@ -31,7 +31,7 @@ curl -sS https://tokenhub.example.com/api/admin/analytics/credentials \
   }'
 ```
 
-レスポンスには `credential` メタデータと `token` が含まれます。Token は直ちにコピーしてください。以後の一覧には prefix と suffix だけが表示されます。Agent が TokenHub インスタンス全体を読む必要がある場合に限り、`scope_type` を `organization` にして `project_id` を省略します。有効期限は任意ですが、設定を推奨します。
+レスポンスには `credential` メタデータと `token` が含まれます。Token は直ちにコピーしてください。以後の一覧には prefix と suffix だけが表示されます。Agent が TokenRouter インスタンス全体を読む必要がある場合に限り、`scope_type` を `organization` にして `project_id` を省略します。有効期限は任意ですが、設定を推奨します。
 
 Token をローカル Agent の Secret ストアに保存します。
 
@@ -173,7 +173,7 @@ curl -sS -G https://tokenhub.example.com/api/v1/analytics/token-costs \
   -o token-costs.csv
 ```
 
-CSV は JSON と同じ Filter、上限、Metric、Pagination、`dedupe_key` を使います。Metadata は `X-TokenHub-Schema-Version`、`X-TokenHub-Has-More`、`X-TokenHub-Next-Cursor`、`X-TokenHub-Watermark`、`X-TokenHub-Dedupe-By`、`X-TokenHub-Checkpoint-By`、`X-TokenHub-Incremental-Mode` Header で返します。Spreadsheet Formula と解釈される可能性のある Text Cell には Apostrophe Prefix を付けます。
+CSV は JSON と同じ Filter、上限、Metric、Pagination、`dedupe_key` を使います。Metadata は `X-TokenRouter-Schema-Version`、`X-TokenRouter-Has-More`、`X-TokenRouter-Next-Cursor`、`X-TokenRouter-Watermark`、`X-TokenRouter-Dedupe-By`、`X-TokenRouter-Checkpoint-By`、`X-TokenRouter-Incremental-Mode` Header で返します。Spreadsheet Formula と解釈される可能性のある Text Cell には Apostrophe Prefix を付けます。
 
 ## CLI と MCP の評価
 

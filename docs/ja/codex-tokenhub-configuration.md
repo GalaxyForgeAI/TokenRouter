@@ -1,8 +1,8 @@
-# Codex を TokenHub に接続する：4 つの設定方法と復旧
+# Codex を TokenRouter に接続する：4 つの設定方法と復旧
 
 Language: [English](../codex-tokenhub-configuration.md) | [简体中文](../zh-CN/codex-tokenhub-configuration.md) | 日本語
 
-> このガイドでは、ローカルの Codex CLI、Codex デスクトップアプリ、および IDE 拡張機能を TokenHub に接続する方法を説明します。分離 Profile、プロセス単位の一時設定、CLI グローバル設定、デスクトップ設定の 4 方式を扱います。
+> このガイドでは、ローカルの Codex CLI、Codex デスクトップアプリ、および IDE 拡張機能を TokenRouter に接続する方法を説明します。分離 Profile、プロセス単位の一時設定、CLI グローバル設定、デスクトップ設定の 4 方式を扱います。
 >
 > Profile の最短手順のみが必要な場合は、[Profile クイック設定](codex-tokenhub-profile-quick-start.md)を参照してください。
 
@@ -12,14 +12,14 @@ Language: [English](../codex-tokenhub-configuration.md) | [简体中文](../zh-C
 | --- | --- | --- | --- | --- |
 | 分離 Profile | Profile を指定して開始したセッション | あり | 特定のプロジェクトまたはタスク | `--profile tokenhub` を付けずに起動 |
 | プロセス単位の一時設定 | 現在のプロセスまたはターミナル | なし | 初回検証または一時利用 | Codex を終了して環境変数を削除 |
-| CLI グローバル設定 | 現在のユーザーのローカル Codex セッション | あり | CLI から常に TokenHub を使用 | `config.toml` を復元 |
+| CLI グローバル設定 | 現在のユーザーのローカル Codex セッション | あり | CLI から常に TokenRouter を使用 | `config.toml` を復元 |
 | デスクトップ設定 | デスクトップ、CLI、IDE 拡張機能 | あり | アプリを含む継続利用 | `config.toml` を復元して再起動 |
 
 初回接続では、まずプロセス単位の一時設定で検証してから、永続化方法を選択してください。
 
 Codex CLI、デスクトップアプリ、IDE 拡張機能は `~/.codex/config.toml` を共有します。信頼済みプロジェクトの `.codex/config.toml` では、`model_provider`、`model_providers`、`openai_base_url` を上書きできません。プロバイダーを分離する場合は Profile を使用してください。
 
-TokenHub コンソールのログイントークンとプロジェクト API Key は異なります。API Key をソース管理に登録したり、シェル履歴に残したりしないでください。通常は `env_key` を使用します。`experimental_bearer_token` は管理された開発環境でのみ使用でき、Key は平文で保存されます。
+TokenRouter コンソールのログイントークンとプロジェクト API Key は異なります。API Key をソース管理に登録したり、シェル履歴に残したりしないでください。通常は `env_key` を使用します。`experimental_bearer_token` は管理された開発環境でのみ使用でき、Key は平文で保存されます。
 
 スクリーンショットには実際の設定またはリクエストのみを使用してください。API Key、Authorization ヘッダー、ログイン／OAuth トークン、非公開ホスト、ユーザー名、パス、プロジェクト ID、アカウント ID、セッション ID、リクエスト IDは、すべてマスキングしてください。
 
@@ -31,8 +31,8 @@ TokenHub コンソールのログイントークンとプロジェクト API Key
 
 | 項目 | 取得元 | 要件 |
 | --- | --- | --- |
-| TokenHub Base URL | デプロイ情報 | `/v1` で終わる URL |
-| TokenHub プロジェクト API Key | TokenHub の **Key Management** | ログイントークンではなくプロジェクト API Key |
+| TokenRouter Base URL | デプロイ情報 | `/v1` で終わる URL |
+| TokenRouter プロジェクト API Key | TokenRouter の **Key Management** | ログイントークンではなくプロジェクト API Key |
 | モデル ID | プロジェクト API Key で `GET /v1/models` を実行 | 実際に返された `data[].id` |
 
 ### 2.2 現在のターミナルに環境変数を設定
@@ -40,8 +40,8 @@ TokenHub コンソールのログイントークンとプロジェクト API Key
 #### macOS zsh
 
 ```bash
-export TOKENHUB_BASE_URL="実際の TokenHub Base URL を入力"
-read -r -s "TOKENHUB_API_KEY?TokenHub プロジェクト API Key: "
+export TOKENHUB_BASE_URL="実際の TokenRouter Base URL を入力"
+read -r -s "TOKENHUB_API_KEY?TokenRouter プロジェクト API Key: "
 export TOKENHUB_API_KEY
 echo
 ```
@@ -51,8 +51,8 @@ echo
 #### Bash
 
 ```bash
-export TOKENHUB_BASE_URL="実際の TokenHub Base URL を入力"
-read -r -s -p "TokenHub プロジェクト API Key: " TOKENHUB_API_KEY
+export TOKENHUB_BASE_URL="実際の TokenRouter Base URL を入力"
+read -r -s -p "TokenRouter プロジェクト API Key: " TOKENHUB_API_KEY
 export TOKENHUB_API_KEY
 echo
 ```
@@ -60,8 +60,8 @@ echo
 #### Windows PowerShell
 
 ```powershell
-$env:TOKENHUB_BASE_URL = Read-Host "TokenHub Base URL（/v1 で終わる URL）"
-$tokenHubSecureKey = Read-Host "TokenHub プロジェクト API Key" -AsSecureString
+$env:TOKENHUB_BASE_URL = Read-Host "TokenRouter Base URL（/v1 で終わる URL）"
+$tokenHubSecureKey = Read-Host "TokenRouter プロジェクト API Key" -AsSecureString
 $env:TOKENHUB_API_KEY = [System.Net.NetworkCredential]::new("", $tokenHubSecureKey).Password
 Remove-Variable tokenHubSecureKey
 ```
@@ -131,9 +131,9 @@ Invoke-WebRequest `
   -Body $tokenHubRequestBody
 ```
 
-TokenHub が `provider_capability_not_supported` を返す場合、管理者がモデルルートまたはプロバイダーリソース種別を修正する必要があります。
+TokenRouter が `provider_capability_not_supported` を返す場合、管理者がモデルルートまたはプロバイダーリソース種別を修正する必要があります。
 
-DeepSeek 公式 Provider では、Responses と Codex の能力はモデル単位で、`deepseek-v4-flash` と `deepseek-v4-pro` の両方で利用できます。両モデルはサーバー側の `web_search`、Codex の `apply_patch` カスタムツール、0～20 の `top_logprobs` をサポートしますが、画像やファイルの入力には対応していません。DeepSeek の Responses API はステートレスであるため、クライアントは `previous_response_id` や `conversation` に依存せず、各ターンの `input` に会話履歴全体を渡す必要があります。DeepSeek のコンテキストキャッシュは自動管理です。`TOKENHUB_CACHE_AFFINITY_ENABLED=true` を有効にすると、TokenHub は `session-id`、`client_metadata.session_id`、`prompt_cache_key` などの安定した Codex セッションヒントを使い、連続する Responses リクエストを同じ上流アカウントへ固定します。このキーはゲートウェイルーティング専用であり、TokenHub 内に別のレスポンスキャッシュを作成するものではありません。
+DeepSeek 公式 Provider では、Responses と Codex の能力はモデル単位で、`deepseek-v4-flash` と `deepseek-v4-pro` の両方で利用できます。両モデルはサーバー側の `web_search`、Codex の `apply_patch` カスタムツール、0～20 の `top_logprobs` をサポートしますが、画像やファイルの入力には対応していません。DeepSeek の Responses API はステートレスであるため、クライアントは `previous_response_id` や `conversation` に依存せず、各ターンの `input` に会話履歴全体を渡す必要があります。DeepSeek のコンテキストキャッシュは自動管理です。`TOKENHUB_CACHE_AFFINITY_ENABLED=true` を有効にすると、TokenRouter は `session-id`、`client_metadata.session_id`、`prompt_cache_key` などの安定した Codex セッションヒントを使い、連続する Responses リクエストを同じ上流アカウントへ固定します。このキーはゲートウェイルーティング専用であり、TokenRouter 内に別のレスポンスキャッシュを作成するものではありません。
 
 ---
 
@@ -171,8 +171,8 @@ model_provider = "tokenhub"
 model = "GET /v1/models で返された実際のモデル ID"
 
 [model_providers.tokenhub]
-name = "TokenHub"
-base_url = "実際の TokenHub Base URL"
+name = "TokenRouter"
+base_url = "実際の TokenRouter Base URL"
 env_key = "TOKENHUB_API_KEY"
 env_key_instructions = "Codex を起動する前に TOKENHUB_API_KEY を設定してください"
 wire_api = "responses"
@@ -184,15 +184,15 @@ wire_api = "responses"
 
 ```toml
 [model_providers.tokenhub]
-name = "TokenHub"
-base_url = "実際の TokenHub Base URL"
-experimental_bearer_token = "TokenHub プロジェクト API Key を入力"
+name = "TokenRouter"
+base_url = "実際の TokenRouter Base URL"
+experimental_bearer_token = "TokenRouter プロジェクト API Key を入力"
 wire_api = "responses"
 ```
 
 `experimental_bearer_token` を `env_key`、プロバイダーの `auth`、`requires_openai_auth` と併用しないでください。ファイルの権限は `600` に設定し、コミット、アップロード、共有、スクリーンショットへの掲載は禁止してください。
 
-![Base URL をマスキングした実際の TokenHub Profile 設定](../assets/codex-profile/tokenhub-profile-config-redacted.png)
+![Base URL をマスキングした実際の TokenRouter Profile 設定](../assets/codex-profile/tokenhub-profile-config-redacted.png)
 
 *図 1：環境変数を使用する実際の Profile 設定。Base URL はマスキング済みです。*
 
@@ -204,9 +204,9 @@ codex --profile tokenhub --cd "/実際のプロジェクトの絶対パス"
 codex exec --profile tokenhub --cd "/実際のプロジェクトの絶対パス" "実際のタスク内容"
 ```
 
-`/status` を実行し、モデル、TokenHub プロバイダー、および対応する TokenHub の成功ログを確認します。
+`/status` を実行し、モデル、TokenRouter プロバイダー、および対応する TokenRouter の成功ログを確認します。
 
-![TokenHub Profile を使用した Codex の実際のステータス画面（機密情報をマスキング済み）](../assets/codex-profile/codex-status-redacted.png)
+![TokenRouter Profile を使用した Codex の実際のステータス画面（機密情報をマスキング済み）](../assets/codex-profile/codex-status-redacted.png)
 
 *図 2：Profile を有効にした `/status`。プロバイダー詳細、ウィンドウタイトル、セッション ID はマスキング済みです。*
 
@@ -237,7 +237,7 @@ mv "$HOME/.codex/tokenhub.config.toml" \
 codex \
   -c 'model_provider="tokenhub"' \
   -c "model=\"${TOKENHUB_MODEL_ID}\"" \
-  -c 'model_providers.tokenhub.name="TokenHub"' \
+  -c 'model_providers.tokenhub.name="TokenRouter"' \
   -c "model_providers.tokenhub.base_url=\"${TOKENHUB_BASE_URL}\"" \
   -c 'model_providers.tokenhub.env_key="TOKENHUB_API_KEY"' \
   -c 'model_providers.tokenhub.env_key_instructions="Codex を起動する前に TOKENHUB_API_KEY を設定してください"' \
@@ -250,7 +250,7 @@ PowerShell：
 codex `
   -c 'model_provider="tokenhub"' `
   -c "model=`"$env:TOKENHUB_MODEL_ID`"" `
-  -c 'model_providers.tokenhub.name="TokenHub"' `
+  -c 'model_providers.tokenhub.name="TokenRouter"' `
   -c "model_providers.tokenhub.base_url=`"$env:TOKENHUB_BASE_URL`"" `
   -c 'model_providers.tokenhub.env_key="TOKENHUB_API_KEY"' `
   -c 'model_providers.tokenhub.env_key_instructions="Codex を起動する前に TOKENHUB_API_KEY を設定してください"' `
@@ -290,9 +290,9 @@ codex doctor --summary
 codex
 ```
 
-`/status` を実行し、TokenHub のログで対応するリクエストを確認します。
+`/status` を実行し、TokenRouter のログで対応するリクエストを確認します。
 
-復旧するには、バックアップを復元するか、`model_provider` と `model` を以前の値に戻して TokenHub のプロバイダーテーブルを削除します。その後 Codex を完全に再起動してください。
+復旧するには、バックアップを復元するか、`model_provider` と `model` を以前の値に戻して TokenRouter のプロバイダーテーブルを削除します。その後 Codex を完全に再起動してください。
 
 ---
 
@@ -309,7 +309,7 @@ codex
 ターミナル以外から起動したデスクトップアプリは、通常、ターミナルの環境変数を引き継ぎません。Key を `~/.codex/.env` に追加します。
 
 ```dotenv
-TOKENHUB_API_KEY=実際の TokenHub プロジェクト API Key を入力
+TOKENHUB_API_KEY=実際の TokenRouter プロジェクト API Key を入力
 ```
 
 ```bash
@@ -318,7 +318,7 @@ chmod 600 "$HOME/.codex/.env"
 
 既存の `.env` の設定を上書きしないでください。また、このファイルをソース管理またはスクリーンショットに含めないでください。
 
-Codex を完全に再起動し、ローカルタスクを作成してモデルを確認した後、TokenHub のログでリクエストを確認します。ローカルの `config.toml` は Codex クラウドタスクの既定モデルを制御しません。
+Codex を完全に再起動し、ローカルタスクを作成してモデルを確認した後、TokenRouter のログでリクエストを確認します。ローカルの `config.toml` は Codex クラウドタスクの既定モデルを制御しません。
 
 復旧するには、`config.toml` を復元し、`.env` に追加した `TOKENHUB_API_KEY` の行だけを削除してから再起動します。
 
@@ -329,7 +329,7 @@ Codex を完全に再起動し、ローカルタスクを作成してモデル�
 | 症状 | 主な原因 | 対処 |
 | --- | --- | --- |
 | `TOKENHUB_API_KEY` が見つからない | プロセスに環境変数が渡されていない | 変数を確認し、`.env` 更新後はデスクトップアプリを再起動 |
-| HTTP 401 / `invalid_api_key` | Key が未設定、不正、または認識されていない | コンソールのログイントークンではなく、TokenHub プロジェクト API Key を使用 |
+| HTTP 401 / `invalid_api_key` | Key が未設定、不正、または認識されていない | コンソールのログイントークンではなく、TokenRouter プロジェクト API Key を使用 |
 | HTTP 403 | Key が無効または期限切れ、あるいはモデルが許可されていない | プロジェクト、Key、モデル許可リスト、ポリシーを確認 |
 | HTTP 404 | Base URL またはモデル ID が不正 | `/v1` を確認し、`GET /v1/models` を再実行 |
 | HTTP 429 / `quota_exceeded` | リクエスト数、トークン数、コスト、同時実行数、プロバイダーの制限 | 制限の回復を待つか、ポリシーを調整 |

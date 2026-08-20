@@ -101,7 +101,7 @@ export function gatewayEmbeddingsCurl(stats: GatewayDocStats) {
   --header "Content-Type: application/json" \\
   --data '{
     "model": "text-embedding-3-small",
-    "input": "TokenHub enterprise knowledge base"
+    "input": "TokenRouter enterprise knowledge base"
   }'`;
 }
 
@@ -175,7 +175,7 @@ export function gatewayEnglishLLMUsageDocs(stats: GatewayDocStats, role: AppRole
             group: "Start Here",
             badge: "GUIDE",
             title: "Quick Start",
-            description: "Make your first OpenAI-compatible LLM request through TokenHub.",
+            description: "Make your first OpenAI-compatible LLM request through TokenRouter.",
             details: [
               { label: "Base URL", value: stats.baseURL },
               { label: "Auth header", value: "Authorization: Bearer <API Key>" },
@@ -351,12 +351,12 @@ export function gatewayEnglishLLMUsageDocs(stats: GatewayDocStats, role: AppRole
             method: "POST",
             path: "/v1/messages",
             title: "Create Anthropic Message",
-            description: "Call TokenHub from Claude Code or an Anthropic-compatible client with text, images, client tools, tool results, and streaming.",
+            description: "Call TokenRouter from Claude Code or an Anthropic-compatible client with text, images, client tools, tool results, and streaming.",
             params: {
               title: "Request body",
               columns: ["Field", "Type", "Required", "Description"],
               rows: [
-                ["model", "string", "Yes", "A callable TokenHub model ID."],
+                ["model", "string", "Yes", "A callable TokenRouter model ID."],
                 ["max_tokens", "integer", "Yes", "Maximum generated tokens."],
                 ["messages", "array", "Yes", "Anthropic user and assistant messages with structured content blocks."],
                 ["system", "string | array", "No", "Top-level Anthropic system prompt."],
@@ -440,7 +440,7 @@ export function gatewayEnglishLLMUsageDocs(stats: GatewayDocStats, role: AppRole
             group: teamLeader ? "Team Rollout" : "Project Keys",
             badge: "SDK",
             title: "SDKs and Claude Code",
-            description: "Use the TokenHub Base URL with OpenAI-compatible SDKs or the TokenHub host URL with Claude Code.",
+            description: "Use the TokenRouter Base URL with OpenAI-compatible SDKs or the TokenRouter host URL with Claude Code.",
             examplesTitle: "Client examples",
             examples: [
               { title: "Node.js", code: gatewayOpenAISDKExample(stats) },

@@ -11,7 +11,7 @@ export function gatewayJapaneseDocs(stats: GatewayDocBundle): GatewayDocBundle {
       noResults: "一致するドキュメントはありません",
     },
     title: "3 つのロール別ゲートウェイガイド",
-    description: "TokenHub のドキュメントは、利用者、チームリーダー、管理者の 3 つの企業ロールを中心に整理しています。",
+    description: "TokenRouter のドキュメントは、利用者、チームリーダー、管理者の 3 つの企業ロールを中心に整理しています。",
     languageLabel: "ドキュメント言語",
     quickInfoLabel: "API 基本情報",
     quickCards: {
@@ -29,7 +29,7 @@ export function gatewayJapaneseDocs(stats: GatewayDocBundle): GatewayDocBundle {
             ...stats.groups[0].items[0],
             group: "はじめに",
             title: "プラットフォーム概要",
-            description: "TokenHub がモデル、プロジェクト、Key、ルーティング、監査、コスト配賦を 1 つの統制フローにまとめる仕組みを説明します。",
+            description: "TokenRouter がモデル、プロジェクト、Key、ルーティング、監査、コスト配賦を 1 つの統制フローにまとめる仕組みを説明します。",
             notesTitle: "開始手順",
             notes: [
               "利用者は利用可能モデル、Key 管理、個人利用量から始めます。Provider 認証情報を理解する必要はありません。",
@@ -175,7 +175,7 @@ export function gatewayJapaneseDocs(stats: GatewayDocBundle): GatewayDocBundle {
               title: "よくあるエラー",
               columns: ["ステータス", "エラーコード", "対応"],
               rows: [
-                ["401", "invalid_api_key", "Authorization に TokenHub API Key を指定しているか確認します。"],
+                ["401", "invalid_api_key", "Authorization に TokenRouter API Key を指定しているか確認します。"],
                 ["403", "project_forbidden / model_not_allowed", "ユーザーが Project に所属しているか、モデルが Project に公開されているか確認します。"],
                 ["404/503", "provider_unavailable", "モデルに有効ルートを設定するか、上流 Provider のヘルスを確認します。"],
                 ["429", "quota_exceeded", "Project クォータ、同時実行制限、Provider リソース制限を確認します。"],

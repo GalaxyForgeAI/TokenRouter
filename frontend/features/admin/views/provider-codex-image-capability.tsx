@@ -113,7 +113,7 @@ export function ProviderCodexImageCapability({
                 <h2 id="codex-image-capability-title">{tx("测试并启用生图能力")}</h2>
               </div>
             </div>
-            <p>{tx("TokenHub 将立即向所选真实 Codex 账号发送一次低质量生图请求。只有收到有效图片后才会添加线路；本次测试会消耗少量订阅额度。")}</p>
+            <p>{tx("TokenRouter 将立即向所选真实 Codex 账号发送一次低质量生图请求。只有收到有效图片后才会添加线路；本次测试会消耗少量订阅额度。")}</p>
             <label className="field">
               <span>{tx("测试账号")}</span>
               <select disabled={busy === "enable"} onChange={(event) => { setResourceID(event.target.value); setError(""); }} value={resourceID}>

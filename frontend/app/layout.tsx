@@ -4,8 +4,8 @@ import "./globals.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "TokenHub Admin",
-  description: "Enterprise AI Gateway administration console",
+  title: "TokenRouter 炬枢 · 企业 AI 网关",
+  description: "TokenRouter (炬枢) — Enterprise AI Gateway administration console",
 };
 
 export default function RootLayout({

@@ -3,7 +3,7 @@
 ## パイプライン概要
 
 ```
-Source Gateway  ──extract──▶  CanonicalMigrationBundle  ──apply──▶  TokenHub
+Source Gateway  ──extract──▶  CanonicalMigrationBundle  ──apply──▶  TokenRouter
 (LiteLLM, ...)               (バージョン付き JSON、平文秘密なし)        (Admin API / DB)
 ```
 

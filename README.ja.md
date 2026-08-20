@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="frontend/public/brand/tokenhub-logo.png" alt="TokenHub" width="96" />
+  <img src="frontend/public/brand/tokenhub-logo.png" alt="TokenRouter" width="96" />
 </p>
 
-<h1 align="center">TokenHub</h1>
+<h1 align="center">TokenRouter</h1>
 
 <p align="center">
-  TokenHub は、企業の AI モデル接続とガバナンスを一元化し、すべてのリクエストを制御・追跡し、利用主体を特定できるプライベートゲートウェイです。
+  TokenRouter は、企業の AI モデル接続とガバナンスを一元化し、すべてのリクエストを制御・追跡し、利用主体を特定できるプライベートゲートウェイです。
 </p>
 
 <p align="center">
@@ -22,12 +22,12 @@
 ## 対応 Provider
 
 > [!TIP]
-> **Codex サブスクリプションに対応：**OpenAI Codex のサブスクリプションアカウントを TokenHub に接続し、API Provider と同じ統合ゲートウェイでモデルを提供・管理できます。[Codex 接続ガイド →](docs/ja/codex-tokenhub-profile-quick-start.md)
+> **Codex サブスクリプションに対応：**OpenAI Codex のサブスクリプションアカウントを TokenRouter に接続し、API Provider と同じ統合ゲートウェイでモデルを提供・管理できます。[Codex 接続ガイド →](docs/ja/codex-tokenhub-profile-quick-start.md)
 
-TokenHub は、Codex サブスクリプション、OpenAI、Azure OpenAI、Anthropic、Gemini、DeepSeek、Qwen、ローカルモデル向けのネイティブアダプターに加え、150 以上の Provider テンプレートとカスタム OpenAI-Compatible 上流接続を備えています。主な接続先：
+TokenRouter は、Codex サブスクリプション、OpenAI、Azure OpenAI、Anthropic、Gemini、DeepSeek、Qwen、ローカルモデル向けのネイティブアダプターに加え、150 以上の Provider テンプレートとカスタム OpenAI-Compatible 上流接続を備えています。主な接続先：
 
 <p align="center">
-  <img src="docs/assets/provider-showcase.svg" alt="Codex サブスクリプション、OpenAI、Anthropic、Google Gemini、DeepSeek、Qwen、Llama、カスタム上流を含む TokenHub の主な Provider 接続先。" width="100%">
+  <img src="docs/assets/provider-showcase.svg" alt="Codex サブスクリプション、OpenAI、Anthropic、Google Gemini、DeepSeek、Qwen、Llama、カスタム上流を含む TokenRouter の主な Provider 接続先。" width="100%">
 </p>
 
 Provider テンプレートは、利用可能な場合は対応するネイティブアダプターを使用し、それ以外は OpenAI-Compatible エンドポイントへ接続します。利用可能なモデルと機能は、上流サービスおよびアカウントによって異なります。
@@ -35,12 +35,12 @@ Provider テンプレートは、利用可能な場合は対応するネイテ�
 ## スクリーンショット
 
 <p align="center">
-  <img src="docs/assets/screenshots/tokenhub-tour.webp" alt="TokenHub 製品ツアー：ログイン、概要、API ドキュメント、Provider チャネル、モデルカタログ、ルーティングポリシー、利用分析、システム設定" width="100%">
+  <img src="docs/assets/screenshots/tokenhub-tour.webp" alt="TokenRouter 製品ツアー：ログイン、概要、API ドキュメント、Provider チャネル、モデルカタログ、ルーティングポリシー、利用分析、システム設定" width="100%">
 </p>
 
 ## 3つのロールを中心に設計
 
-TokenHub は、日常的なモデル利用、チームガバナンス、プラットフォーム運用を明確に分け、企業ユーザーが自分の責任に合ったワークフローへすぐ入れるようにします。
+TokenRouter は、日常的なモデル利用、チームガバナンス、プラットフォーム運用を明確に分け、企業ユーザーが自分の責任に合ったワークフローへすぐ入れるようにします。
 
 | ロール | ワークスペースの重点 | ガイド |
 | --- | --- | --- |
@@ -61,8 +61,8 @@ TokenHub は、日常的なモデル利用、チームガバナンス、プラ�
 - SQLite-first のプライベートデプロイ向けに、ネイティブ systemd と Docker Compose の両方をサポート。
 - PostgreSQL はマルチインスタンス構成に対応します。リモート PostgreSQL で状態を共有し、フロントエンドとバックエンドのレプリカを水平スケールできるほか、コネクションプールも設定できます。[デプロイガイド](docs/ja/deployment.md)を参照してください。
 - 管理コンソールは英語、中国語、日本語の切り替えに対応。
-- TokenHub は OpenAI Codex のサブスクリプションアカウントリソースにも接続できます。分離および復旧が可能な Codex Profile を使用し、指定したローカル Codex CLI またはデスクトップセッションを TokenHub 経由で実行できます。[Codex 接続ガイド](docs/ja/codex-tokenhub-profile-quick-start.md)を参照してください。
-- Gemini CLI は TokenHub の Gemini ネイティブ API に直接接続し、Codex サブスクリプションアカウントの GPT モデルを CCswitch なしで使用できます。[Gemini CLI 接続ガイド](docs/ja/gemini-cli-codex-subscription.md)を参照してください。
+- TokenRouter は OpenAI Codex のサブスクリプションアカウントリソースにも接続できます。分離および復旧が可能な Codex Profile を使用し、指定したローカル Codex CLI またはデスクトップセッションを TokenRouter 経由で実行できます。[Codex 接続ガイド](docs/ja/codex-tokenhub-profile-quick-start.md)を参照してください。
+- Gemini CLI は TokenRouter の Gemini ネイティブ API に直接接続し、Codex サブスクリプションアカウントの GPT モデルを CCswitch なしで使用できます。[Gemini CLI 接続ガイド](docs/ja/gemini-cli-codex-subscription.md)を参照してください。
 
 ## クイックスタート
 
@@ -107,7 +107,7 @@ cp deploy/.env.example deploy/.env
 
 ## Contributors
 
-TokenHub は、実際のエンタープライズ利用からのフィードバック、ゲートウェイ連携、ドキュメント、テスト、継続的なメンテナンスによって育っています。プロジェクトをより信頼できるものにしてくれるすべての方に感謝します。
+TokenRouter は、実際のエンタープライズ利用からのフィードバック、ゲートウェイ連携、ドキュメント、テスト、継続的なメンテナンスによって育っています。プロジェクトをより信頼できるものにしてくれるすべての方に感謝します。
 
 <!-- readme: contributors -start -->
 
@@ -260,4 +260,4 @@ TokenHub は、実際のエンタープライズ利用からのフィードバ�
 
 ## License
 
-TokenHub は [Apache License 2.0](LICENSE) の下で提供されています。
+TokenRouter は [Apache License 2.0](LICENSE) の下で提供されています。

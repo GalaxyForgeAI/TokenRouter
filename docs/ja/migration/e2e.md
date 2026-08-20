@@ -1,6 +1,6 @@
 # E2E テスト
 
-移行フレームワークは Docker Compose ベースの E2E テストを提供します。実際の LiteLLM と TokenHub を起動し、TokenHub Admin API を通じて extract → plan → apply → verify → re-apply → rollback のフロー全体を検証します。OpenAI 互換アップストリームは Nginx、ユーザーインポートに必要な SMTP は Mailpit で提供します。
+移行フレームワークは Docker Compose ベースの E2E テストを提供します。実際の LiteLLM と TokenRouter を起動し、TokenRouter Admin API を通じて extract → plan → apply → verify → re-apply → rollback のフロー全体を検証します。OpenAI 互換アップストリームは Nginx、ユーザーインポートに必要な SMTP は Mailpit で提供します。
 
 ## 実行方法
 

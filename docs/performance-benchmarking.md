@@ -1,6 +1,6 @@
 # Performance Benchmarking
 
-TokenHub includes two complementary benchmark layers. Black-box benchmarks exercise an OpenAI-compatible HTTP endpoint and can compare TokenHub with another gateway. In-process Go benchmarks isolate TokenHub's routing and governance costs and report allocations. Neither layer calls a real model provider.
+TokenRouter includes two complementary benchmark layers. Black-box benchmarks exercise an OpenAI-compatible HTTP endpoint and can compare TokenRouter with another gateway. In-process Go benchmarks isolate TokenRouter's routing and governance costs and report allocations. Neither layer calls a real model provider.
 
 ## What the numbers mean
 
@@ -26,13 +26,13 @@ mkdir -p .tmp
 The tool provides six commands:
 
 - `mocker`: deterministic OpenAI-compatible Chat Completions, Responses, Embeddings, and SSE endpoints.
-- `gateway`: self-contained in-memory TokenHub plus the deterministic upstream, for a zero-configuration TokenHub smoke baseline.
+- `gateway`: self-contained in-memory TokenRouter plus the deterministic upstream, for a zero-configuration TokenRouter smoke baseline.
 - `run`: fixed-concurrency or fixed-rate HTTP load with warmup and unique prompts that defeat response caching.
 - `check`: scenario-compatible baseline comparison using a tolerant performance budget.
 - `summarize-go`: convert repeated standard Go benchmark output into median JSON metrics.
 - `check-go`: compare internal `ns/op`, `B/op`, and `allocs/op` metrics with a tracked baseline.
 
-For a quick TokenHub-only smoke run, start the self-contained gateway in one terminal. The key is synthetic, exists only in the in-memory benchmark database, and is still passed through the environment rather than a command-line argument:
+For a quick TokenRouter-only smoke run, start the self-contained gateway in one terminal. The key is synthetic, exists only in the in-memory benchmark database, and is still passed through the environment rather than a command-line argument:
 
 ```bash
 TOKENHUB_BENCHMARK_API_KEY=thk_benchmark_local \
@@ -57,7 +57,7 @@ Then use `run` against `http://127.0.0.1:18080`. The tracked `benchmarks/baselin
 
 Configure both gateways with a route named `benchmark-model` that forwards to `http://127.0.0.1:18081/v1`. Give each gateway a local benchmark API key. The mocker can also inject deterministic failures with `--failure-every` to test failover.
 
-## Compare TokenHub and Bifrost
+## Compare TokenRouter and Bifrost
 
 Start each gateway on the same otherwise idle machine, using the same database class and telemetry settings. Avoid running both measured gateways at once when they would compete for CPU. Run each target multiple times and alternate their order.
 
@@ -146,4 +146,4 @@ The scenario fingerprint also includes duration, warmup, timeout, maximum in-fli
 
 ## Interpreting a comparison
 
-Treat a run as invalid if success rate differs materially, the load generator saturates, either gateway retries a different number of times, or CPU and memory pressure differ. Compare throughput at fixed concurrency, latency at fixed offered RPS, streaming TTFT, and allocations separately. A single maximum-throughput number does not explain the cost of TokenHub's persistence, audit, routing, metrics, and tracing guarantees.
+Treat a run as invalid if success rate differs materially, the load generator saturates, either gateway retries a different number of times, or CPU and memory pressure differ. Compare throughput at fixed concurrency, latency at fixed offered RPS, streaming TTFT, and allocations separately. A single maximum-throughput number does not explain the cost of TokenRouter's persistence, audit, routing, metrics, and tracing guarantees.

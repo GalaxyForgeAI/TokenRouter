@@ -10,7 +10,7 @@ The adapter reads a LiteLLM `proxy_config.yaml` file. Future versions will also 
 
 ## Feature Mapping
 
-| LiteLLM Feature | TokenHub Equivalent | Status |
+| LiteLLM Feature | TokenRouter Equivalent | Status |
 |----------------|-------------------|--------|
 | `model_list` providers | Providers + Provider Resources | Supported |
 | `model_list` models | Models | Supported |
@@ -43,4 +43,4 @@ The following LiteLLM features are not yet mapped and will appear as warnings:
 
 ## Key Rotation
 
-After migration, TokenHub issues new API keys. The old LiteLLM keys should be rotated. The `report.new_keys[]` field in the apply report maps old key references to new TokenHub key values.
+After migration, TokenRouter issues new API keys. The old LiteLLM keys should be rotated. The `report.new_keys[]` field in the apply report maps old key references to new TokenRouter key values.

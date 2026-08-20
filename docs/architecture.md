@@ -1,8 +1,8 @@
-# TokenHub Architecture
+# TokenRouter Architecture
 
 Language: English | [简体中文](zh-CN/architecture.md) | [日本語](ja/architecture.md)
 
-This document describes the architecture implemented in this repository for developers, operators, and security teams. TokenHub defaults to a single-instance SQLite deployment and also supports single-instance PostgreSQL and multi-instance deployments backed by remote PostgreSQL.
+This document describes the architecture implemented in this repository for developers, operators, and security teams. TokenRouter defaults to a single-instance SQLite deployment and also supports single-instance PostgreSQL and multi-instance deployments backed by remote PostgreSQL.
 
 ## Overview
 
@@ -14,7 +14,7 @@ flowchart TB
     app["Applications and SDKs"]
     ingress["Direct ports or HTTPS reverse proxy"]
     frontend["Next.js admin console"]
-    backend["TokenHub Go backend"]
+    backend["TokenRouter Go backend"]
 
     subgraph backendProcess["Backend process"]
         adminApi["Admin API\n/api/admin/*"]
@@ -119,7 +119,7 @@ The default image uses the model catalog bundled at build time so the executable
 ```mermaid
 sequenceDiagram
     participant C as Application
-    participant G as TokenHub /v1
+    participant G as TokenRouter /v1
     participant S as Store and database
     participant A as Provider adapter
     participant U as Upstream model service

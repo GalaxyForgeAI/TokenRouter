@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { type LoadedData, loadPlanForView, mergeLoadedData } from "../core/data-loading";
@@ -846,6 +847,14 @@ export function AdminConsole({ defaultBaseURL }: { defaultBaseURL: string }) {
 
           {activeView === "playground" ? null : <div className="divider" />}
 
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeView}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
           {activeView === "overview" ? (
             <OverviewView data={data} user={currentUser} onSelectView={selectView} />
           ) : activeView === "playground" ? (
@@ -989,6 +998,8 @@ export function AdminConsole({ defaultBaseURL }: { defaultBaseURL: string }) {
               />
             </>
           ) : null}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 

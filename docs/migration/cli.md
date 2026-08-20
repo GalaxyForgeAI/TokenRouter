@@ -7,12 +7,12 @@
 | `sources` | List registered source adapters |
 | `inspect [source]` | Inspect a source gateway configuration |
 | `extract [source]` | Extract a canonical migration bundle |
-| `plan` | Dry-run: show what apply would do against a remote TokenHub instance |
-| `apply` | Apply a bundle to a remote TokenHub instance via the Admin API |
-| `verify` | Verify bundle consistency against a remote TokenHub instance |
-| `rollback` | Rollback from a checkpoint file against a remote TokenHub instance |
+| `plan` | Dry-run: show what apply would do against a remote TokenRouter instance |
+| `apply` | Apply a bundle to a remote TokenRouter instance via the Admin API |
+| `verify` | Verify bundle consistency against a remote TokenRouter instance |
+| `rollback` | Rollback from a checkpoint file against a remote TokenRouter instance |
 
-`plan`, `apply`, `verify`, and `rollback` require a TokenHub target: pass `--to`
+`plan`, `apply`, `verify`, and `rollback` require a TokenRouter target: pass `--to`
 or set `TOKENHUB_API` (plus `--token` or `TOKENHUB_ADMIN_TOKEN`). The CLI
 refuses to run these commands against a transient in-memory store and exits
 with code 5.
@@ -24,7 +24,7 @@ with code 5.
 | `--secret-source` | Secret resolution: env, file | `env` |
 | `--secret-file` | `key=value` file used with `--secret-source=file` | — |
 | `--id-strategy` | ID generation: stable, prefixed, source | `prefixed` |
-| `--to` | TokenHub admin API base URL (or `TOKENHUB_API`) | — |
+| `--to` | TokenRouter admin API base URL (or `TOKENHUB_API`) | — |
 | `--token` | Admin API token (or `TOKENHUB_ADMIN_TOKEN`) | — |
 | `--report` | Reserved for structured report output | — |
 | `--log-level` | Reserved for future logging control | `info` |
@@ -67,7 +67,7 @@ tokenhub-migrate extract litellm --from proxy_config.yaml --out bundle.json
 # Optional: preserve source IDs instead of the default prefixed IDs
 tokenhub-migrate extract litellm --from proxy_config.yaml --out bundle.json --id-strategy source
 
-# Target TokenHub instance for the remaining commands
+# Target TokenRouter instance for the remaining commands
 export TOKENHUB_API=http://localhost:8080
 export TOKENHUB_ADMIN_TOKEN=<admin-token>
 

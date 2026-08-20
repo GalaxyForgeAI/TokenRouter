@@ -1,4 +1,5 @@
 import { AlertCircle, Check, ChevronDown, ChevronRight, LogOut, Moon, PanelLeftClose, PanelLeftOpen, Search, Sun, X } from "lucide-react";
+import { motion } from "motion/react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { appRole, filterNavItemByAccess, isNavItemActive, isNavParentItem, navGroupsForUser, normalizeSearchText, readRecentViews, roleScopeDescription, standaloneViewMeta, topQuickActionsForUser, topSearchItemsForUser, topSearchResults } from "../core/navigation";
 import { type AdminUser, type AppData, type NavItem, type ViewKey } from "../core/types";
@@ -33,8 +34,11 @@ export function Sidebar({
   return (
     <aside className={collapsed ? "sidebar collapsed" : "sidebar"}>
       <div className="brand">
-        <img src="/brand/tokenhub-logo.png" alt="TokenHub" className="brand-logo" />
-        <span className="brand-name">TokenHub</span>
+        <img src="/brand/tokenrouter-logo.png" alt="TokenRouter" className="brand-logo" />
+        <span className="brand-name">
+          TokenRouter
+          <em className="brand-name-zh">炬枢</em>
+        </span>
         <div className="sidebar-version-status" id="sidebar-version-status" />
         <button
           className="sidebar-toggle"
@@ -106,6 +110,13 @@ export function Sidebar({
                                     onClick={() => onSelect(child.view)}
                                     type="button"
                                   >
+                                    {activeView === child.view ? (
+                                      <motion.span
+                                        layoutId="nav-active-pill"
+                                        className="nav-active-pill"
+                                        transition={{ type: "spring", stiffness: 520, damping: 38 }}
+                                      />
+                                    ) : null}
                                     <ChildIcon size={16} />
 	                                    <span>{tx(child.label)}</span>
                                   </button>
@@ -124,6 +135,13 @@ export function Sidebar({
 	                        title={collapsed ? tx(item.label) : undefined}
                         type="button"
                       >
+                        {activeView === item.view ? (
+                          <motion.span
+                            layoutId="nav-active-pill"
+                            className="nav-active-pill"
+                            transition={{ type: "spring", stiffness: 520, damping: 38 }}
+                          />
+                        ) : null}
                         <Icon size={17} />
 	                        <span>{tx(item.label)}</span>
                       </button>
@@ -163,7 +181,7 @@ export function PageHeader({
   const path = navPathForView(user, activeView);
   const chips = pageHeaderChips(activeView, data, user);
   const pathGroup = path.group || pageHeaderFallbackGroup(activeView, user);
-  const pathSegments = ["TokenHub", pathGroup, path.parent, path.label || meta.title].filter(Boolean);
+  const pathSegments = ["TokenRouter", pathGroup, path.parent, path.label || meta.title].filter(Boolean);
   return (
     <header className="page-header page-context-header">
       <div className="page-context-main">

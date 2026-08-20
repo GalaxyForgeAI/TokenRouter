@@ -1,22 +1,22 @@
-# Gemini CLI 通过 TokenHub 使用 Codex 订阅 GPT
+# Gemini CLI 通过 TokenRouter 使用 Codex 订阅 GPT
 
-TokenHub 提供 Gemini 原生 `v1beta` 兼容接口。官方 Gemini CLI 可以直接把请求发送到 TokenHub，再由 TokenHub 路由到 OpenAI Codex Subscription 账号；不需要 CCswitch 或其他本地协议代理。
+TokenRouter 提供 Gemini 原生 `v1beta` 兼容接口。官方 Gemini CLI 可以直接把请求发送到 TokenRouter，再由 TokenRouter 路由到 OpenAI Codex Subscription 账号；不需要 CCswitch 或其他本地协议代理。
 
 ## 前置条件
 
-- TokenHub 中已经添加可用的 OpenAI Codex Subscription 账号。
+- TokenRouter 中已经添加可用的 OpenAI Codex Subscription 账号。
 - 已启用一个 GPT 模型，并把该模型路由到 Codex Subscription Provider，例如 `gpt-5.5`。
 - 项目 Key 允许访问该模型。
 - 本机已安装支持 `GOOGLE_GEMINI_BASE_URL` 的 Gemini CLI。可运行 `gemini --version` 检查。
 
-TokenHub 地址必须使用 HTTPS；只有 `localhost`、`127.0.0.1` 和 `[::1]` 可以使用 HTTP。Base URL 不要添加 `/v1beta`。
+TokenRouter 地址必须使用 HTTPS；只有 `localhost`、`127.0.0.1` 和 `[::1]` 可以使用 HTTP。Base URL 不要添加 `/v1beta`。
 
 ## 不修改现有配置的启动方式
 
 推荐先使用仅对当前命令生效的环境变量。以下命令不会修改 `~/.gemini/settings.json`：
 
 ```bash
-export TOKENHUB_GEMINI_KEY='你的 TokenHub 项目 Key'
+export TOKENHUB_GEMINI_KEY='你的 TokenRouter 项目 Key'
 
 GEMINI_API_KEY="$TOKENHUB_GEMINI_KEY" \
 GOOGLE_GEMINI_BASE_URL='https://tokenhub.example.com' \
@@ -29,7 +29,7 @@ unset TOKENHUB_GEMINI_KEY
 本地开发实例示例：
 
 ```bash
-export TOKENHUB_GEMINI_KEY='你的 TokenHub 项目 Key'
+export TOKENHUB_GEMINI_KEY='你的 TokenRouter 项目 Key'
 
 GEMINI_API_KEY="$TOKENHUB_GEMINI_KEY" \
 GOOGLE_GEMINI_BASE_URL='http://127.0.0.1:8080' \
@@ -37,14 +37,14 @@ GEMINI_MODEL='gpt-5.5' \
 gemini -m gpt-5.5
 ```
 
-Gemini CLI 使用 `x-goog-api-key` 发送 `GEMINI_API_KEY`，TokenHub 会把它当作项目 Key 验证。不要在这里填写 OpenAI OAuth Access Token。
+Gemini CLI 使用 `x-goog-api-key` 发送 `GEMINI_API_KEY`，TokenRouter 会把它当作项目 Key 验证。不要在这里填写 OpenAI OAuth Access Token。
 
 ## 仅对一个项目持久化
 
-如果只希望某个代码项目通过 TokenHub，可以在该项目下创建 `.gemini/.env`：
+如果只希望某个代码项目通过 TokenRouter，可以在该项目下创建 `.gemini/.env`：
 
 ```dotenv
-GEMINI_API_KEY=你的 TokenHub 项目 Key
+GEMINI_API_KEY=你的 TokenRouter 项目 Key
 GOOGLE_GEMINI_BASE_URL=https://tokenhub.example.com
 GEMINI_MODEL=gpt-5.5
 ```
@@ -97,7 +97,7 @@ gemini -m gpt-5.5 -p 'Use read_file to read fixture.txt, then return its marker.
 
 | 现象 | 检查项 |
 | --- | --- |
-| `invalid_api_key` | `GEMINI_API_KEY` 必须是 TokenHub 项目 Key，不是 Codex OAuth Token |
+| `invalid_api_key` | `GEMINI_API_KEY` 必须是 TokenRouter 项目 Key，不是 Codex OAuth Token |
 | `model_not_allowed` | 项目 Key 的模型白名单必须包含所选 GPT 模型 |
 | `provider_unavailable` | 检查模型路由、Codex 账号健康状态和额度 |
 | CLI 仍访问 Google | 确认设置了 `GOOGLE_GEMINI_BASE_URL`，且地址末尾没有 `/v1beta` |

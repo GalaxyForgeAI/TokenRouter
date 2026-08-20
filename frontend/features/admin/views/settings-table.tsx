@@ -164,7 +164,7 @@ export function SystemSettingsPanel({
           <div>
             <p className="eyebrow">{tx("全局平台范围")}</p>
             <h3>{tx("网关基础设置")}</h3>
-            <p>{tx("这里维护 TokenHub 运行时读取的一组全局默认值；它不是配置模板，也不需要新增多条记录。")}</p>
+            <p>{tx("这里维护 TokenRouter 运行时读取的一组全局默认值；它不是配置模板，也不需要新增多条记录。")}</p>
           </div>
           {current ? (
             <button className="button" onClick={() => onEdit(current)} type="button">

@@ -13,7 +13,7 @@ export function adminUserConfig(): ResourceConfig<AdminUser> {
     view: "users",
     title: "用户管理",
     eyebrow: "后台用户列表",
-    description: "管理 TokenHub 后台登录账号、角色权限、归属团队和账号状态。",
+    description: "管理 TokenRouter 后台登录账号、角色权限、归属团队和账号状态。",
     createLabel: "新增用户",
     columns: [
       { key: "name", label: "姓名" },

@@ -10,7 +10,7 @@ LiteLLM `proxy_config.yaml` ファイル（`model_list`、`key_management_settin
 
 ## マッピングルール
 
-| LiteLLM 概念 | TokenHub リソース |
+| LiteLLM 概念 | TokenRouter リソース |
 |-------------|-------------------|
 | `model_list[].litellm_params.model` プレフィックス | Provider |
 | `model_list[].model_name` | Model + Route |

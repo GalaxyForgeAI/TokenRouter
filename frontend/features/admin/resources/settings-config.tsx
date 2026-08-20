@@ -84,7 +84,7 @@ export function systemSettingConfig(): ResourceConfig<AdminResource> {
       key: "provider_synthetic_dns_enabled",
       label: "允许 Provider 使用 Synthetic DNS / Fake-IP",
       type: "boolean",
-      help: "仅当 TokenHub 所在主机启用了 Fake-IP 代理，且 Provider 域名因此解析到合成地址时开启。该例外只用于域名解析结果，不允许把字面量 IP 直接配置为 Provider Base URL。",
+      help: "仅当 TokenRouter 所在主机启用了 Fake-IP 代理，且 Provider 域名因此解析到合成地址时开启。该例外只用于域名解析结果，不允许把字面量 IP 直接配置为 Provider Base URL。",
     },
     {
       key: "provider_synthetic_dns_allow_private_ranges",
@@ -214,7 +214,7 @@ export function sqliteBackupConfig(): ResourceConfig<SQLiteBackup> {
     view: "sqlite-backups",
     title: "数据备份",
     eyebrow: "SQLite 备份",
-    description: "创建、下载和恢复 TokenHub SQLite 数据库快照。",
+    description: "创建、下载和恢复 TokenRouter SQLite 数据库快照。",
     createLabel: "创建备份",
     columns: [
       { key: "name", label: "名称" },

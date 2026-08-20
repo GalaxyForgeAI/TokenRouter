@@ -1,6 +1,6 @@
 # PostgreSQL Setup Guide
 
-TokenHub supports PostgreSQL as a production database. This guide explains how to configure and deploy the PostgreSQL setup.
+TokenRouter supports PostgreSQL as a production database. This guide explains how to configure and deploy the PostgreSQL setup.
 
 ## Why PostgreSQL?
 
@@ -148,7 +148,7 @@ postgresql://user:pass@host:5432/db?pool_max_conns=25&pool_min_conns=5
 
 ## Backup and Recovery
 
-TokenHub's built-in backup feature only supports SQLite. For PostgreSQL, use `pg_dump` and `pg_restore`.
+TokenRouter's built-in backup feature only supports SQLite. For PostgreSQL, use `pg_dump` and `pg_restore`.
 
 ### Backing Up the Database
 
@@ -186,7 +186,7 @@ Add it to crontab (backup daily at 2 AM):
 
 ## Migrating from SQLite to PostgreSQL
 
-The current version of TokenHub does not include an automatic migration tool. Migration steps:
+The current version of TokenRouter does not include an automatic migration tool. Migration steps:
 
 1. **Export SQLite data as SQL**
 
@@ -210,7 +210,7 @@ psql -h localhost -U tokenhub -d tokenhub -f tokenhub_sqlite.sql
 
 ### Index Optimization
 
-TokenHub automatically creates the necessary indexes, but you can add extra indexes based on your query patterns:
+TokenRouter automatically creates the necessary indexes, but you can add extra indexes based on your query patterns:
 
 ```sql
 -- If you frequently query projects by cost_center

@@ -1,8 +1,8 @@
-# TokenHub 全体アーキテクチャ
+# TokenRouter 全体アーキテクチャ
 
 Language: [English](../architecture.md) | [简体中文](../zh-CN/architecture.md) | 日本語
 
-このドキュメントは、開発、運用、セキュリティ担当者向けに、リポジトリで実装されている TokenHub のデプロイ形態、リクエスト経路、データ境界を説明します。TokenHub は SQLite による単一インスタンスを既定とし、PostgreSQL による単一インスタンスおよびリモート PostgreSQL を使うマルチインスタンスもサポートします。
+このドキュメントは、開発、運用、セキュリティ担当者向けに、リポジトリで実装されている TokenRouter のデプロイ形態、リクエスト経路、データ境界を説明します。TokenRouter は SQLite による単一インスタンスを既定とし、PostgreSQL による単一インスタンスおよびリモート PostgreSQL を使うマルチインスタンスもサポートします。
 
 ## 概要
 
@@ -14,7 +14,7 @@ flowchart TB
     app["業務アプリケーション / SDK"]
     ingress["直接ポートまたは HTTPS リバースプロキシ"]
     frontend["Next.js 管理コンソール"]
-    backend["TokenHub Go バックエンド"]
+    backend["TokenRouter Go バックエンド"]
 
     subgraph backendProcess["バックエンドプロセス"]
         adminApi["管理 API\n/api/admin/*"]
@@ -119,7 +119,7 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     participant C as 業務アプリケーション
-    participant G as TokenHub /v1
+    participant G as TokenRouter /v1
     participant S as Store とデータベース
     participant A as Provider Adapter
     participant U as 上流モデルサービス

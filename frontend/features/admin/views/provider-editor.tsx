@@ -1362,7 +1362,7 @@ export function ProviderUpsertModal({
               <section className="provider-wizard-panel">
                 <div className="wizard-panel-head">
                   <h3>{tx(credentialMode === "account_integration" ? "确认账号通道和基础信息" : "选择渠道和基础信息")}</h3>
-                  <p>{tx(credentialMode === "account_integration" ? "账号资源池已为你选好默认通道。这里通常只确认 Base URL；账号走企业代理时再修改。" : "选择上游渠道商模板，TokenHub 会带出类型、Base URL 和可引入模型。")}</p>
+                  <p>{tx(credentialMode === "account_integration" ? "账号资源池已为你选好默认通道。这里通常只确认 Base URL；账号走企业代理时再修改。" : "选择上游渠道商模板，TokenRouter 会带出类型、Base URL 和可引入模型。")}</p>
                 </div>
                 {credentialMode === "account_integration" ? (
                   <div className="provider-account-channel-note">
@@ -1387,7 +1387,7 @@ export function ProviderUpsertModal({
                   <h3>{tx(credentialMode === "account_integration" ? "账号授权" : "直接 API Key")}</h3>
                   <p>{tx(
                     credentialMode === "account_integration"
-                      ? "先完成账号授权回填；TokenHub 会把回填的 Token 保存为账号资源。"
+                      ? "先完成账号授权回填；TokenRouter 会把回填的 Token 保存为账号资源。"
                       : "把上游 Key 保存到 Provider，适合单账号或兼容 API。",
                   )}</p>
                 </div>
@@ -1429,7 +1429,7 @@ export function ProviderUpsertModal({
                   <div className="provider-account-inline">
                     <div className="provider-account-inline-head">
                       <strong>{tx("账号授权")}</strong>
-                      <span>{tx("使用 OpenAI/Codex OAuth 授权账号；TokenHub 会在后端换取并保存账号 Token。")}</span>
+                      <span>{tx("使用 OpenAI/Codex OAuth 授权账号；TokenRouter 会在后端换取并保存账号 Token。")}</span>
                     </div>
                     <div className="provider-account-auth-grid">
                       <label className={`field provider-account-auth-wide provider-account-name-field${accountResourceNameConflict ? " conflict" : ""}`}>

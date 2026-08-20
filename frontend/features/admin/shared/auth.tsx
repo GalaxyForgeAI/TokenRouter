@@ -593,14 +593,14 @@ export function LoginView({
         onThemeToggle={onThemeToggle}
       />
       <section className="login-stage">
-        <aside className={`login-hero-panel${heroPaused ? " is-paused" : ""}`} aria-label="TokenHub">
+        <aside className={`login-hero-panel${heroPaused ? " is-paused" : ""}`} aria-label="TokenRouter">
           <div className="login-brand-lockup">
             <span className="login-brand-mark" aria-hidden="true">
-              <img src="/brand/tokenhub-logo.png" alt="" />
+              <img src="/brand/tokenrouter-logo.png" alt="" />
             </span>
             <span className="login-brand-copy">
-              <strong>Token<span>Hub</span></strong>
-              <small>{tx("企业 AI 网关")}</small>
+              <strong>Token<span>Router</span></strong>
+              <small>{tx("炬枢 · 企业 AI 网关")}</small>
             </span>
           </div>
 

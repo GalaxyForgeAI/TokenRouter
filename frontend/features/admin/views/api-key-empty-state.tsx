@@ -12,7 +12,7 @@ export function APIKeyEmptyState({ onCreate }: { onCreate: () => void }) {
           <Sparkles className="api-key-empty-sparkle" size={13} strokeWidth={2.2} />
         </div>
         <h3>{tx("你还没有创建任何 API Key")}</h3>
-        <p>{tx("创建后即可通过 API Key 调用 TokenHub 提供的模型和推理服务。")}</p>
+        <p>{tx("创建后即可通过 API Key 调用 TokenRouter 提供的模型和推理服务。")}</p>
         <button className="button api-key-empty-create" onClick={onCreate} type="button">
           <Plus size={16} />
           {tx("创建 API Key")}

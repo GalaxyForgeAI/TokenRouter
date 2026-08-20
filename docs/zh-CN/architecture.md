@@ -1,8 +1,8 @@
-# TokenHub 整体架构
+# TokenRouter 整体架构
 
 Language: [English](../architecture.md) | 简体中文 | [日本語](../ja/architecture.md)
 
-本文描述当前仓库已经实现的 TokenHub 架构，供开发、运维和安全人员理解部署形态、请求链路与数据边界。TokenHub 默认采用 SQLite 单实例部署，同时支持 PostgreSQL 单实例和基于远端 PostgreSQL 的多实例部署。
+本文描述当前仓库已经实现的 TokenRouter 架构，供开发、运维和安全人员理解部署形态、请求链路与数据边界。TokenRouter 默认采用 SQLite 单实例部署，同时支持 PostgreSQL 单实例和基于远端 PostgreSQL 的多实例部署。
 
 ## 架构概览
 
@@ -14,7 +14,7 @@ flowchart TB
     app["业务应用 / SDK"]
     ingress["直接端口或 HTTPS 反向代理"]
     frontend["Next.js 管理后台"]
-    backend["TokenHub Go 后端"]
+    backend["TokenRouter Go 后端"]
 
     subgraph backendProcess["后端进程"]
         adminApi["管理 API\n/api/admin/*"]
@@ -122,7 +122,7 @@ Provider 类型与主要能力如下：
 ```mermaid
 sequenceDiagram
     participant C as 业务应用
-    participant G as TokenHub /v1
+    participant G as TokenRouter /v1
     participant S as Store + 数据库
     participant A as Provider Adapter
     participant U as 上游模型服务

@@ -1,5 +1,7 @@
 import { Activity, BarChart3, Boxes, Check, CircleDollarSign, Code2, Database, FileText, Gauge, KeyRound, LayoutDashboard, Server, ShieldCheck, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import CountUp from "@/components/reactbits/CountUp/CountUp";
+import SpotlightCard from "@/components/reactbits/SpotlightCard/SpotlightCard";
 import { appRole, canAccessView } from "../core/navigation";
 import { type AdminUser, type AppData, type AppRole, type RequestLog, type Summary, type UsageBreakdownRow, type UsagePoint, type ViewKey } from "../core/types";
 import { findProvider, providerResourceAuditLabel } from "../domain/entities";
@@ -271,16 +273,36 @@ export function UsageMonitorKPI({
   icon: typeof Activity;
   tone: "blue" | "green" | "red" | "amber" | "purple";
 }) {
+  const parsed = parseNumericValue(value);
   return (
-    <article className={`usage-monitor-kpi ${tone}`}>
+    <SpotlightCard className={`usage-monitor-kpi ${tone}`} spotlightColor="rgba(30, 64, 175, 0.12)">
       <span className="usage-monitor-kpi-icon"><Icon size={17} /></span>
       <div>
         <span>{tx(label)}</span>
-        <strong>{value}</strong>
+        <strong>
+          {parsed ? (
+            <>
+              {parsed.prefix}
+              <CountUp to={parsed.num} duration={1.3} separator="," />
+              {parsed.suffix}
+            </>
+          ) : (
+            value
+          )}
+        </strong>
         <small>{detail}</small>
       </div>
-    </article>
+    </SpotlightCard>
   );
+}
+
+/** 从展示字符串里拆出数值部分，供 CountUp 动画使用；非数值返回 null 原样渲染。 */
+function parseNumericValue(value: string): { num: number; prefix: string; suffix: string } | null {
+  const match = /^([^\d.-]*)(-?[\d,]+(?:\.\d+)?)(.*)$/.exec(value);
+  if (!match || match[2] === "") return null;
+  const num = Number(match[2].replace(/,/g, ""));
+  if (!Number.isFinite(num)) return null;
+  return { num, prefix: match[1], suffix: match[3] };
 }
 
 export function UsageMonitorTrafficChart({ points }: { points: UsagePoint[] }) {
@@ -832,6 +854,7 @@ export function OverviewMetricCard({
   value: string;
   values: number[];
 }) {
+  const parsed = parseNumericValue(value);
   return (
     <article className="metric compact-metric overview-metric-card">
       <div className="overview-card-head">
@@ -841,7 +864,17 @@ export function OverviewMetricCard({
         </div>
         {badge ? <span>{tx(badge)}</span> : null}
       </div>
-      <div className="metric-value">{value}</div>
+      <div className="metric-value">
+        {parsed ? (
+          <>
+            {parsed.prefix}
+            <CountUp to={parsed.num} duration={1.3} separator="," />
+            {parsed.suffix}
+          </>
+        ) : (
+          value
+        )}
+      </div>
       {caption ? (
         <div className="overview-health-caption">
           <span />

@@ -8,9 +8,9 @@ export function gatewayChineseDocs(stats: GatewayDocBundle): GatewayDocBundle {
       searchPlaceholder: "搜索指南、API 或错误码",
       noResults: "没有匹配的文档",
     },
-    eyebrow: "TokenHub Docs",
+    eyebrow: "TokenRouter Docs",
     title: "面向三种角色的网关指南",
-    description: "TokenHub 文档按企业角色组织：普通用户调用已批准模型，团队负责人管理项目和成员，管理员治理 Provider、路由、身份源、审计和成本。",
+    description: "TokenRouter 文档按企业角色组织：普通用户调用已批准模型，团队负责人管理项目和成员，管理员治理 Provider、路由、身份源、审计和成本。",
     languageLabel: "文档语言",
     quickInfoLabel: "接口基础信息",
     quickCards: {
@@ -29,7 +29,7 @@ export function gatewayChineseDocs(stats: GatewayDocBundle): GatewayDocBundle {
             group: "开始",
             badge: "DOC",
             title: "平台概览",
-            description: "理解 TokenHub 如何把模型、项目、Key、路由、审计和成本归因放在同一条治理链路里。",
+            description: "理解 TokenRouter 如何把模型、项目、Key、路由、审计和成本归因放在同一条治理链路里。",
             details: [
               { label: "主要入口", value: "Model Playground / Key Management / Usage Analytics" },
               { label: "业务接口", value: "/v1/*" },
@@ -181,7 +181,7 @@ export function gatewayChineseDocs(stats: GatewayDocBundle): GatewayDocBundle {
               title: "常见错误",
               columns: ["状态", "错误码", "处理方式"],
               rows: [
-                ["401", "invalid_api_key", "检查 Authorization 是否使用 TokenHub API Key。"],
+                ["401", "invalid_api_key", "检查 Authorization 是否使用 TokenRouter API Key。"],
                 ["403", "project_forbidden / model_not_allowed", "检查用户是否在项目中，以及模型是否对项目开放。"],
                 ["404/503", "provider_unavailable", "为模型配置启用路由，或检查上游 Provider 健康状态。"],
                 ["429", "quota_exceeded", "检查项目额度、并发限制和 Provider 资源限制。"],

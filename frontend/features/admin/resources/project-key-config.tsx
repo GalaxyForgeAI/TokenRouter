@@ -367,7 +367,7 @@ export function APIKeyDownloadMenu({ item, data, baseURL }: { item: APIKey; data
         <div className="api-key-download-options" ref={optionsRef} role="menu" style={position}>
           <button onClick={downloadConfig} role="menuitem" type="button">
             <strong>{tx("Codex CLI 配置")}</strong>
-            <span>config.toml · {tx("连接 TokenHub Responses")}</span>
+            <span>config.toml · {tx("连接 TokenRouter Responses")}</span>
           </button>
           <button onClick={downloadEnvironment} role="menuitem" type="button">
             <strong>{tx("环境变量模板")}</strong>
@@ -383,7 +383,7 @@ export function APIKeyDownloadMenu({ item, data, baseURL }: { item: APIKey; data
 export function codexConfigTemplate(item: APIKey, data: AppData, apiBaseURL: string) {
   const model = codexTemplateModel(item, data);
   const baseURL = apiGatewayBaseURL(apiBaseURL);
-  return `# TokenHub Codex CLI configuration for ${item.name}
+  return `# TokenRouter Codex CLI configuration for ${item.name}
 # Set the API key before starting Codex:
 # export TOKENHUB_API_KEY="REPLACE_WITH_YOUR_TOKENHUB_API_KEY"
 
@@ -392,7 +392,7 @@ model_provider = "tokenhub"
 model_reasoning_effort = "medium"
 
 [model_providers.tokenhub]
-name = "TokenHub - ${escapeTomlString(item.name)}"
+name = "TokenRouter - ${escapeTomlString(item.name)}"
 base_url = "${escapeTomlString(baseURL)}"
 wire_api = "responses"
 env_key = "TOKENHUB_API_KEY"
@@ -401,7 +401,7 @@ env_key_instructions = "Set TOKENHUB_API_KEY to REPLACE_WITH_YOUR_TOKENHUB_API_K
 }
 
 export function tokenHubEnvironmentTemplate(item: APIKey) {
-  return `# TokenHub API Key for ${item.name}
+  return `# TokenRouter API Key for ${item.name}
 TOKENHUB_API_KEY=REPLACE_WITH_YOUR_TOKENHUB_API_KEY
 `;
 }

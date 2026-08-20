@@ -198,7 +198,7 @@ textarea:focus-visible {
 }
 
 .login-flow-token {
-  fill: #3e7bf6;
+  fill: #1e40af;
   opacity: 0.92;
   filter: drop-shadow(0 0 7px rgba(62, 123, 246, 0.45));
   animation: login-token-pulse 1.55s ease-in-out infinite;
@@ -252,7 +252,7 @@ textarea:focus-visible {
   background:
     radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.96), transparent 42%),
     rgba(62, 123, 246, 0.1);
-  color: #2f6df3;
+  color: #1e40af;
   box-shadow: 0 8px 16px rgba(62, 123, 246, 0.14);
 }
 
@@ -358,10 +358,10 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   background:
-    linear-gradient(135deg, rgba(62, 123, 246, 0.95), rgba(15, 164, 120, 0.92)),
-    #3e7bf6;
+    linear-gradient(135deg, rgba(30, 64, 175, 0.95), rgba(59, 130, 246, 0.92)),
+    #1e40af;
   color: #ffffff;
-  box-shadow: 0 10px 22px rgba(62, 123, 246, 0.26);
+  box-shadow: 0 10px 22px rgba(30, 64, 175, 0.26);
   animation: login-provider-ready 3.1s ease-in-out infinite;
 }
 

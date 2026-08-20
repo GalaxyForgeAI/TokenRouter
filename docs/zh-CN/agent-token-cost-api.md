@@ -2,7 +2,7 @@
 
 Language: [English](../agent-token-cost-api.md) | 简体中文 | [日本語](../ja/agent-token-cost-api.md)
 
-版本化的 Agent Token 成本 API 让本地报表或监控 Agent 无需管理员会话、模型调用 API Key、Provider 凭证或人工导出，即可只读访问 TokenHub 用量。接口与管理员用量页面使用相同的请求、Token、错误数和预估客户成本口径。
+版本化的 Agent Token 成本 API 让本地报表或监控 Agent 无需管理员会话、模型调用 API Key、Provider 凭证或人工导出，即可只读访问 TokenRouter 用量。接口与管理员用量页面使用相同的请求、Token、错误数和预估客户成本口径。
 
 ## 接口
 
@@ -31,7 +31,7 @@ curl -sS https://tokenhub.example.com/api/admin/analytics/credentials \
   }'
 ```
 
-响应包含 `credential` 元数据和 `token`。请立即复制 Token；以后列表只显示前缀和后缀。只有在 Agent 确实需要读取整个 TokenHub 实例时，才将 `scope_type` 设为 `organization` 并省略 `project_id`。过期时间可选，但建议设置。
+响应包含 `credential` 元数据和 `token`。请立即复制 Token；以后列表只显示前缀和后缀。只有在 Agent 确实需要读取整个 TokenRouter 实例时，才将 `scope_type` 设为 `organization` 并省略 `project_id`。过期时间可选，但建议设置。
 
 将 Token 保存到本地 Agent 的密钥存储：
 
@@ -142,7 +142,7 @@ curl -sS -G https://tokenhub.example.com/api/v1/analytics/token-costs \
 }
 ```
 
-`request_count` 和 `error_count` 来自网关请求日志，因此包含没有用量记录的失败请求。Token 与成本来自用量记录。缓存和推理 Token 已包含在输入/输出总量中，不要把所有明细字段再次加到 `total_tokens`。`estimated_cost_usd` 是管理员用量页面使用的外部客户计费估算，不是 TokenHub 保密的 Provider 成本。
+`request_count` 和 `error_count` 来自网关请求日志，因此包含没有用量记录的失败请求。Token 与成本来自用量记录。缓存和推理 Token 已包含在输入/输出总量中，不要把所有明细字段再次加到 `total_tokens`。`estimated_cost_usd` 是管理员用量页面使用的外部客户计费估算，不是 TokenRouter 保密的 Provider 成本。
 
 ## 分页与增量拉取
 
@@ -173,7 +173,7 @@ curl -sS -G https://tokenhub.example.com/api/v1/analytics/token-costs \
   -o token-costs.csv
 ```
 
-CSV 使用与 JSON 相同的过滤、限制、指标、分页和 `dedupe_key`。元数据通过 `X-TokenHub-Schema-Version`、`X-TokenHub-Has-More`、`X-TokenHub-Next-Cursor`、`X-TokenHub-Watermark`、`X-TokenHub-Dedupe-By`、`X-TokenHub-Checkpoint-By` 和 `X-TokenHub-Incremental-Mode` 响应头返回。可能被电子表格解释为公式的文本单元格会添加单引号前缀。
+CSV 使用与 JSON 相同的过滤、限制、指标、分页和 `dedupe_key`。元数据通过 `X-TokenRouter-Schema-Version`、`X-TokenRouter-Has-More`、`X-TokenRouter-Next-Cursor`、`X-TokenRouter-Watermark`、`X-TokenRouter-Dedupe-By`、`X-TokenRouter-Checkpoint-By` 和 `X-TokenRouter-Incremental-Mode` 响应头返回。可能被电子表格解释为公式的文本单元格会添加单引号前缀。
 
 ## CLI 与 MCP 评估
 

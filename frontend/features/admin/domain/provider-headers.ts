@@ -67,7 +67,7 @@ export function providerHeaderEntryErrors(entries: ProviderHeaderEntry[]) {
     if (!name) errors.push("请求头名称不能为空。");
     else if (seen.has(comparable)) errors.push("请求头名称不能重复（大小写不敏感）。");
     else if (encoder.encode(name).length > 128 || !/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/.test(name)) errors.push("请求头名称格式不合法。");
-    else if (reservedProviderHeaders.has(comparable)) errors.push("该请求头由 TokenHub 管理，不能覆盖。");
+    else if (reservedProviderHeaders.has(comparable)) errors.push("该请求头由 TokenRouter 管理，不能覆盖。");
     else seen.add(comparable);
     if ((!entry.value || entry.value === providerHeaderMask) && (!entry.sensitive || !entry.retained)) errors.push("请求头值不能为空。");
     if (!validProviderHeaderValue(entry.value)) errors.push("请求头值不能包含非法控制字符。");

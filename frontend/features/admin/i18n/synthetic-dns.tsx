@@ -1,7 +1,7 @@
 const syntheticDNSTranslations = {
   en: {
     "允许 Provider 使用 Synthetic DNS / Fake-IP": "Allow Providers to Use Synthetic DNS / Fake-IP",
-    "仅当 TokenHub 所在主机启用了 Fake-IP 代理，且 Provider 域名因此解析到合成地址时开启。该例外只用于域名解析结果，不允许把字面量 IP 直接配置为 Provider Base URL。": "Enable only when the TokenHub host uses a Fake-IP proxy and provider domains therefore resolve to synthetic addresses. This exception applies only to DNS results; a literal IP still cannot be used as a Provider Base URL.",
+    "仅当 TokenRouter 所在主机启用了 Fake-IP 代理，且 Provider 域名因此解析到合成地址时开启。该例外只用于域名解析结果，不允许把字面量 IP 直接配置为 Provider Base URL。": "Enable only when the TokenRouter host uses a Fake-IP proxy and provider domains therefore resolve to synthetic addresses. This exception applies only to DNS results; a literal IP still cannot be used as a Provider Base URL.",
     "允许信任私网 / ULA Synthetic DNS 网段（高风险）": "Trust Private / ULA Synthetic DNS Ranges (High Risk)",
     "默认仍禁止 RFC1918 私网和 IPv6 ULA。仅当代理确实把这些范围用作 Fake-IP 池（例如部分 Xray IPv6 配置）时开启；开启后，恶意或被劫持的 Provider 域名可能访问该范围内的真实内网服务。": "RFC1918 private networks and IPv6 ULA remain blocked by default. Enable only when the proxy actually uses these ranges as its Fake-IP pool (for example, some Xray IPv6 configurations). Once enabled, a malicious or hijacked provider hostname could reach real internal services in those ranges.",
     "Synthetic DNS / Fake-IP 网段": "Synthetic DNS / Fake-IP Ranges",
@@ -14,7 +14,7 @@ const syntheticDNSTranslations = {
   },
   ja: {
     "允许 Provider 使用 Synthetic DNS / Fake-IP": "Provider による Synthetic DNS / Fake-IP の使用を許可",
-    "仅当 TokenHub 所在主机启用了 Fake-IP 代理，且 Provider 域名因此解析到合成地址时开启。该例外只用于域名解析结果，不允许把字面量 IP 直接配置为 Provider Base URL。": "TokenHub ホストで Fake-IP プロキシを使用し、Provider ドメインが合成アドレスに解決される場合にのみ有効にしてください。この例外は DNS の解決結果だけに適用され、リテラル IP を Provider Base URL に直接指定することはできません。",
+    "仅当 TokenRouter 所在主机启用了 Fake-IP 代理，且 Provider 域名因此解析到合成地址时开启。该例外只用于域名解析结果，不允许把字面量 IP 直接配置为 Provider Base URL。": "TokenRouter ホストで Fake-IP プロキシを使用し、Provider ドメインが合成アドレスに解決される場合にのみ有効にしてください。この例外は DNS の解決結果だけに適用され、リテラル IP を Provider Base URL に直接指定することはできません。",
     "允许信任私网 / ULA Synthetic DNS 网段（高风险）": "プライベート / ULA Synthetic DNS 範囲を信頼（高リスク）",
     "默认仍禁止 RFC1918 私网和 IPv6 ULA。仅当代理确实把这些范围用作 Fake-IP 池（例如部分 Xray IPv6 配置）时开启；开启后，恶意或被劫持的 Provider 域名可能访问该范围内的真实内网服务。": "RFC1918 プライベートネットワークと IPv6 ULA は既定では引き続きブロックされます。プロキシが実際にこれらを Fake-IP プールとして使用する場合（例：一部の Xray IPv6 設定）にのみ有効にしてください。有効にすると、悪意のある、または乗っ取られた Provider ホスト名が該当範囲の実在する内部サービスへ到達できる可能性があります。",
     "Synthetic DNS / Fake-IP 网段": "Synthetic DNS / Fake-IP 範囲",

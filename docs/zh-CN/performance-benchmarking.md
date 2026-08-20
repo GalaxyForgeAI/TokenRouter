@@ -1,6 +1,6 @@
 # 性能基准测试
 
-TokenHub 提供两层互补的基准测试：黑盒测试通过 OpenAI 兼容 HTTP 端点评估 TokenHub 或对比其他网关；进程内 Go 基准用于分离 TokenHub 路由与治理成本，并统计内存分配。两者都不访问真实模型 Provider。
+TokenRouter 提供两层互补的基准测试：黑盒测试通过 OpenAI 兼容 HTTP 端点评估 TokenRouter 或对比其他网关；进程内 Go 基准用于分离 TokenRouter 路由与治理成本，并统计内存分配。两者都不访问真实模型 Provider。
 
 ## 指标含义
 
@@ -23,9 +23,9 @@ mkdir -p .tmp
 (cd backend && go build -o ../.tmp/tokenhub-benchmark ./cmd/tokenhub-benchmark)
 ```
 
-CLI 包含 `mocker`、`gateway`、`run`、`check`、`summarize-go` 和 `check-go` 六个命令，分别用于启动确定性 upstream、启动零配置的内存 TokenHub 测试网关、发起带预热的定并发/定 RPS 负载、执行黑盒基线预算检查、汇总 Go 基准中位数，以及检查进程内 `ns/op`、`B/op`、`allocs/op`。Runner 为每个 prompt 添加唯一标识，避免响应缓存影响。
+CLI 包含 `mocker`、`gateway`、`run`、`check`、`summarize-go` 和 `check-go` 六个命令，分别用于启动确定性 upstream、启动零配置的内存 TokenRouter 测试网关、发起带预热的定并发/定 RPS 负载、执行黑盒基线预算检查、汇总 Go 基准中位数，以及检查进程内 `ns/op`、`B/op`、`allocs/op`。Runner 为每个 prompt 添加唯一标识，避免响应缓存影响。
 
-快速执行 TokenHub 单产品冒烟基准时，可在一个终端启动自包含网关。该 Key 只存在内存测试数据库中，但仍通过环境变量传入：
+快速执行 TokenRouter 单产品冒烟基准时，可在一个终端启动自包含网关。该 Key 只存在内存测试数据库中，但仍通过环境变量传入：
 
 ```bash
 TOKENHUB_BENCHMARK_API_KEY=thk_benchmark_local \
@@ -48,7 +48,7 @@ TOKENHUB_BENCHMARK_API_KEY=thk_benchmark_local \
 
 在两个网关中都配置名为 `benchmark-model` 的路由，指向 `http://127.0.0.1:18081/v1`，并分别创建本地基准 API Key。`--failure-every` 可注入确定性故障，用于故障转移场景。
 
-## 对比 TokenHub 与 Bifrost
+## 对比 TokenRouter 与 Bifrost
 
 应在同一台空闲机器上使用相同数据库类型和可观测性开关。如果两个网关会争抢 CPU，不要同时测量；多次交替顺序执行。
 
@@ -110,4 +110,4 @@ TOKENHUB_BENCHMARK_UPDATE_BASELINE=1 ./benchmarks/run-internal.sh
 
 场景指纹还包含时长、预热、超时、最大在途请求、响应大小、流式形状和数据库/可观测性 profile。任一项不同或压测端丢弃请求时都会失败。
 
-若成功率明显不同、压测端饱和、网关重试次数不同，或 CPU/内存压力不同，该轮对比应判为无效。需要分开看定并发吞吐、定 RPS 延迟、TTFT 和内存分配；单个最大 RPS 无法说明 TokenHub 持久化、审计、路由、metrics 和 tracing 的成本。
+若成功率明显不同、压测端饱和、网关重试次数不同，或 CPU/内存压力不同，该轮对比应判为无效。需要分开看定并发吞吐、定 RPS 延迟、TTFT 和内存分配；单个最大 RPS 无法说明 TokenRouter 持久化、审计、路由、metrics 和 tracing 的成本。
