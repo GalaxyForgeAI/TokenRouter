@@ -1,24 +1,43 @@
 /* ===== TokenRouter 炬枢 design-system additions ===== */
 
-/* 品牌名旁的「炬枢」徽标 */
+/* 品牌区：三行网格（logo 徽标 / 品牌名 / 版本状态），炬枢 chip 独立成行，杜绝溢出 */
+.brand {
+  grid-template-areas:
+    "logo name"
+    "logo zh"
+    "logo version";
+  min-height: 88px;
+}
+
 .brand-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  align-self: end;
 }
 
 .brand-name-zh {
+  grid-area: zh;
+  justify-self: start;
+  align-self: start;
   font-style: normal;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   line-height: 1;
-  padding: 3px 7px 2px;
+  padding: 3px 8px 2px;
   border-radius: 999px;
   color: var(--accent);
   background: var(--accent-weak);
   border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-  vertical-align: 2px;
+}
+
+/* 侧边栏顶部品牌渐变线 */
+.sidebar .brand::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #1e40af, #3b82f6 55%, #38bdf8);
 }
 
 /* 侧边栏导航激活指示条（motion layoutId 弹簧滑动） */
@@ -71,4 +90,99 @@
 
 .usage-monitor-kpi.card-spotlight::before {
   border-radius: 16px;
+}
+
+/* 概览指标卡：聚光 + 卡片规范 */
+.overview-metric-card.card-spotlight {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.overview-metric-card.card-spotlight::before {
+  border-radius: 16px;
+}
+
+/* 概览趋势/侧栏面板：SpotlightCard 外框收敛 */
+.overview-trend-panel.card-spotlight,
+.overview-side-panel.card-spotlight {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.overview-trend-panel.card-spotlight::before,
+.overview-side-panel.card-spotlight::before {
+  border-radius: 16px;
+}
+
+/* 概览页头：品牌 hero 区 */
+.overview-report-head {
+  align-items: center;
+  position: relative;
+}
+
+.overview-head-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.overview-head-brand .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.overview-title-gradient {
+  cursor: default;
+  margin: 0;
+  font-size: 26px;
+  font-weight: 780;
+  letter-spacing: 0.01em;
+}
+
+.overview-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--pos) 35%, var(--border));
+  background: var(--pos-weak);
+  color: var(--pos);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.overview-live-badge .live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pos);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--pos) 60%, transparent);
+  animation: tr-live-pulse 2.2s ease-out infinite;
+}
+
+@keyframes tr-live-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--pos) 55%, transparent); }
+  70% { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* 面包屑：品牌段高亮 */
+.page-breadcrumb span:first-child {
+  color: var(--accent);
+  font-weight: 760;
+}
+
+/* 概览面板内容入场动画容器 */
+.overview-panel-motion {
+  display: contents;
 }

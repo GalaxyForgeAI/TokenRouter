@@ -1,6 +1,9 @@
 import { Activity, BarChart3, Boxes, Check, CircleDollarSign, Code2, Database, FileText, Gauge, KeyRound, LayoutDashboard, Server, ShieldCheck, X } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import CountUp from "@/components/reactbits/CountUp/CountUp";
+import GradientText from "@/components/reactbits/GradientText/GradientText";
+import ShinyText from "@/components/reactbits/ShinyText/ShinyText";
 import SpotlightCard from "@/components/reactbits/SpotlightCard/SpotlightCard";
 import { appRole, canAccessView } from "../core/navigation";
 import { type AdminUser, type AppData, type AppRole, type RequestLog, type Summary, type UsageBreakdownRow, type UsagePoint, type ViewKey } from "../core/types";
@@ -85,73 +88,112 @@ export function OverviewView({
   return (
     <div className="overview-report">
       <header className="overview-report-head">
-        <div>
-          <p className="eyebrow">Enterprise AI Gateway</p>
-          <h1>{tx("网关概览")}</h1>
-        </div>
-        <div className="overview-range-tabs" role="tablist" aria-label={tx("报表时间范围")}>
-          {overviewRangeTabs.map((item) => (
-            <button
-              className={range === item.key ? "active" : ""}
-              key={item.key}
-              onClick={() => setRange(item.key)}
-              type="button"
+        <div className="overview-head-brand">
+          <p className="eyebrow">炬枢 · Enterprise AI Gateway</p>
+          <h1>
+            <GradientText
+              colors={["#1E40AF", "#3B82F6", "#38BDF8"]}
+              animationSpeed={10}
+              showBorder={false}
+              className="overview-title-gradient"
             >
-              {tx(item.label)}
-            </button>
-          ))}
+              {tx("网关概览")}
+            </GradientText>
+          </h1>
+        </div>
+        <div className="overview-head-side">
+          <span className="overview-live-badge">
+            <span className="live-dot" />
+            {tx("网关运行中")}
+          </span>
+          <div className="overview-range-tabs" role="tablist" aria-label={tx("报表时间范围")}>
+            {overviewRangeTabs.map((item) => (
+              <button
+                className={range === item.key ? "active" : ""}
+                key={item.key}
+                onClick={() => setRange(item.key)}
+                type="button"
+              >
+                {tx(item.label)}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
       <OverviewRoleWorkbench data={data} user={user} onSelectView={onSelectView} />
 
       <section className="metrics overview-metrics">
-        {cards.map((card) => {
+        {cards.map((card, index) => {
           const Icon = card.icon;
           return (
-            <OverviewMetricCard
-              badge={"badge" in card ? card.badge : card.delta}
-              caption={"caption" in card ? card.caption : undefined}
-              icon={Icon}
+            <motion.div
               key={card.label}
-              label={card.label}
-              value={card.value}
-              values={card.values}
-            />
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.1 + index * 0.07, ease: "easeOut" }}
+            >
+              <OverviewMetricCard
+                badge={"badge" in card ? card.badge : card.delta}
+                caption={"caption" in card ? card.caption : undefined}
+                icon={Icon}
+                label={card.label}
+                value={card.value}
+                values={card.values}
+              />
+            </motion.div>
           );
         })}
       </section>
 
       <section className="overview-report-grid">
-        <article className="overview-panel overview-trend-panel">
-          <div className="overview-panel-head">
-            <div>
-              <h2>{tx("成本与用量趋势")}</h2>
-              <p>
-                <strong>{chartValue.value}</strong>
-                <span>{chartValue.delta}</span>
-                <em>· {overviewRangeLabel(range)}</em>
-              </p>
+        <SpotlightCard className="overview-panel overview-trend-panel" spotlightColor="rgba(30, 64, 175, 0.08)">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.35, ease: "easeOut" }}
+          >
+            <div className="overview-panel-head">
+              <div>
+                <h2>{tx("成本与用量趋势")}</h2>
+                <p>
+                  <strong>{chartValue.value}</strong>
+                  <span>{chartValue.delta}</span>
+                  <em>· {overviewRangeLabel(range)}</em>
+                </p>
+              </div>
+              <div className="overview-metric-tabs" role="tablist" aria-label={tx("趋势指标")}>
+                {overviewMetricTabs.map((item) => (
+                  <button
+                    className={chartMetric === item.key ? "active" : ""}
+                    key={item.key}
+                    onClick={() => setChartMetric(item.key)}
+                    type="button"
+                  >
+                    {tx(item.label)}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="overview-metric-tabs" role="tablist" aria-label={tx("趋势指标")}>
-              {overviewMetricTabs.map((item) => (
-                <button
-                  className={chartMetric === item.key ? "active" : ""}
-                  key={item.key}
-                  onClick={() => setChartMetric(item.key)}
-                  type="button"
-                >
-                  {tx(item.label)}
-                </button>
-              ))}
-            </div>
-          </div>
-          <OverviewTrendChart metric={chartMetric} points={series} />
-        </article>
+            <OverviewTrendChart metric={chartMetric} points={series} />
+          </motion.div>
+        </SpotlightCard>
 
         <aside className="overview-side-stack">
-          <OverviewProviderShare rows={providerRows} />
-          <OverviewTopModels rows={topModels} />
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.45, ease: "easeOut" }}
+          >
+            <OverviewProviderShare rows={providerRows} />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.55, ease: "easeOut" }}
+          >
+            <OverviewTopModels rows={topModels} />
+          </motion.div>
         </aside>
       </section>
     </div>
@@ -532,7 +574,12 @@ export function OverviewRoleWorkbench({
   if (setupComplete || guidePreference !== "show" || !primary) return null;
 
   return (
-    <section className={`overview-workbench role-${role}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.12, ease: "easeOut" }}
+    >
+      <section className={`overview-workbench role-${role}`}>
       <div className="overview-workbench-main">
         <div>
           <p className="eyebrow">{tx(overviewRoleEyebrow(role))}</p>
@@ -558,7 +605,7 @@ export function OverviewRoleWorkbench({
           <small>{tx(primary.description)}</small>
         </div>
         <button className="button" onClick={() => openGuideTarget(primary.target)} type="button">
-          {tx(primary.action)}
+          <ShinyText text={tx(primary.action)} color="#FFFFFF" shineColor="#BFDBFE" speed={2.4} />
         </button>
       </div>
 
@@ -580,6 +627,7 @@ export function OverviewRoleWorkbench({
         })}
       </div>
     </section>
+    </motion.div>
   );
 }
 
@@ -856,7 +904,7 @@ export function OverviewMetricCard({
 }) {
   const parsed = parseNumericValue(value);
   return (
-    <article className="metric compact-metric overview-metric-card">
+    <SpotlightCard className="metric compact-metric overview-metric-card" spotlightColor="rgba(30, 64, 175, 0.1)">
       <div className="overview-card-head">
         <div className="metric-label">
           <Icon size={17} />
@@ -883,7 +931,7 @@ export function OverviewMetricCard({
       ) : (
         <OverviewSparkline values={values} />
       )}
-    </article>
+    </SpotlightCard>
   );
 }
 

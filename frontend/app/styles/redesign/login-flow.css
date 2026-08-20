@@ -63,7 +63,10 @@
 }
 
 .login-brand-copy strong span {
-  color: #3478f6;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 60%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .login-brand-copy small {
@@ -626,9 +629,15 @@
   color: #f3f6fb;
 }
 
-[data-theme="dark"] .login-brand-copy strong span,
 [data-theme="dark"] .login-route-auth strong {
   color: #78a4ff;
+}
+
+[data-theme="dark"] .login-brand-copy strong span {
+  background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 60%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 [data-theme="dark"] .login-brand-copy small,
