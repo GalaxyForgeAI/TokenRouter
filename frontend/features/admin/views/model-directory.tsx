@@ -13,6 +13,7 @@ import { tx } from "../i18n/runtime";
 import { adminFetch, readAdminError } from "../resources/payloads";
 import { DataSection, StatusPill } from "../shared/ui";
 import { ModelBrandIcon } from "./model-catalog";
+import { ModelProfileRadar } from "../shared/model-profile-radar";
 import { ModelGovernanceEmptyState, ModelGovernanceFlow } from "./model-governance-empty-state";
 
 export function ModelDirectoryView({
@@ -46,6 +47,7 @@ export function ModelDirectoryView({
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
+  const [profileModel, setProfileModel] = useState<Model | null>(null);
 
   const publishedModels = useMemo(() => externalModels(data, readOnly), [data, readOnly]);
   const filteredExternal = useMemo(
@@ -155,12 +157,61 @@ export function ModelDirectoryView({
           models={filteredExternal}
           readOnly={readOnly}
           busy={busy || loading}
+          onOpenProfile={setProfileModel}
           onOpenRoutes={onOpenRoutes}
           onEdit={onEditModel}
           onDelete={onDeleteModel}
           onPublish={setPublished}
         />
       </div>
+
+      {profileModel ? (
+        <div className="modal-backdrop" onClick={() => setProfileModel(null)}>
+          <div className="modal profile-modal" role="dialog" aria-modal="true" aria-label={`${profileModel.name} ${tx("模型画像")}`} onClick={(event) => event.stopPropagation()}>
+            <div className="modal-header">
+              <strong>{tx("模型画像")}</strong>
+              <div className="profile-modal-title">
+                <ModelBrandIcon category={modelCategory(profileModel)} label={modelCategoryLabel(modelCategory(profileModel))} />
+                <span>
+                  <strong>{modelDisplayName(profileModel.metadata, profileModel.name)}</strong>
+                  <em>{profileModel.name}</em>
+                </span>
+                <ModelTierBadge tier={profileModel.tier ?? ""} profileStatus={profileModel.profile_status ?? ""} />
+              </div>
+              <button aria-label={tx("关闭")} className="modal-close" onClick={() => setProfileModel(null)} type="button">✕</button>
+            </div>
+            <div className="modal-body profile-modal-body">
+              <ModelProfileRadar model={profileModel} />
+              <div className="profile-details">
+                <dl className="profile-detail-grid">
+                  <div><dt>{tx("上下文窗口")}</dt><dd>{compactNumber(profileModel.context_window || 0)}</dd></div>
+                  <div><dt>{tx("输入价格")}</dt><dd>{priceMetric(profileModel.input_price_usd_per_1m)} / 1M</dd></div>
+                  <div><dt>{tx("输出价格")}</dt><dd>{priceMetric(profileModel.output_price_usd_per_1m)} / 1M</dd></div>
+                  <div><dt>{tx("能力档位")}</dt><dd>{profileModel.tier ? tx({ basic: "基础", standard: "标准", flagship: "旗舰", frontier: "前沿" }[profileModel.tier] ?? profileModel.tier) : "-"}</dd></div>
+                </dl>
+                <div className="profile-section">
+                  <strong>{tx("能力标签")}</strong>
+                  <div className="directory-capability-chips">
+                    {(profileModel.capabilities ?? []).map((capability) => <em key={capability}>{capability}</em>)}
+                    {(profileModel.capabilities ?? []).length === 0 ? <span className="muted">-</span> : null}
+                  </div>
+                </div>
+                <div className="profile-section">
+                  <strong>{tx("画像状态")}</strong>
+                  <span className={profileModel.profile_status === "partial" ? "profile-partial-hint" : "profile-complete-hint"}>
+                    {tx(profileModel.profile_status === "partial" ? "画像待完善" : "画像完整")}
+                  </span>
+                </div>
+                {!readOnly ? (
+                  <button className="secondary-button" onClick={() => { setProfileModel(null); onEditModel(profileModel); }} type="button">
+                    {tx("编辑画像")}
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </DataSection>
   );
 }
@@ -185,11 +236,12 @@ function ModelDirectoryStats({ stats }: { stats: ReturnType<typeof modelDirector
   );
 }
 
-function ExternalModelsTable({ data, models, readOnly, busy, onOpenRoutes, onEdit, onDelete, onPublish }: {
+function ExternalModelsTable({ data, models, readOnly, busy, onOpenProfile, onOpenRoutes, onEdit, onDelete, onPublish }: {
   data: AppData;
   models: Model[];
   readOnly: boolean;
   busy: boolean;
+  onOpenProfile: (model: Model) => void;
   onOpenRoutes: (model?: Model) => void;
   onEdit: (model: Model) => void;
   onDelete: (model: Model) => void;
@@ -256,7 +308,7 @@ function ExternalModelsTable({ data, models, readOnly, busy, onOpenRoutes, onEdi
                 </> : <td><StatusPill status="active" label={tx("当前账号可用")} /></td>}
                 <td><strong>{priceMetric(model.input_price_usd_per_1m)}</strong><span>{tx("输入")} · {priceMetric(model.output_price_usd_per_1m)} {tx("输出")}</span></td>
                 {!readOnly ? (
-                  <td><div className="directory-row-actions"><button aria-label={`${tx("路由策略")}: ${model.name}`} className="text-button" onClick={() => onOpenRoutes(model)} type="button">{tx("路由策略")}</button><button className="text-button" onClick={() => onEdit(model)} type="button">{tx("编辑")}</button><button className="text-button" disabled={busy || (publication !== "published" && activeRoutes.length === 0)} onClick={() => onPublish(model, publication !== "published")} type="button">{tx(publication === "published" ? "下线" : "发布")}</button><button className="danger-button" onClick={() => onDelete(model)} type="button">{tx("删除")}</button></div></td>
+                  <td><div className="directory-row-actions"><button aria-label={`${tx("画像")}: ${model.name}`} className="text-button" onClick={() => onOpenProfile(model)} type="button">{tx("画像")}</button><button aria-label={`${tx("路由策略")}: ${model.name}`} className="text-button" onClick={() => onOpenRoutes(model)} type="button">{tx("路由策略")}</button><button className="text-button" onClick={() => onEdit(model)} type="button">{tx("编辑")}</button><button className="text-button" disabled={busy || (publication !== "published" && activeRoutes.length === 0)} onClick={() => onPublish(model, publication !== "published")} type="button">{tx(publication === "published" ? "下线" : "发布")}</button><button className="danger-button" onClick={() => onDelete(model)} type="button">{tx("删除")}</button></div></td>
                 ) : null}
               </tr>
             );
