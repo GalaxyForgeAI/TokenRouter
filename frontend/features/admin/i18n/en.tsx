@@ -756,7 +756,7 @@ export const enTranslations: Record<string, string> = {
     "请联系管理员启用模型目录并配置可用的 Provider 路由。": "Ask an administrator to enable models and configure an available Provider route.",
     "模型系列": "Model Family",
     "参考价格": "Reference Price",
-    "模型能力": "Model Capabilities",
+    "模型能力": "Model Capabilities", "画像待完善": "Profile incomplete",
     "使用方式": "Integration Method",
     "API 接入": "API Integration",
     "AI 工具接入": "AI Tool Integration",

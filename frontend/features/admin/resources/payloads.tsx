@@ -205,6 +205,7 @@ export function modelPayload(values: Record<string, string>, existingMetadata?: 
     payload.cache_read_price_usd_per_1m = 0;
   }
   payload.category = values.category || inferModelCategoryText(values.name || values.family || "");
+  payload.tier = values.tier || "";
   payload.capabilities = splitList(values.capabilities);
   payload.supported_parameters = splitList(values.supported_parameters);
   payload.input_modalities = splitList(values.input_modalities);

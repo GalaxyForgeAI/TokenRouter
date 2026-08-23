@@ -230,7 +230,23 @@ function ExternalModelsTable({ data, models, readOnly, busy, onOpenRoutes, onEdi
                     <div><strong>{title}</strong>{subtitle ? <span>{subtitle}</span> : null}</div>
                   </div>
                 </td>
-                <td><strong>{model.modality || "chat"}</strong><span>{compactNumber(model.context_window || 0)} ctx · {capabilities.slice(0, 2).join(" / ") || model.family || "-"}</span>{facts.map((fact) => <div key={fact.kind}><small>{tx({ protocols: "支持接口协议", parameters: "支持参数", capabilities: "模型能力" }[fact.kind])}: {fact.values.join(" / ")}</small></div>)}</td>
+                <td>
+                  <div className="directory-profile-cell">
+                    <div className="directory-profile-top">
+                      <strong>{model.modality || "chat"}</strong>
+                      <ModelTierBadge tier={model.tier ?? ""} profileStatus={model.profile_status ?? ""} />
+                    </div>
+                    <span>{compactNumber(model.context_window || 0)} ctx · {capabilities.slice(0, 2).join(" / ") || model.family || "-"}</span>
+                    {capabilities.length > 0 ? (
+                      <div className="directory-capability-chips">
+                        {capabilities.slice(0, 4).map((capability) => <em key={capability}>{capability}</em>)}
+                        {capabilities.length > 4 ? <em className="more">+{capabilities.length - 4}</em> : null}
+                      </div>
+                    ) : null}
+                    {model.profile_status === "partial" ? <span className="profile-partial-hint">{tx("画像待完善")}</span> : null}
+                    {facts.map((fact) => <div key={fact.kind}><small>{tx({ protocols: "支持接口协议", parameters: "支持参数", capabilities: "模型能力" }[fact.kind])}: {fact.values.join(" / ")}</small></div>)}
+                  </div>
+                </td>
                 {!readOnly ? <>
                   <td>
                     {primary ? <div className="mapping-summary"><span>{provider?.name || primary.provider_id}</span><strong>{primary.provider_model}</strong>{routes.length > 1 ? <em>+{routes.length - 1}</em> : null}</div> : <span className="muted">{tx("尚未映射 Provider")}</span>}
@@ -248,6 +264,21 @@ function ExternalModelsTable({ data, models, readOnly, busy, onOpenRoutes, onEdi
         </tbody>
       </table>
     </div>
+  );
+}
+
+function ModelTierBadge({ tier, profileStatus }: { tier: string; profileStatus?: string }) {
+  const label = { basic: "基础", standard: "标准", flagship: "旗舰", frontier: "前沿" }[tier] ?? "";
+  if (!label) {
+    return profileStatus === "partial" ? (
+      <em className="model-tier-badge unknown">{tx("画像待完善")}</em>
+    ) : null;
+  }
+  return (
+    <em className={`model-tier-badge ${tier}`}>
+      {tx(label)}
+      {profileStatus === "partial" ? <i title={tx("画像待完善")} /> : null}
+    </em>
   );
 }
 

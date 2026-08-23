@@ -251,6 +251,13 @@ export function modelConfig(): ResourceConfig<Model> {
         help: "选中的已引入模型会在保存时同步生成初始路由；优先级、权重和流量策略可稍后在路由策略中调整。",
       },
       { key: "category", label: "模型类型", type: "select", options: modelCategoryFormOptions(), required: true },
+      {
+        key: "tier",
+        label: "能力档位",
+        type: "select",
+        options: ["basic", "standard", "flagship", "frontier"],
+        help: "用于自动路由的质量锚点；未设置时网关按模型名自动推导（vision/reasoning 等能力标签同理）。",
+      },
       { key: "family", label: "系列", required: true },
       { key: "modality", label: "能力", type: "select", options: ["chat", "embedding", "image", "video", "audio", "ocr", "rerank"], required: true },
       { key: "input_modalities", label: "输入模态", type: "tag-select", options: ["text", "image", "video", "audio", "pdf"], help: "选择模型实际支持的输入类型。" },

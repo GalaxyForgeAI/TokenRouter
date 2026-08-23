@@ -439,6 +439,9 @@ export type Model = {
   capabilities?: string[];
   supported_parameters?: string[];
   metadata?: Record<string, string>;
+  tier?: string;
+  profile_status?: string;
+  profile_updated_at?: string;
 };
 
 export type ModelRoute = {
