@@ -129,6 +129,16 @@ func (s *GormStore) UpdateModel(name string, patch Model) (Model, error) {
 		if patch.Metadata != nil {
 			model.Metadata = patch.Metadata
 		}
+		if patch.Tier != "" {
+			model.Tier = normalizeProfileTier(patch.Tier)
+		}
+		if patch.ProfileStatus != "" {
+			model.ProfileStatus = normalizeProfileStatus(patch.ProfileStatus)
+		}
+		if patch.Tier != "" || patch.ProfileStatus != "" || patch.Capabilities != nil ||
+			patch.InputPriceUSDPer1M > 0 || patch.ContextWindow > 0 {
+			markModelProfileEdited(&model, time.Now().UTC())
+		}
 		if patch.Status != "" {
 			model.Status = patch.Status
 		}

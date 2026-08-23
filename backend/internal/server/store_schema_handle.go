@@ -87,5 +87,8 @@ func VerifySchemaSemantics(ctx context.Context, databaseURL string) error {
 // register their expand and contract migrations here so startup and the
 // maintenance CLI share one registry.
 func SchemaMigrationRegistry() []dbschema.Migration {
+	// Model profile columns (tier, profile_status, profile_updated) landed in
+	// the adoption baseline; no expand migration is needed until the first
+	// released baseline is frozen and later changes must upgrade from it.
 	return nil
 }

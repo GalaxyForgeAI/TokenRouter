@@ -64,6 +64,9 @@ func createModelRecord(db *gorm.DB, model Model) (Model, error) {
 	if model.CreatedAt.IsZero() {
 		model.CreatedAt = time.Now().UTC()
 	}
+	// Derive any missing profile fields (tier, capabilities, status) so that
+	// imported models without a catalog entry still get a usable profile.
+	applyDerivedModelProfile(&model, time.Now().UTC())
 	return model, db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&model).Error
 }
 

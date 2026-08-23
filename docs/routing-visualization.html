@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenRouter 炬枢 · 路由策略图解</title>
+<style>
+  :root{
+    --bg:#F8FAFC; --card:#FFFFFF; --border:#E2E8F0; --ink:#0F172A; --ink2:#475569; --ink3:#94A3B8;
+    --accent:#1E40AF; --accent2:#3B82F6; --accent3:#38BDF8; --amber:#D97706; --green:#16A34A; --red:#DC2626; --violet:#7C3AED;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.6;padding:32px 20px 60px}
+  .wrap{max-width:1080px;margin:0 auto}
+  .hero{text-align:center;padding:28px 0 8px}
+  .hero .logo{width:56px;height:56px;margin-bottom:12px}
+  .hero h1{font-size:30px;font-weight:800;letter-spacing:.02em}
+  .hero h1 span{background:linear-gradient(135deg,#1E40AF,#3B82F6,#38BDF8);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--ink2);font-size:14px;margin-top:6px}
+  .hero .tag{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--accent);background:rgba(30,64,175,.07);border:1px solid rgba(30,64,175,.18);border-radius:999px;padding:4px 14px}
+  section{margin-top:36px}
+  h2{font-size:19px;font-weight:800;display:flex;align-items:center;gap:10px}
+  h2 .no{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#1E40AF,#3B82F6);color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+  h2 .sub{font-size:12px;font-weight:600;color:var(--ink3)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 1px 2px rgba(15,23,42,.03),0 12px 32px -18px rgba(15,23,42,.1);padding:20px 22px}
+  /* 流程图 */
+  .flow{display:flex;align-items:stretch;gap:0;flex-wrap:nowrap;overflow-x:auto;padding:8px 0}
+  .fnode{flex:1;min-width:128px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center;position:relative}
+  .fnode .ic{font-size:20px}
+  .fnode .t{font-size:12.5px;font-weight:750;margin-top:4px}
+  .fnode .d{font-size:10.5px;color:var(--ink2);margin-top:2px;line-height:1.45}
+  .fnode.hot{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+  .fnode.strat{border-color:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,.12)}
+  .farrow{flex:none;width:34px;display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:16px;font-weight:700}
+  /* 策略卡 */
+  .stratgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  .strat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative}
+  .strat .name{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .strat .name .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .strat .def{font-size:11px;font-weight:700;color:var(--ink3);margin-top:2px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .strat .logic{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.6}
+  .strat .logic b{color:var(--ink)}
+  .strat .demo{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border)}
+  .strat .demo .cap{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.06em;margin-bottom:6px}
+  .bar{display:flex;height:22px;border-radius:7px;overflow:hidden;border:1px solid var(--border);background:var(--bg)}
+  .bar i{display:block;height:100%;transition:width .5s cubic-bezier(.22,1,.36,1)}
+  .barA{background:linear-gradient(180deg,#2563EB,#1E40AF)}
+  .barB{background:linear-gradient(180deg,#38BDF8,#0284C7)}
+  .barC{background:linear-gradient(180deg,#FBBF24,#D97706)}
+  .legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--ink2);flex-wrap:wrap}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .pct{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink3);margin-top:5px;display:flex;justify-content:space-between}
+  /* 模拟器 */
+  .sim{display:grid;grid-template-columns:300px 1fr;gap:16px}
+  .sim .cfg label{display:block;font-size:11px;font-weight:750;color:var(--ink2);margin:10px 0 4px}
+  .sim select,.sim button{width:100%;height:38px;border-radius:9px;border:1px solid var(--border);background:var(--card);font-size:13px;font-weight:650;color:var(--ink);padding:0 10px;cursor:pointer}
+  .sim select:focus{outline:2px solid var(--accent2);outline-offset:1px}
+  .sim .send{margin-top:12px;background:linear-gradient(180deg,#2563EB,#1E40AF);color:#fff;border:0;box-shadow:0 2px 8px rgba(30,64,175,.3);font-weight:700}
+  .sim .send:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(30,64,175,.32)}
+  .sim .reset{background:var(--card);margin-top:8px}
+  .out h4{font-size:13px;font-weight:750;margin-bottom:8px;color:var(--ink2)}
+  .hits{display:flex;gap:6px;flex-wrap:wrap;min-height:44px;align-items:center;margin-top:10px}
+  .hit{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:#fff;animation:pop .35s cubic-bezier(.22,1,.36,1)}
+  @keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+  .hit.A{background:linear-gradient(180deg,#2563EB,#1E40AF)}
+  .hit.B{background:linear-gradient(180deg,#38BDF8,#0284C7)}
+  .hit.C{background:linear-gradient(180deg,#FBBF24,#D97706)}
+  .hits .empty{color:var(--ink3);font-size:12px}
+  .sim-note{font-size:11px;color:var(--ink3);margin-top:10px;line-height:1.6}
+  .sim-note code{font-family:ui-monospace,Menlo,monospace;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:10.5px}
+  /* 架构 */
+  .arch{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .arch .panel h3{font-size:13.5px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .arch .badge{font-size:10px;font-weight:700;border-radius:999px;padding:2px 9px;letter-spacing:.05em}
+  .arch .badge.now{background:#FEF3C7;color:#B45309}
+  .arch .badge.after{background:#DCFCE7;color:#15803D}
+  pre{background:#0F172A;color:#E2E8F0;border-radius:12px;padding:16px;font-size:11.5px;line-height:1.7;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  pre .k{color:#93C5FD}.pre .s{color:#FBBF24}
+  pre .c{color:#64748B;font-style:italic}
+  pre .hl{background:rgba(59,130,246,.22);border-radius:4px;padding:0 3px}
+  .plug{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .plug .box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:11.5px;font-weight:700;text-align:center}
+  .plug .box small{display:block;font-weight:600;color:var(--ink3);font-size:9.5px;margin-top:2px}
+  .plug .arrow{color:var(--ink3);font-weight:800}
+  .foot{margin-top:44px;text-align:center;color:var(--ink3);font-size:11.5px}
+  .foot b{color:var(--accent)}
+  @media(max-width:860px){.stratgrid{grid-template-columns:1fr}.sim{grid-template-columns:1fr}.arch{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <img class="logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230E1B4C'/%3E%3Cstop offset='.5' stop-color='%231E40AF'/%3E%3Cstop offset='1' stop-color='%232563EB'/%3E%3C/linearGradient%3E%3CradialGradient id='c' cx='.5' cy='.5' r='.5'%3E%3Cstop offset='0' stop-color='%23FEF3C7'/%3E%3Cstop offset='.55' stop-color='%23FBBF24'/%3E%3Cstop offset='1' stop-color='%23D97706'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M128 16C157 16 173 28 192 39L219 66C230 85 240 102 240 128C240 154 230 171 219 190L192 217C173 228 157 240 128 240C99 240 83 228 64 217L37 190C26 171 16 154 16 128C16 102 26 85 37 66L64 39C83 28 99 16 128 16Z' fill='url(%23g)'/%3E%3Cpath d='M128 216C128 190 128 172 128 156' stroke='url(%23c)' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86 184C100 169 114 157 127 146' stroke='%23BFDBFE' stroke-width='1.6' fill='none' stroke-linecap='round' opacity='.75'/%3E%3Cpath d='M170 184C156 169 142 157 129 146' stroke='%23BFDBFE' stroke-width='1.6' fill='none' stroke-linecap='round' opacity='.75'/%3E%3Ccircle cx='128' cy='149' r='24' fill='%23FBBF24' opacity='.22'/%3E%3Ccircle cx='128' cy='149' r='10.5' fill='url(%23c)'/%3E%3Ccircle cx='124.5' cy='145.5' r='3' fill='%23fff' opacity='.9'/%3E%3C/svg%3E" alt="TokenRouter">
+    <h1>TokenRouter <span>炬枢</span></h1>
+    <p>路由策略图解 —— 一次模型请求，网关如何决定"走哪个渠道"</p>
+    <span class="tag">APACHE-2.0 · GO 1.26 网关核心</span>
+  </div>
+
+  <section>
+    <h2><span class="no">1</span>决策链路 <span class="sub">从请求到渠道，五步</span></h2>
+    <div class="card" style="margin-top:12px">
+      <div class="flow">
+        <div class="fnode"><div class="ic">📨</div><div class="t">① 请求到达</div><div class="d">/v1/chat/completions<br>带 model + API Key</div></div>
+        <div class="farrow">→</div>
+        <div class="fnode"><div class="ic">🔎</div><div class="t">② 候选查询</div><div class="d">该模型所有 active 路由<br>按 <b>priority↑ weight↓</b> 排序</div></div>
+        <div class="farrow">→</div>
+        <div class="fnode"><div class="ic">🗂️</div><div class="t">③ 优先级分组</div><div class="d">高优先级组<b>永远先试</b><br>组内才是策略战场</div></div>
+        <div class="farrow">→</div>
+        <div class="fnode strat"><div class="ic">🎛️</div><div class="t">④ 策略分发</div><div class="d">按路由 strategy 字段<br><b>6 种算法</b>选渠道（见下）</div></div>
+        <div class="farrow">→</div>
+        <div class="fnode hot"><div class="ic">🎯</div><div class="t">⑤ 确定性命中</div><div class="d">requestID 哈希加权<br>同一请求稳定落同一渠道</div></div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;color:var(--ink3);margin-top:10px;flex-wrap:wrap">
+        <span><i style="display:inline-block;width:10px;height:10px;background:var(--amber);border-radius:3px;margin-right:4px"></i>第④步是本篇重点</span>
+        <span><i style="display:inline-block;width:10px;height:10px;background:var(--accent2);border-radius:3px;margin-right:4px"></i>失败才降级到组内下一个（故障转移）</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">2</span>六种策略 <span class="sub">同一批渠道，不同算法选出不同结果</span></h2>
+    <div class="stratgrid" id="stratgrid"></div>
+  </section>
+
+  <section>
+    <h2><span class="no">3</span>动手模拟 <span class="sub">选策略 → 连发请求 → 看落点分布</span></h2>
+    <div class="card" style="margin-top:12px">
+      <div class="sim">
+        <div class="cfg">
+          <label>策略</label>
+          <select id="strategySel"></select>
+          <label>渠道配置（3 个候选，同一优先级组）</label>
+          <div id="chanCfg"></div>
+          <button class="send" id="sendBtn">📤 发送 1 个请求</button>
+          <button class="reset" id="resetBtn">清空重来</button>
+          <div class="sim-note" id="simNote"></div>
+        </div>
+        <div class="out">
+          <h4>命中记录（每个方块 = 一个请求落到对应渠道）</h4>
+          <div class="hits" id="hits"><span class="empty">点「发送请求」开始，看请求怎么被分流</span></div>
+          <h4 style="margin-top:16px">分布统计</h4>
+          <div class="bar"><i class="barA" id="dA" style="width:0%"></i><i class="barB" id="dB" style="width:0%"></i><i class="barC" id="dC" style="width:0%"></i></div>
+          <div class="pct"><span>A</span><span>B</span><span>C</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">4</span>能接新算法吗？<span class="sub">现状 vs 插件化改造</span></h2>
+    <div class="arch">
+      <div class="panel">
+        <h3><span class="badge now">现状</span>策略写死在 4 处 switch</h3>
+        <pre><span class="c">// 校验处</span>
+validScopedRoutingStrategy()  <span class="c">→ switch 6 种</span>
+validateRoutePolicy()          <span class="c">→ switch 6 种</span>
+
+<span class="c">// 网关核心分发（最痛的点）</span>
+<span class="hl">planRoutes() {</span>
+  <span class="hl">switch strategy {</span>
+  case priority_weighted: <span class="c">…</span>
+  case adaptive:          <span class="c">applyRuntimeWeights…</span>
+  case quality, cost:     <span class="c">sortByStrategy…</span>
+  <span class="hl">}</span>
+<span class="hl">}</span>
+
+<span class="c">// 前端表单还要写死枚举</span>
+<span class="c">→ 新增算法要改 4 处 Go + 前端 + 文档</span></pre>
+      </div>
+      <div class="panel">
+        <h3><span class="badge after">改造后</span>策略接口 + 注册表（可插拔）</h3>
+        <pre><span class="c">// ① 定义接口</span>
+type RouteStrategy interface {
+  Name() string
+  Apply(group []RouteSelection) <span class="c">// 组内排序/权重修正</span>
+}
+
+<span class="c">// ② 全局注册表</span>
+var registry = map[string]RouteStrategy{}
+
+func RegisterStrategy(s RouteStrategy) {
+  registry[s.Name()] = s
+}
+
+<span class="c">// ③ 网关分发：switch → 查表</span>
+<span class="hl">strategy := registry[route.Strategy]</span>
+<span class="hl">strategy.Apply(group)</span>   <span class="c">// 未知 → 默认 priority_weighted</span>
+
+<span class="c">// ④ 新算法 = 实现接口 + 注册</span>
+func init() { RegisterStrategy(LowestLatency{}) }</pre>
+        <div class="plug">
+          <span class="box">内置 6 策略<small>默认注册，行为不变</small></span>
+          <span class="arrow">＋</span>
+          <span class="box" style="border-color:var(--green);color:var(--green)">新算法插件<small>最低延迟 / 成本实时定价…</small></span>
+          <span class="arrow">→</span>
+          <span class="box">注册表<small>网关零改动</small></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot"><b>TokenRouter 炬枢</b> · 路由策略可视化 · 数据来源：backend/internal/server（gateway_http.go / scoped_routing_policy.go / store_route_candidates.go）</div>
+</div>
+
+<script>
+const CHANNELS = [
+  {id:"A", name:"渠道 A · 深蓝", w:50, q:80, c:60, lat:120, ok:0.99, color:"#1E40AF"},
+  {id:"B", name:"渠道 B · 亮蓝", w:30, q:60, c:90, lat:80,  ok:0.95, color:"#0284C7"},
+  {id:"C", name:"渠道 C · 琥珀", w:20, q:90, c:40, lat:200, ok:0.85, color:"#D97706"},
+];
+const STRATS = [
+  {id:"priority_weighted", name:"优先级加权", def:"默认策略", desc:"weight 决定组内占比", fn:c=>c.w},
+  {id:"priority_only", name:"纯优先级", def:"忽略权重", desc:"priority 相同则稳定序取首", fn:c=>c.id==="A"?100:0},
+  {id:"balanced", name:"质量×成本平衡", def:"weight+质量+成本", desc:"三者相加修正权重", fn:c=>c.w+c.q+c.c},
+  {id:"adaptive", name:"自适应", def:"延迟×成功率", desc:"≥5 采样后动态修正", fn:c=>Math.round(c.w*clamp(120/c.lat,.25,4)*clamp(c.ok,.25,1)*10)/10},
+  {id:"quality", name:"质量优先", def:"只看质量分", desc:"质量分最高者胜出", fn:c=>c.q},
+  {id:"cost", name:"成本优先", def:"只看成本分", desc:"成本分最高者胜出", fn:c=>c.c},
+];
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+// 确定性哈希（模拟 requestID 加权落点）
+function hash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)}
+function pick(strategyId, requestId){
+  const ch = CHANNELS.slice();
+  if(strategyId==="priority_only"){ ch.sort((a,b)=>(a.id===b.id?0:a.id<b.id?-1:1)); return ch[0].id }
+  if(strategyId==="quality"){ ch.sort((a,b)=>b.q-a.q); return ch[0].id }
+  if(strategyId==="cost"){ ch.sort((a,b)=>b.c-a.c); return ch[0].id }
+  const s = STRATS.find(x=>x.id===strategyId);
+  const total = ch.reduce((sum,c)=>sum+Math.max(1,s.fn(c)),0);
+  let r = hash(requestId)%total;
+  for(const c of ch){ r-=Math.max(1,s.fn(c)); if(r<0) return c.id }
+  return ch[ch.length-1].id;
+}
+// 渲染
+const stratEl=document.getElementById("stratgrid");
+STRATS.forEach((s,idx)=>{
+  const colors=["#1E40AF","#0284C7","#D97706"];
+  const w = CHANNELS.map(c=>Math.max(1,s.fn(c)));
+  const tot = w.reduce((a,b)=>a+b,0);
+  const pcts = w.map(x=>Math.round(x/tot*100));
+  const el=document.createElement("div");
+  el.className="strat";
+  el.innerHTML=`<div class="name"><span class="dot" style="background:${colors[idx%3]}"></span>${s.name}</div>
+    <div class="def">${s.def}</div>
+    <div class="logic">${s.desc}</div>
+    <div class="demo"><div class="cap">组内占比示意</div>
+      <div class="bar">${CHANNELS.map((c,i)=>`<i style="width:${pcts[i]}%;background:${c.color}"></i>`).join("")}</div>
+      <div class="pct">${CHANNELS.map((c,i)=>`<span>${c.id} ${pcts[i]}%</span>`).join("")}</div>
+    </div>`;
+  stratEl.appendChild(el);
+});
+// 模拟器
+const sel=document.getElementById("strategySel");
+STRATS.forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=s.name;sel.appendChild(o)});
+const chanCfg=document.getElementById("chanCfg");
+CHANNELS.forEach(c=>{
+  const d=document.createElement("div");
+  d.style.cssText="font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;margin-bottom:6px;color:var(--ink2)";
+  d.innerHTML=`<b style="color:var(--ink)">${c.name}</b> · 权重 ${c.w} · 质量 ${c.q} · 成本 ${c.c} · 延迟 ${c.lat}ms · 成功率 ${Math.round(c.ok*100)}%`;
+  chanCfg.appendChild(d);
+});
+let hits=[],reqN=0;
+const hitsEl=document.getElementById("hits"),note=document.getElementById("simNote");
+function refresh(){
+  const counts={A:0,B:0,C:0};
+  hits.forEach(h=>counts[h]++);
+  const n=hits.length||1;
+  document.getElementById("dA").style.width=counts.A/n*100+"%";
+  document.getElementById("dB").style.width=counts.B/n*100+"%";
+  document.getElementById("dC").style.width=counts.C/n*100+"%";
+  const s=STRATS.find(x=>x.id===sel.value);
+  note.innerHTML = s ? `当前策略 <code>${s.name}</code>：${s.desc}。` : "";
+}
+function send(){
+  reqN++;
+  const id=`req-${Date.now().toString(36)}-${reqN}`;
+  const target=pick(sel.value,id);
+  hits.push(target);
+  if(hits.length>40) hits.shift();
+  const el=document.createElement("span");
+  el.className="hit "+target;
+  el.textContent=target;
+  hitsEl.appendChild(el);
+  if(hitsEl.querySelector(".empty")) hitsEl.firstChild.remove();
+  refresh();
+}
+document.getElementById("sendBtn").onclick=()=>{
+  for(let i=0;i<12;i++){ reqN++; const id=`req-${Date.now().toString(36)}-${reqN}`; const t=pick(sel.value,id); hits.push(t); }
+  while(hits.length>48) hits.shift();
+  hitsEl.innerHTML="";
+  hits.forEach(h=>{const el=document.createElement("span");el.className="hit "+h;el.textContent=h;hitsEl.appendChild(el)});
+  refresh();
+};
+document.getElementById("resetBtn").onclick=()=>{hits=[];reqN=0;hitsEl.innerHTML='<span class="empty">点「发送请求」开始</span>';refresh()};
+sel.onchange=()=>{hitsEl.innerHTML='<span class="empty">已切换策略 —— 同一批请求的落点会不同</span>';refresh()};
+refresh();
+</script>
+</body>
+</html>

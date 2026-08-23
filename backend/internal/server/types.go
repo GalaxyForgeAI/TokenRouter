@@ -189,8 +189,13 @@ type Model struct {
 	Capabilities           []string          `json:"capabilities,omitempty" gorm:"serializer:json"`
 	SupportedParameters    []string          `json:"supported_parameters,omitempty" gorm:"serializer:json"`
 	Metadata               map[string]string `json:"metadata,omitempty" gorm:"serializer:json"`
-	Status                 string            `json:"status"`
-	CreatedAt              time.Time         `json:"created_at"`
+	// Tier is the capability tier used by automatic model routing
+	// (basic / standard / flagship / frontier).
+	Tier           string    `json:"tier,omitempty" gorm:"index"`
+	ProfileStatus  string    `json:"profile_status,omitempty"`
+	ProfileUpdated time.Time `json:"profile_updated_at,omitempty"`
+	Status         string    `json:"status"`
+	CreatedAt      time.Time `json:"created_at"`
 }
 
 type ProviderCatalogModel struct {
@@ -201,6 +206,7 @@ type ProviderCatalogModel struct {
 	Category               string            `json:"category,omitempty"`
 	Family                 string            `json:"family,omitempty"`
 	Type                   string            `json:"type,omitempty"`
+	Tier                   string            `json:"tier,omitempty"`
 	ContextWindow          int64             `json:"context_window,omitempty"`
 	MaxOutputTokens        int64             `json:"max_output_tokens,omitempty"`
 	InputPriceUSDPer1M     float64           `json:"input_price_usd_per_1m,omitempty"`
