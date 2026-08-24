@@ -31,6 +31,16 @@ func (s *Server) handleChatCompletions(w http.ResponseWriter, r *http.Request) {
 		writeError(w, r, NewHTTPError(400, "missing_model", "model is required"))
 		return
 	}
+	if strings.EqualFold(req.Model, AutoModelName) {
+		selected, err := s.resolveAutoModel(r.Context(), &req)
+		if err != nil {
+			requestID := s.finishRejectedCall(r, time.Now().UTC(), project, key, AutoModelName, req.Stream, err, guardrailAuditSummary{Model: AutoModelName})
+			w.Header().Set("x-request-id", requestID)
+			writeError(w, r, NewHTTPError(http.StatusBadRequest, "auto_model_no_eligible", err.Error()))
+			return
+		}
+		req.Model = selected.Name
+	}
 	admittedAt := time.Now().UTC()
 	call, err := s.admitRoutedCall(w, r, project, key, req.Model, req.Stream, requestTokenReservation(req))
 	if err != nil {
