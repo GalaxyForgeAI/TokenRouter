@@ -628,6 +628,7 @@ export function PlaygroundPanel({ api, data, canViewRoutes }: { api: ApiContext;
         <label className="playground-model-select">
           <select value={pendingModelName || modelName} onChange={(event) => requestModelChange(event.target.value)} disabled={models.length === 0 || loading}>
             {models.length === 0 ? <option value="">{tx("暂无聊天模型")}</option> : null}
+            <option value="auto">auto · {tx("自动选择")}</option>
             {models.map((model) => {
               const routeCount = canViewRoutes ? activeRouteCount(model.name, data) : 0;
               return (
