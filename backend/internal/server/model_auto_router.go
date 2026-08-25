@@ -125,12 +125,31 @@ func autoRequiredCapabilities(features autoRequestFeatures) []string {
 	return required
 }
 
+// AutoDecision records why a particular model was chosen, so callers can
+// surface it in response headers or logs.
+type AutoDecision struct {
+	Requested      string   `json:"requested"`
+	Resolved       string   `json:"resolved"`
+	MinTier        int      `json:"min_tier"`
+	RequiredCaps   []string `json:"required_capabilities,omitempty"`
+	Candidates     int      `json:"candidate_count"`
+	InputPriceUSD1M float64 `json:"input_price_usd_per_1m"`
+}
+
+func (d AutoDecision) HeaderValue() string {
+	parts := []string{fmt.Sprintf("min_tier=%d", d.MinTier), fmt.Sprintf("candidates=%d", d.Candidates)}
+	if len(d.RequiredCaps) > 0 {
+		parts = append(parts, "required="+strings.Join(d.RequiredCaps, ","))
+	}
+	return strings.Join(parts, " ")
+}
+
 // resolveAutoModel picks the cheapest published model that satisfies the
 // request's quality constraints. Candidates are models with at least one
 // active route (otherwise the model could not be served), whose tier meets the
 // minimum derived from the request features, and whose capabilities cover the
 // request's demands. Ties on input price are broken by output price.
-func (s *Server) resolveAutoModel(ctx context.Context, req *ChatCompletionRequest) (Model, error) {
+func (s *Server) resolveAutoModel(ctx context.Context, req *ChatCompletionRequest) (Model, AutoDecision, error) {
 	features := extractAutoRequestFeatures(req)
 	minTier := autoMinTierRank(features)
 	required := autoRequiredCapabilities(features)
@@ -165,12 +184,20 @@ func (s *Server) resolveAutoModel(ctx context.Context, req *ChatCompletionReques
 		return autoSortablePriceOut(left) < autoSortablePriceOut(right)
 	})
 	if len(candidates) == 0 {
-		return Model{}, &AutoModelError{Reason: fmt.Sprintf(
+		return Model{}, AutoDecision{}, &AutoModelError{Reason: fmt.Sprintf(
 			"auto routing found no eligible model: min_tier=%d required_capabilities=%v",
 			minTier, required,
 		)}
 	}
-	return candidates[0], nil
+	selected := candidates[0]
+	return selected, AutoDecision{
+		Requested:       AutoModelName,
+		Resolved:        selected.Name,
+		MinTier:         minTier,
+		RequiredCaps:    required,
+		Candidates:      len(candidates),
+		InputPriceUSD1M: selected.InputPriceUSDPer1M,
+	}, nil
 }
 
 // modelHasAllCapabilities reports whether the model covers every required tag.

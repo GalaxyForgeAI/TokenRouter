@@ -32,7 +32,7 @@ func (s *Server) handleChatCompletions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if strings.EqualFold(req.Model, AutoModelName) {
-		selected, err := s.resolveAutoModel(r.Context(), &req)
+		selected, decision, err := s.resolveAutoModel(r.Context(), &req)
 		if err != nil {
 			requestID := s.finishRejectedCall(r, time.Now().UTC(), project, key, AutoModelName, req.Stream, err, guardrailAuditSummary{Model: AutoModelName})
 			w.Header().Set("x-request-id", requestID)
@@ -40,6 +40,8 @@ func (s *Server) handleChatCompletions(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		req.Model = selected.Name
+		w.Header().Set("x-model-resolved", selected.Name)
+		w.Header().Set("x-auto-decision", decision.HeaderValue())
 	}
 	admittedAt := time.Now().UTC()
 	call, err := s.admitRoutedCall(w, r, project, key, req.Model, req.Stream, requestTokenReservation(req))

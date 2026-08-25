@@ -30,7 +30,7 @@ func TestResolveAutoModelPicksCheapestEligible(t *testing.T) {
 
 	// Short plain chat must resolve to the cheapest basic model.
 	req := &ChatCompletionRequest{Model: AutoModelName, Messages: []ChatMessage{{Role: "user", Content: "hi"}}}
-	selected, err := server.resolveAutoModel(context.Background(), req)
+	selected, _, err := server.resolveAutoModel(context.Background(), req)
 	if err != nil {
 		t.Fatalf("resolveAutoModel: %v", err)
 	}
@@ -52,7 +52,7 @@ func TestResolveAutoModelRequiresCapabilities(t *testing.T) {
 		Model:    AutoModelName,
 		Messages: []ChatMessage{{Role: "user", Content: []any{map[string]any{"type": "text", "text": "describe"}, map[string]any{"type": "image_url", "image_url": map[string]any{"url": "data:image/png;base64,xxx"}}}}},
 	}
-	selected, err := server.resolveAutoModel(context.Background(), req)
+	selected, _, err := server.resolveAutoModel(context.Background(), req)
 	if err != nil {
 		t.Fatalf("resolveAutoModel: %v", err)
 	}
@@ -75,7 +75,7 @@ func TestResolveAutoModelRequiresTools(t *testing.T) {
 		Messages: []ChatMessage{{Role: "user", Content: "call a tool"}},
 		Tools:    []any{map[string]any{"type": "function", "function": map[string]any{"name": "lookup"}}},
 	}
-	selected, err := server.resolveAutoModel(context.Background(), req)
+	selected, _, err := server.resolveAutoModel(context.Background(), req)
 	if err != nil {
 		t.Fatalf("resolveAutoModel: %v", err)
 	}
@@ -98,7 +98,7 @@ func TestResolveAutoModelEscalatesTierForLongPrompt(t *testing.T) {
 		longText += "a"
 	}
 	req := &ChatCompletionRequest{Model: AutoModelName, Messages: []ChatMessage{{Role: "user", Content: longText}}}
-	selected, err := server.resolveAutoModel(context.Background(), req)
+	selected, _, err := server.resolveAutoModel(context.Background(), req)
 	if err != nil {
 		t.Fatalf("resolveAutoModel: %v", err)
 	}
@@ -117,7 +117,7 @@ func TestResolveAutoModelExcludesUnroutedAndDisabled(t *testing.T) {
 	})
 
 	req := &ChatCompletionRequest{Model: AutoModelName, Messages: []ChatMessage{{Role: "user", Content: "hi"}}}
-	selected, err := server.resolveAutoModel(context.Background(), req)
+	selected, _, err := server.resolveAutoModel(context.Background(), req)
 	if err != nil {
 		t.Fatalf("resolveAutoModel: %v", err)
 	}
@@ -132,7 +132,7 @@ func TestResolveAutoModelNoEligibleError(t *testing.T) {
 	}, nil)
 
 	req := &ChatCompletionRequest{Model: AutoModelName, Messages: []ChatMessage{{Role: "user", Content: "hi"}}}
-	if _, err := server.resolveAutoModel(context.Background(), req); err == nil {
+	if _, _, err := server.resolveAutoModel(context.Background(), req); err == nil {
 		t.Fatal("expected error when no model has an active route")
 	}
 }
